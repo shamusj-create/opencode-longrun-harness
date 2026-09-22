@@ -1,0 +1,829 @@
+{
+  "runId": "lr-e2804cb46297",
+  "status": "RECOVERY_REQUIRED",
+  "originalRequest": "Mission rehearsal presets feature. From the title screen the player saves named mission/seed presets, lists, edits/renames, deletes one with explicit UI confirmation, and launches that exact mission/seed into the existing real tactical game. Persist through the HTTP API into a file-backed SQLite database (localStorage alone insufficient). New versioned API under /api/presets: create/list/update/delete with server validation, parameterized SQLite, optimistic concurrency (revision), stable server-generated IDs. Name trimmed 1..40 chars, duplicate trimmed names ->409 without overwrite. Mission indices 0..2, seed integer 0..4294967295 inclusive; seed 0 must reach the real game unchanged. Malformed JSON/types/out-of-range/malformed IDs ->400; unknown valid IDs ->404; stale revision ->409 no lost update; genuine storage failure ->500. Invalid writes leave DB unchanged. Idempotent schema init preserving existing leaderboard rows. Existing campaign, saves, leaderboard, AI preview and ?mode=replay intact; shared sim/PRNG/combat unchanged. UI has loading/empty/validation/conflict/backend-failure/success states, preserves form input on failure with retry/reload, accessible, renders names as text, selection/late-fetch must not apply to another preset, confirm-delete cancel nondestructive, two independent pages demonstrate stale conflict + recovery. Launch consumes server-returned mission/seed into the existing GameCanvas/TacticalGame, not a fake shim/new simulator; editing a preset must not overwrite existing campaign saves.",
+  "contract": {
+    "criteria": [
+      {
+        "id": "presets-server",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-presets-server"
+        ],
+        "evidenceClass": "INTEGRATION",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "presets-e2e",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-presets-e2e"
+        ],
+        "evidenceClass": "BROWSER",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "regression-unit",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-default-unit"
+        ],
+        "evidenceClass": "UNIT",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "regression-browser",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-default-browser"
+        ],
+        "evidenceClass": "BROWSER",
+        "visual": false,
+        "status": "FAIL"
+      }
+    ],
+    "gates": [
+      {
+        "id": "c-typecheck",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "id": "c-build",
+        "required": true,
+        "status": "FAIL"
+      }
+    ],
+    "lossTarget": 0
+  },
+  "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+  "evaluatorHash": null,
+  "sourceFingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+  "loss": 1,
+  "budget": {
+    "iterations": 16,
+    "activeSeconds": 3600,
+    "deadlineSeconds": 14400,
+    "sameFailureLimit": 3,
+    "noProgressLimit": 5,
+    "autoDispatchCap": 40,
+    "toolActionCap": 90
+  },
+  "autoEnabled": false,
+  "runMode": "tracked",
+  "memoryStatus": "FRESH",
+  "state": {
+    "iterations": 0,
+    "noProgressStreak": 0,
+    "sameFailureStreak": 0,
+    "candidates": [
+      {
+        "n": 1,
+        "runId": "lr-e2804cb46297",
+        "fingerprint": "9df02d5f20783ca7111d7f346aaa7359cec978f75e06b92da4e6158e9e4ab4f6",
+        "ts": 1789920110166,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-1-b5a5f590b2df"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": null,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 1246,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 2,
+        "runId": "lr-e2804cb46297",
+        "fingerprint": "c1e5143318bfa3d52619e52cdc2d669c50ee6e8d8079601165be61d713d2e80f",
+        "ts": 1789920237173,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-2-ee73a0d31117"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": null,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 1247,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 3,
+        "runId": "lr-e2804cb46297",
+        "fingerprint": "4f1c9fece491541c0ad22d81c7e20641472bb6d2b7d1e9babfd57d07118a1feb",
+        "ts": 1789920251996,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-3-7133e9bfeea1"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": null,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1115,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 4,
+        "runId": "lr-e2804cb46297",
+        "fingerprint": "ae59a7396b9150b3b38d52bf2af04acf20416cad4e3eb64d807b1817fcd9d710",
+        "ts": 1789921054420,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-5-463eb413932b"
+        ],
+        "criteriaChanged": [
+          "presets-e2e"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 1,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 16289,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 5,
+        "runId": "lr-e2804cb46297",
+        "fingerprint": "27c2f530d79714abfec09024294f6eb2092a52554ed5e817eca3134bf2f496d8",
+        "ts": 1789921290376,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-6-60cc3d29ecfe"
+        ],
+        "criteriaChanged": [
+          "presets-e2e"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 0.75,
+        "bestLoss": 1,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 5819,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 6,
+        "runId": "lr-e2804cb46297",
+        "fingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+        "ts": 1789921358408,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-8-05a4d303046a"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.75,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1066,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      }
+    ],
+    "lastEvalFingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+    "memoryNodes": [
+      "AGENTS.md"
+    ],
+    "current": {
+      "n": 6,
+      "runId": "lr-e2804cb46297",
+      "fingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+      "ts": 1789921358408,
+      "hypothesis": null,
+      "receiptIds": [
+        "receipt-8-05a4d303046a"
+      ],
+      "criteriaChanged": [],
+      "lossBefore": 1,
+      "lossAfter": 1,
+      "bestLoss": 0.75,
+      "result": "PASS",
+      "diagnosticOnly": false,
+      "elapsedMs": 1066,
+      "counted": true,
+      "reason": "evaluated_new_source_state"
+    },
+    "best": {
+      "n": 5,
+      "runId": "lr-e2804cb46297",
+      "fingerprint": "27c2f530d79714abfec09024294f6eb2092a52554ed5e817eca3134bf2f496d8",
+      "ts": 1789921290376,
+      "hypothesis": null,
+      "receiptIds": [
+        "receipt-6-60cc3d29ecfe"
+      ],
+      "criteriaChanged": [
+        "presets-e2e"
+      ],
+      "lossBefore": 1,
+      "lossAfter": 0.75,
+      "bestLoss": 1,
+      "result": "PASS",
+      "diagnosticOnly": false,
+      "elapsedMs": 5819,
+      "counted": true,
+      "reason": "evaluated_new_source_state"
+    }
+  },
+  "receipts": [
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "FAIL",
+      "exitCode": 2,
+      "testCount": null,
+      "startedAt": 1789920108894,
+      "finishedAt": 1789920110140,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "9df02d5f20783ca7111d7f346aaa7359cec978f75e06b92da4e6158e9e4ab4f6",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "...s of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(265,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(266,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(270,31): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(273,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(274,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(276,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(279,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(292,31): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(297,33): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(326,34): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(331,36): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(333,33): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(335,35): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(356,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(357,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(359,32): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(371,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/presets.test.ts(372,29): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type 'Handler'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "fd488f22-af55-4d4b-aed3-d7db81d34f12"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "FAIL",
+      "exitCode": 2,
+      "testCount": null,
+      "startedAt": 1789920235903,
+      "finishedAt": 1789920237150,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "c1e5143318bfa3d52619e52cdc2d669c50ee6e8d8079601165be61d713d2e80f",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "packages/server/src/index.ts(6,3): error TS6133: 'API_VERSION' is declared but its value is never read.\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "4bfa26b3-dd9a-4568-8190-7e54dc7c4fed"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789920250859,
+      "finishedAt": 1789920251974,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "4f1c9fece491541c0ad22d81c7e20641472bb6d2b7d1e9babfd57d07118a1feb",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "1bd81743-011c-4ecf-a49e-72084aaabbc4"
+    },
+    {
+      "checkId": "c-presets-server",
+      "command": "npx vitest run packages/server/test/presets.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 11,
+      "startedAt": 1789920262097,
+      "finishedAt": 1789920263296,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "4f1c9fece491541c0ad22d81c7e20641472bb6d2b7d1e9babfd57d07118a1feb",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/presets.test.ts"
+      ],
+      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/server/test/presets.test.ts (11 tests) 443ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 339ms\n\n Test Files  1 passed (1)\n      Tests  11 passed (11)\n   Start at  17:04:22\n   Duration  749ms (transform 95ms, setup 0ms, collect 118ms, tests 443ms, environment 0ms, prepare 55ms)\n\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "ba21644b-8dd5-4782-a4be-7fcbc8fcea72"
+    },
+    {
+      "checkId": "c-presets-e2e",
+      "command": "npx playwright test --config playwright.presets.config.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 5,
+      "startedAt": 1789921038075,
+      "finishedAt": 1789921054364,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "ae59a7396b9150b3b38d52bf2af04acf20416cad4e3eb64d807b1817fcd9d710",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.presets.config.ts"
+      ],
+      "outputTail": "....toEqual(expected) // deep equality\n\n    - Expected  - 0\n    + Received  + 3\n\n      Object {\n    +   \"created_ts\": 1789921040745,\n    +   \"id\": \"2af719b6-7cfd-44fa-863c-05e1466245b9\",\n        \"mission\": 0,\n        \"name\": \"Zero Seed\",\n        \"revision\": 1,\n        \"seed\": 0,\n    +   \"updated_ts\": 1789921040745,\n      }\n\n      71 |     });\n      72 |     expect(truth.presets.length).toBe(1);\n    > 73 |     expect(truth.presets[0]).toEqual({ name: \"Zero Seed\", mission: 0, seed: 0, revision: 1 });\n         |                              ^\n      74 |\n      75 |     // Launch into the game; the shared TacticalGame must receive seed 0 unchanged (not the default).\n      76 |     await page.getByTestId(\"preset-launch\").first().click();\n        at /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:73:30\n\n    Error Context: e2e-presets/test-results/presets-presets-keyboard-j-4e332-l-seed-0-into-the-real-game-chromium/error-context.md\n\n  2) [chromium] › e2e-presets/presets.spec.ts:142:3 › presets failure + conflict states › create failure keeps the typed input, and a duplicate name surfaces a conflict (not a write) \n\n    Error: expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 0\n    + Received  + 5\n\n      Object {\n    +   \"created_ts\": 1789921041999,\n    +   \"id\": \"dd5fdd5c-696b-4505-ab0a-25ffa8f03415\",\n    +   \"mission\": 0,\n        \"name\": \"Dup\",\n    +   \"revision\": 1,\n        \"seed\": 1,\n    +   \"updated_ts\": 1789921041999,\n      }\n\n      158 |     const rows = await page.evaluate(async () => (await (await fetch(\"/api/presets/v1\", { headers: { \"x-sb-api-version\": \"1\" } })).json()).presets as { name: string; seed: number }[]);\n      159 |     expect(rows.length).toBe(1);\n    > 160 |     expect(rows[0]).toEqual({ name: \"Dup\", seed: 1 }); // unchanged by the 409 attempt\n          |                     ^\n      161 |   });\n      162 |\n      163 |   test(\"network failure during a create preserves input and Retry (after the backend returns) succeeds\", async ({ page }) => {\n        at /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:160:21\n\n    Error Context: e2e-presets/test-results/presets-presets-failure-co-9618b-ces-a-conflict-not-a-write--chromium/error-context.md\n\n  3) [chromium] › e2e-presets/presets.spec.ts:183:3 › presets failure + conflict states › two independently loaded pages: stale edit conflict + recovery \n\n    Error: expect(locator).toContainText(expected) failed\n\n    Locator: getByTestId('preset-row').filter({ hasText: 'Contested' })\n    Expected substring: \"222\"\n    Received string:    \"ContestedM2 · seed 111 · rev 2LaunchEditDelete\"\n    Timeout: 10000ms\n\n    Call log:\n      - Expect \"toContainText\" getByTestId('preset-row').filter({ hasText: 'Contested' }) with timeout 10000ms\n      - waiting for getByTestId('preset-row').filter({ hasText: 'Contested' })\n        24 × locator resolved to <div class=\"preset-row\" data-name=\"Contested\" data-testid=\"preset-row\">…</div>\n           - unexpected value \"ContestedM2 · seed 111 · rev 2LaunchEditDelete\"\n\n\n      219 |       await waitReady(b);\n      220 |       const bRow = b.getByTestId(\"preset-row\").filter({ hasText: \"Contested\" });\n    > 221 |       await expect(bRow).toContainText(\"222\");\n          |                          ^\n      222 |       await bRow.getByTestId(\"preset-edit\").click();\n      223 |       await expect(b.getByTestId(\"preset-seed\")).toHaveValue(\"222\");\n      224 |     } finally {\n        at /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:221:26\n\n    Error Context: e2e-presets/test-results/presets-presets-failure-co-bdb47-tale-edit-conflict-recovery-chromium/error-context.md\n\n  3 failed\n    [chromium] › e2e-presets/presets.spec.ts:48:3 › presets keyboard journey + exact launch › create (keyboard) then launch consumes the saved mission/seed incl seed 0 into the real game \n    [chromium] › e2e-presets/presets.spec.ts:142:3 › presets failure + conflict states › create failure keeps the typed input, and a duplicate name surfaces a conflict (not a write) \n    [chromium] › e2e-presets/presets.spec.ts:183:3 › presets failure + conflict states › two independently loaded pages: stale edit conflict + recovery \n  5 passed (15.6s)\n[WebServer] (node:33840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33868) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33870) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33898) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:33901) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33938) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "9a9d51ff-f7b8-4235-9849-4e709ed707f9"
+    },
+    {
+      "checkId": "c-presets-e2e",
+      "command": "npx playwright test --config playwright.presets.config.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 8,
+      "startedAt": 1789921284536,
+      "finishedAt": 1789921290355,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "27c2f530d79714abfec09024294f6eb2092a52554ed5e817eca3134bf2f496d8",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.presets.config.ts"
+      ],
+      "outputTail": "\nRunning 8 tests using 1 worker\n\n  ✓  1 [chromium] › e2e-presets/presets.spec.ts:48:3 › presets keyboard journey + exact launch › create (keyboard) then launch consumes the saved mission/seed incl seed 0 into the real game (1.5s)\n  ✓  2 [chromium] › e2e-presets/presets.spec.ts:93:3 › presets keyboard journey + exact launch › delete needs explicit confirmation; cancel is non-destructive; confirm removes only that row (539ms)\n  ✓  3 [chromium] › e2e-presets/presets.spec.ts:125:3 › presets failure + conflict states › backend unavailable on load is an honest error with reload; recovery restores the list (261ms)\n  ✓  4 [chromium] › e2e-presets/presets.spec.ts:143:3 › presets failure + conflict states › create failure keeps the typed input, and a duplicate name surfaces a conflict (not a write) (263ms)\n  ✓  5 [chromium] › e2e-presets/presets.spec.ts:164:3 › presets failure + conflict states › network failure during a create preserves input and Retry (after the backend returns) succeeds (277ms)\n  ✓  6 [chromium] › e2e-presets/presets.spec.ts:184:3 › presets failure + conflict states › two independently loaded pages: stale edit conflict + recovery (644ms)\n  ✓  7 [chromium] › e2e-presets/presets.spec.ts:232:3 › presets failure + conflict states › user names render as TEXT (no HTML injection) (279ms)\n  ✓  8 [chromium] › e2e-presets/presets.spec.ts:251:3 › presets no cross-record bleed › a late response for one preset never overwrites the form of another (271ms)\n\n  8 passed (5.3s)\n[WebServer] (node:34264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34293) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34294) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34324) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:34326) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "d4a87866-fd54-493e-8d29-8defc3466edb"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "FAIL",
+      "exitCode": 2,
+      "testCount": null,
+      "startedAt": 1789921320324,
+      "finishedAt": 1789921321413,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "27c2f530d79714abfec09024294f6eb2092a52554ed5e817eca3134bf2f496d8",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "packages/web/src/Presets.tsx(115,115): error TS2322: Type 'number | undefined' is not assignable to type 'number'.\n  Type 'undefined' is not assignable to type 'number'.\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "6dc9705e-655a-48b3-a000-002c1fbf9568"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789921357323,
+      "finishedAt": 1789921358389,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "288ec93e-ee17-40ce-b241-7969a2662bfb"
+    },
+    {
+      "checkId": "c-build",
+      "command": "npm run build -w @sb/web",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789921364129,
+      "finishedAt": 1789921365227,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npm",
+        "run",
+        "build",
+        "-w",
+        "@sb/web"
+      ],
+      "outputTail": "\n> @sb/web@0.1.0 build\n> vite build\n\nvite v5.4.21 building for production...\ntransforming...\n✓ 72 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.89 kB │ gzip:   0.55 kB\ndist/assets/index-zkh9-lO7.css    5.85 kB │ gzip:   1.71 kB\ndist/assets/index-CX8Zu2UX.js   932.01 kB │ gzip: 252.47 kB │ map: 2,940.31 kB\n✓ built in 847ms\n\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "99e6c36b-f8fa-48d2-8618-5b38d532a757"
+    },
+    {
+      "checkId": "c-presets-server",
+      "command": "npx vitest run packages/server/test/presets.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 11,
+      "startedAt": 1789921380350,
+      "finishedAt": 1789921381393,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/presets.test.ts"
+      ],
+      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/server/test/presets.test.ts (11 tests) 420ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 332ms\n\n Test Files  1 passed (1)\n      Tests  11 passed (11)\n   Start at  17:23:00\n   Duration  648ms (transform 66ms, setup 0ms, collect 86ms, tests 420ms, environment 0ms, prepare 33ms)\n\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "713df509-4ebd-4a8a-a855-954e8499d277"
+    },
+    {
+      "checkId": "c-default-unit",
+      "command": "npx vitest run",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 96,
+      "startedAt": 1789921389587,
+      "finishedAt": 1789921390616,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run"
+      ],
+      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/sim/test/core.test.ts (9 tests) 3ms\n ✓ packages/sim/test/save.test.ts (7 tests) 6ms\n ✓ packages/sim/test/destruct.test.ts (3 tests) 12ms\n ✓ packages/sim/test/fog.test.ts (8 tests) 18ms\n ✓ packages/sim/test/detect.test.ts (7 tests) 18ms\n ✓ packages/sim/test/security.test.ts (10 tests) 21ms\n ✓ packages/sim/test/ai.test.ts (10 tests) 30ms\n ✓ packages/sim/test/neg-replay.test.ts (4 tests) 69ms\n ✓ packages/server/test/transport.test.ts (2 tests) 75ms\n ✓ packages/server/test/server.test.ts (6 tests) 87ms\n ✓ packages/sim/test/game.test.ts (13 tests) 111ms\n ✓ packages/sim/test/replay2.test.ts (3 tests) 120ms\n ✓ packages/sim/test/missions23.test.ts (3 tests) 167ms\n ✓ packages/server/test/presets.test.ts (11 tests) 449ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 337ms\n\n Test Files  14 passed (14)\n      Tests  96 passed (96)\n   Start at  17:23:09\n   Duration  725ms (transform 459ms, setup 0ms, collect 1.50s, tests 1.19s, environment 1ms, prepare 578ms)\n\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "f0533d8e-49a9-4e06-86cd-99bd0c2932fb"
+    },
+    {
+      "checkId": "c-presets-e2e",
+      "command": "npx playwright test --config playwright.presets.config.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 8,
+      "startedAt": 1789921398976,
+      "finishedAt": 1789921404608,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.presets.config.ts"
+      ],
+      "outputTail": "\nRunning 8 tests using 1 worker\n\n  ✓  1 [chromium] › e2e-presets/presets.spec.ts:48:3 › presets keyboard journey + exact launch › create (keyboard) then launch consumes the saved mission/seed incl seed 0 into the real game (1.6s)\n  ✓  2 [chromium] › e2e-presets/presets.spec.ts:93:3 › presets keyboard journey + exact launch › delete needs explicit confirmation; cancel is non-destructive; confirm removes only that row (535ms)\n  ✓  3 [chromium] › e2e-presets/presets.spec.ts:125:3 › presets failure + conflict states › backend unavailable on load is an honest error with reload; recovery restores the list (263ms)\n  ✓  4 [chromium] › e2e-presets/presets.spec.ts:143:3 › presets failure + conflict states › create failure keeps the typed input, and a duplicate name surfaces a conflict (not a write) (265ms)\n  ✓  5 [chromium] › e2e-presets/presets.spec.ts:164:3 › presets failure + conflict states › network failure during a create preserves input and Retry (after the backend returns) succeeds (264ms)\n  ✓  6 [chromium] › e2e-presets/presets.spec.ts:184:3 › presets failure + conflict states › two independently loaded pages: stale edit conflict + recovery (647ms)\n  ✓  7 [chromium] › e2e-presets/presets.spec.ts:232:3 › presets failure + conflict states › user names render as TEXT (no HTML injection) (272ms)\n  ✓  8 [chromium] › e2e-presets/presets.spec.ts:251:3 › presets no cross-record bleed › a late response for one preset never overwrites the form of another (275ms)\n\n  8 passed (5.3s)\n[WebServer] (node:34773) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34801) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34803) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34832) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:34834) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "9d8a48e6-8d1b-4723-94fa-7d6ab84b9374"
+    },
+    {
+      "checkId": "c-default-browser",
+      "command": "npx playwright test",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 34,
+      "startedAt": 1789921416118,
+      "finishedAt": 1789921519225,
+      "versions": {
+        "node": "v24.3.0"
+      },
+      "contractHash": "c1f33b88e2fc57a3bcb69ef08e9eaea5bf9c7c8ece8cc206a51ce555ba0a6dd1",
+      "evaluatorHash": null,
+      "sourceFingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test"
+      ],
+      "outputTail": "\nRunning 34 tests using 1 worker\n\n  ✓   1 [chromium] › e2e/ai.spec.ts:76:1 › AI preview is debug-gated: absent by default even while playing (3.1s)\n  ✓   2 [chromium] › e2e/ai.spec.ts:86:1 › debug-on preview matches an independent oracle and excludes hidden enemies (3.5s)\n  ✓   3 [chromium] › e2e/ai.spec.ts:146:1 › preview re-derives on hidden + DEAD transitions via state events (not the 500ms timer) (4.2s)\n  ✓   4 [chromium] › e2e/ai.spec.ts:234:1 › reading/rendering the preview leaves the non-empty actionLog, revision and state unchanged (3.6s)\n  ✓   5 [chromium] › e2e/ai.spec.ts:275:3 › bounded preview does not overlap the (expanded) HUD at 1280x720 (3.7s)\n  ✓   6 [chromium] › e2e/ai.spec.ts:275:3 › bounded preview does not overlap the (expanded) HUD at 1024x768 (3.6s)\n  ✓   7 [chromium] › e2e/ai.spec.ts:313:1 › preview is deterministic across two identical seeded runs (6.0s)\n  ✓   8 [chromium] › e2e/chars.spec.ts:14:1 › distinct silhouettes: each archetype has a unique render volume and material set (3.5s)\n  ✓   9 [chromium] › e2e/chars.spec.ts:59:1 › players and enemies read in different team colours at their own pixels (3.8s)\n  ✓  10 [chromium] › e2e/chars.spec.ts:142:1 › detection cones draw for alerted enemies during a live run (3.2s)\n  ✓  11 [chromium] › e2e/environment.spec.ts:14:1 › security devices and extraction read as world props (3.4s)\n  ✓  12 [chromium] › e2e/environment.spec.ts:31:1 › turret/camera render state follows authority changes (4.0s)\n  ✓  13 [chromium] › e2e/environment.spec.ts:56:1 › environment depth: camera rotation produces a visually different frame (4.0s)\n  ✓  14 [chromium] › e2e/fog.spec.ts:15:1 › fog layers exist and track the authoritative 3-state visibility (3.2s)\n  ✓  15 [chromium] › e2e/fog.spec.ts:58:1 › rendering must not mutate the simulation (fog paints from a read copy) (2.9s)\n  ✓  16 [chromium] › e2e/fog.spec.ts:74:1 › hidden enemies do not leak into the DOM and are not rendered (3.4s)\n  ✓  17 [chromium] › e2e/fog.spec.ts:110:1 › fog repaints after the enemy phase (presentation follows authoritative state) (3.3s)\n  ✓  18 [chromium] › e2e/journeys.spec.ts:17:1 › Journey A — basic combat: preview damage equals applied damage, energy deducted (2.0s)\n  ✓  19 [chromium] › e2e/journeys.spec.ts:39:1 › Journey B — enemy phase resolves legally and the game never stalls (2.0s)\n  ✓  20 [chromium] › e2e/journeys.spec.ts:57:1 › Journey C — objectives: relays, core unlock+hack, extraction reach win (2.3s)\n  ✓  21 [chromium] › e2e/journeys.spec.ts:74:1 › Journey D — persistence: authoritative state survives reload (3.1s)\n  ✓  22 [chromium] › e2e/journeys.spec.ts:97:1 › Journey E — determinism: identical seed+actions produce identical final hash (2.3s)\n  ✓  23 [chromium] › e2e/journeys.spec.ts:121:1 › Journey H — responsive/visual integrity at laptop sizes (4.9s)\n  ✓  24 [chromium] › e2e/leaderboard.spec.ts:14:1 › Journey L1 — a legit winning run is re-validated server-side and listed (5.5s)\n  ✓  25 [chromium] › e2e/render-units.spec.ts:115:1 › live units are synchronised into the scene on normal startup (real integration path) (3.4s)\n  ✓  26 [chromium] › e2e/render-units.spec.ts:150:1 › evidence collapses when the sync->scene wiring is disabled (isolated sabotage fixture) (3.2s)\n  ✓  27 [chromium] › e2e/render.spec.ts:11:1 › rendering: 3D board is non-blank, perf is instrumented, debug overlay defaults OFF (3.2s)\n  ✓  28 [chromium] › e2e/replay.spec.ts:3:1 › Journey G — replay viewer re-runs the action log and is speed-independent (276ms)\n  ✓  29 [chromium] › e2e/smoke.spec.ts:3:1 › title screen renders and console is clean (160ms)\n  ✓  30 [chromium] › e2e/smoke.spec.ts:17:1 › deploy into tactical board with a live 3D canvas (3.0s)\n  ✓  31 [chromium] › e2e/tamper.spec.ts:14:1 › negative control: doctored submissions are rejected by the server (3.1s)\n  ✓  32 [chromium] › e2e/ui.spec.ts:6:1 › UI keyboard: menus are operable without a mouse and settings toggles persist (154ms)\n  ✓  33 [chromium] › e2e/ui.spec.ts:31:1 › UI leaderboard: real backend roundtrip shows honest success then honest failure states (290ms)\n  ✓  34 [chromium] › e2e/ui.spec.ts:46:1 › UI backend: the server rejects an invalid (tampered) submission and it never enters the board (205ms)\n\n  34 passed (1.7m)\n[WebServer] (node:34895) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34923) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34924) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34926) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:34954) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:34956) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "a5941854-8808-4f0a-ab12-6eb718131dab"
+    }
+  ],
+  "faults": [],
+  "execution": {
+    "schemaVersion": 1,
+    "since": 1789917710927,
+    "historicalUsageUnknown": false,
+    "verificationMs": 140979,
+    "commandAttempts": 13,
+    "inFlight": null
+  },
+  "directory": "/Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project",
+  "checkCatalogue": {
+    "c-presets-server": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/presets.test.ts"
+      ],
+      "kind": "test",
+      "integration": true,
+      "negativeControl": true,
+      "timeoutMs": 180000
+    },
+    "c-presets-e2e": {
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.presets.config.ts"
+      ],
+      "kind": "test",
+      "integration": true,
+      "negativeControl": true,
+      "timeoutMs": 360000
+    },
+    "c-default-unit": {
+      "command": [
+        "npx",
+        "vitest",
+        "run"
+      ],
+      "kind": "test",
+      "timeoutMs": 180000
+    },
+    "c-default-browser": {
+      "command": [
+        "npx",
+        "playwright",
+        "test"
+      ],
+      "kind": "test",
+      "timeoutMs": 600000
+    },
+    "c-typecheck": {
+      "command": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "kind": "cmd",
+      "gate": true,
+      "timeoutMs": 180000
+    },
+    "c-build": {
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "-w",
+        "@sb/web"
+      ],
+      "kind": "cmd",
+      "gate": true,
+      "timeoutMs": 240000
+    }
+  },
+  "createdAt": 1789917710927,
+  "compactionSessionID": "ses_f409adba2ffeezgMJmYUfOmTgi",
+  "agentProgressHistory": [
+    {
+      "schemaVersion": 1,
+      "revision": 1,
+      "at": 1789917722210,
+      "sessionID": "ses_f409adba2ffeezgMJmYUfOmTgi",
+      "sourceFingerprint": "59c8a4c2236a4bcb65f27cd0075cb63ea90321a42689e7dd50e33749d5d870be",
+      "fields": {
+        "currentSlice": "Feature: mission rehearsal presets (UI + /api/presets + file-backed SQLite). Run created, memory FRESH, no code written yet.",
+        "nextAction": "Slice1 server: add packages/server/src/presets.ts (versioned schema init idempotent, CRUD, revision optimistic concurrency, validation 400/404/409/500) + wire into makeHandler; add packages/server/test/presets.test.ts incl file-DB reopen + server-restart + old-schema migration + storage-failure; then typecheck.",
+        "decisions": [
+          "Preset=stable server id,name(trimmed 1..40),mission 0..2,seed 0..4294967295(ZERO must reach game unchanged),revision int.",
+          "API /api/presets: GET list, GET one, POST create, PUT update, DELETE; stale revision update/delete->409 no lost update; unknown valid id->404; malformed id/types/range/JSON->400; storage failure->500 not empty.",
+          "Storage: new table presets in SAME file DB via idempotent CREATE TABLE IF NOT EXISTS; must preserve leaderboard rows; parameterized statements only.",
+          "Duplicate trimmed name ->409 without overwrite (unique index on trimmed name).",
+          "UI: new Presets screen from title; launch sets ui.campaign={mission,seed} from server-returned values then briefing->GameCanvas (real sim), not a shim; editing presets never writes campaign SAVE_KEY.",
+          "Separate e2e-presets/ + playwright.presets.config.ts: web5399/server8999, isolated file DB, vite proxy->8999, strictPort, reuseExistingServer:false, 127.0.0.1 only; default playwright.config.ts switched to refuse reused servers (retain 34 tests/12 files)."
+        ],
+        "failedHypotheses": [],
+        "memoryNodes": [
+          "server makeHandler + node:sqlite DatabaseSync in leaderboard.ts is the pattern to extend",
+          "App.tsx title screen + GameScreen pass campaign.mission/seed to GameCanvas; seedFromUrl uses >>>0"
+        ],
+        "artifacts": [
+          "packages/server/src/presets.ts",
+          "packages/server/test/presets.test.ts",
+          "packages/web/src",
+          "e2e-presets",
+          "playwright.presets.config.ts"
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "revision": 2,
+      "at": 1789920294405,
+      "sessionID": "ses_f409adba2ffeezgMJmYUfOmTgi",
+      "sourceFingerprint": "4f1c9fece491541c0ad22d81c7e20641472bb6d2b7d1e9babfd57d07118a1feb",
+      "fields": {
+        "currentSlice": "Server repaired + green: c-typecheck PASS, c-presets-server PASS (11 tests incl real same-port restart with owned cleanup). Next: presets UI (title button + Presets screen) + e2e-presets config/journey, then run all declared gates.",
+        "nextAction": "Implement UI (new Presets screen wired to /api/presets/v1 + x-sb-api-version:1; exact seed incl 0 into GameCanvas; no SAVE_KEY writes on edit), then packages/web/vite.presets.config.ts proxy->8999, playwright.presets.config.ts (web5399/server8999 isolated file DB, 127.0.0.1, reuseExistingServer:false), e2e-presets specs (keyboard create/edit/launch/delete/cancel, backend failure input-preserve, two-page stale conflict). Then sequential native verify c-presets-e2e, c-default-unit, c-default-browser, c-typecheck, c-build. No shell test/pipeline use.",
+        "decisions": [
+          "c-presets-server restart test PASSED via native verify (INTEGRATION, 11 tests) — real two-process same-port restart, not wrapper kill.",
+          "Process ownership rule: spawn child directly (not npx/tsx wrapper), await ACTUAL exit, timeout must FAIL cleanup, verify port released, refuse occupied port, never kill unrelated listeners.",
+          "Masked-exit rule: never pipe to head/tail then echo $?; run declared checks only via longrun_verify."
+        ],
+        "failedHypotheses": [
+          "Killing only the npx/tsx wrapper leaked real server children (reparented to PID1) and a timer-resolving waitExit masked non-exit -> must own the actual process tree + await real exit + fail cleanup on timeout.",
+          "Piping a check to head/tail and echoing $? reports the pipeline tail's status, hiding the tool's real exit (the 9/1-fail run masked a genuine failure). Use native longrun_verify only.",
+          "Assuming `node --import tsx/esm file` spawns a wrapper layer that must be group-killed: it is a single process; but the original npx-based helper was not. Do not broaden kills by process-name search."
+        ],
+        "memoryNodes": [
+          "server makeHandler + node:sqlite DatabaseSync in leaderboard.ts is the pattern to extend",
+          "App.tsx title screen + GameScreen pass campaign.mission/seed to GameCanvas; seedFromUrl uses >>>0"
+        ],
+        "artifacts": [
+          "packages/server/src/presets.ts",
+          "packages/server/test/presets.test.ts",
+          "packages/web/src",
+          "e2e-presets",
+          "playwright.presets.config.ts"
+        ]
+      }
+    }
+  ],
+  "agentProgress": {
+    "schemaVersion": 1,
+    "revision": 2,
+    "at": 1789920294405,
+    "sessionID": "ses_f409adba2ffeezgMJmYUfOmTgi",
+    "sourceFingerprint": "4f1c9fece491541c0ad22d81c7e20641472bb6d2b7d1e9babfd57d07118a1feb",
+    "fields": {
+      "currentSlice": "Server repaired + green: c-typecheck PASS, c-presets-server PASS (11 tests incl real same-port restart with owned cleanup). Next: presets UI (title button + Presets screen) + e2e-presets config/journey, then run all declared gates.",
+      "nextAction": "Implement UI (new Presets screen wired to /api/presets/v1 + x-sb-api-version:1; exact seed incl 0 into GameCanvas; no SAVE_KEY writes on edit), then packages/web/vite.presets.config.ts proxy->8999, playwright.presets.config.ts (web5399/server8999 isolated file DB, 127.0.0.1, reuseExistingServer:false), e2e-presets specs (keyboard create/edit/launch/delete/cancel, backend failure input-preserve, two-page stale conflict). Then sequential native verify c-presets-e2e, c-default-unit, c-default-browser, c-typecheck, c-build. No shell test/pipeline use.",
+      "decisions": [
+        "c-presets-server restart test PASSED via native verify (INTEGRATION, 11 tests) — real two-process same-port restart, not wrapper kill.",
+        "Process ownership rule: spawn child directly (not npx/tsx wrapper), await ACTUAL exit, timeout must FAIL cleanup, verify port released, refuse occupied port, never kill unrelated listeners.",
+        "Masked-exit rule: never pipe to head/tail then echo $?; run declared checks only via longrun_verify."
+      ],
+      "failedHypotheses": [
+        "Killing only the npx/tsx wrapper leaked real server children (reparented to PID1) and a timer-resolving waitExit masked non-exit -> must own the actual process tree + await real exit + fail cleanup on timeout.",
+        "Piping a check to head/tail and echoing $? reports the pipeline tail's status, hiding the tool's real exit (the 9/1-fail run masked a genuine failure). Use native longrun_verify only.",
+        "Assuming `node --import tsx/esm file` spawns a wrapper layer that must be group-killed: it is a single process; but the original npx-based helper was not. Do not broaden kills by process-name search."
+      ],
+      "memoryNodes": [
+        "server makeHandler + node:sqlite DatabaseSync in leaderboard.ts is the pattern to extend",
+        "App.tsx title screen + GameScreen pass campaign.mission/seed to GameCanvas; seedFromUrl uses >>>0"
+      ],
+      "artifacts": [
+        "packages/server/src/presets.ts",
+        "packages/server/test/presets.test.ts",
+        "packages/web/src",
+        "e2e-presets",
+        "playwright.presets.config.ts"
+      ]
+    }
+  },
+  "controlGeneration": 2
+}

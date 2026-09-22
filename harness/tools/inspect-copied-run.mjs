@@ -1,0 +1,25 @@
+// Offline tool-factory projection only; never OpenCode live evidence.
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { pathToFileURL } from 'node:url';
+const [caseRoot, sourceRoot, label = 'before'] = process.argv.slice(2);
+if (!caseRoot || !sourceRoot || !fs.existsSync(path.join(caseRoot,'case.json'))) throw Error('An isolated snapshot case is required');
+const game = path.join(caseRoot, 'game'), sd = path.join(caseRoot, `state-${label}`);
+process.env.LONGRUN_TEST = '1'; process.env.LONGRUN_STATE_DIR = sd;
+process.env.LONGRUN_CONTROLLER_FILE = path.join(sourceRoot,'harness/src/controller.js');
+fs.mkdirSync(sd,{recursive:true});
+const C = await import(pathToFileURL(process.env.LONGRUN_CONTROLLER_FILE));
+const original = JSON.parse(fs.readFileSync(path.join(caseRoot,'state-original/state/982e1f79cff6bc710465d3704c7a947e/run.json')));
+const run = structuredClone(original); run.directory = game;
+const key = C.stateKey(C.projectIdentity(game),run.runId), store = new C.Store(sd);
+store.writeJSON(key,'run.json',run);
+fs.writeFileSync(path.join(sd,'runs.json'),JSON.stringify({offline:{runKey:key,directory:game,runId:run.runId,checkCatalogue:run.checkCatalogue}}));
+const plugin = await import(pathToFileURL(path.join(sourceRoot,'harness/plugin/longrun.js')));
+const t = (await plugin.default.server({client:null})).tool;
+const ctx = {sessionID:'offline',directory:game,worktree:game};
+const read = async action => {const v=await t.longrun.execute({action,runId:run.runId},ctx);try{return JSON.parse(v)}catch{return v}};
+const fp=C.sourceFingerprint(game);
+const report = {kind:'OFFLINE_TOOL_FACTORY',version:C.LIFECYCLE_SCHEMA_VERSION,at:new Date().toISOString(),runId:run.runId,rawState:run.status,fingerprint:fp,contractHash:crypto.createHash('sha256').update(JSON.stringify(run.contract)).digest('hex'),budget:run.budget,receiptCount:run.receipts.length,missingFingerprints:run.receipts.filter(x=>!x.sourceFingerprint).length,status:await read('status'),recovery:await read('resume-context'),verify:await read('verify'),memory:await read('memory_status'),complete:await read('complete'),checks:Object.keys(run.checkCatalogue).map(checkId=>({checkId,...C.effectiveReceipt(run,checkId,fp.hash)}))};
+fs.writeFileSync(path.join(caseRoot,`${label}.json`),JSON.stringify(report,null,2));
+console.log(JSON.stringify({report:path.join(caseRoot,`${label}.json`),fingerprint:fp,status:report.status,recovery:report.recovery,memory:report.memory,missingFingerprints:report.missingFingerprints},null,2));

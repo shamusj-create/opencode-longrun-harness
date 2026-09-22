@@ -1,0 +1,1375 @@
+{
+  "runId": "lr-4c94bb821465",
+  "status": "PAUSED",
+  "originalRequest": "Signal Breach expansion: authoritative fog of war, enemy detection cones, stealth, deterministic noise, security network (cameras/turrets/nodes), alarm escalation, AI upgrade, mission 2/3 rebalance with deterministic win replays, leaderboard pipeline, save v2->v3 migration, character/environment/animation upgrades, browser journeys, negative controls. Preserve all existing systems/tests.",
+  "contract": {
+    "criteria": [
+      {
+        "id": "FOG",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-fog-unit",
+          "c-fog-e2e"
+        ],
+        "evidenceClass": "INTEGRATION",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "DETECT",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-detect-unit",
+          "c-detect-e2e"
+        ],
+        "evidenceClass": "UNIT",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "SECNET",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-sec-unit",
+          "c-sec-e2e"
+        ],
+        "evidenceClass": "UNIT",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "AI",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-ai-unit",
+          "c-ai-e2e"
+        ],
+        "evidenceClass": "UNIT",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "MISS",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-mission-win",
+          "c-mission-e2e"
+        ],
+        "evidenceClass": "INTEGRATION",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "DETERM",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-replay-determ",
+          "c-save-migration",
+          "nc-replay"
+        ],
+        "evidenceClass": "INTEGRATION",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "LEADER",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-server-tests",
+          "c-leaderboard-e2e",
+          "nc-tamper"
+        ],
+        "evidenceClass": "SYSTEM",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "CHAR",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-char-visual"
+        ],
+        "evidenceClass": "VISION",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "ENV",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-env-visual"
+        ],
+        "evidenceClass": "VISION",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "UI",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-ui-e2e"
+        ],
+        "evidenceClass": "SYSTEM",
+        "visual": false,
+        "status": "PASS"
+      },
+      {
+        "id": "ENG",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-typecheck",
+          "c-build",
+          "c-verify-all"
+        ],
+        "evidenceClass": "INTEGRATION",
+        "visual": false,
+        "status": "PASS"
+      }
+    ],
+    "gates": [
+      {
+        "id": "c-typecheck",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "id": "c-build",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "id": "c-verify-all",
+        "required": true,
+        "status": "FAIL"
+      }
+    ],
+    "lossTarget": 0
+  },
+  "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+  "evaluatorHash": null,
+  "sourceFingerprint": "96c236c2d720c5bc448b68c72461d82e6050a761be1d7302910fac9d572ef82d",
+  "loss": 1,
+  "budget": {
+    "iterations": 60,
+    "activeSeconds": 14400,
+    "deadlineSeconds": 28800,
+    "sameFailureLimit": 3,
+    "noProgressLimit": 5,
+    "autoDispatchCap": 40,
+    "toolActionCap": 200
+  },
+  "autoEnabled": false,
+  "runMode": "tracked",
+  "memoryStatus": "FRESH",
+  "state": {
+    "iterations": 0,
+    "noProgressStreak": 0,
+    "sameFailureStreak": 0,
+    "candidates": [
+      {
+        "n": 1,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "dd470f7cd39b23ca3c2fa975a0be0f6ba1085074e555b97e4e87934846200c78",
+        "ts": 1789834367565,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-fog-unit"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 0.6363636363636364,
+        "lossAfter": 0.6363636363636364,
+        "bestLoss": null,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 623,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 2,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "247460900e8cfe476ecf705fe1b71a428651ea0fd2c26e49d9f6e713aa80405b",
+        "ts": 1789834675830,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-server-tests"
+        ],
+        "criteriaChanged": [
+          "LEADER"
+        ],
+        "lossBefore": 0.45454545454545453,
+        "lossAfter": 0.45454545454545453,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 660,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 3,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "67a84eeaa93d1d63c1a80f893256f2531b9806c846607d83068585f881834727",
+        "ts": 1789836414781,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-char-visual"
+        ],
+        "criteriaChanged": [
+          "CHAR"
+        ],
+        "lossBefore": 0.36363636363636365,
+        "lossAfter": 0.36363636363636365,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 12503,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 4,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "bbe24e95714f2e67ea38989c2468a4bf299d759c0e24adb676c33fd1e590daeb",
+        "ts": 1789836433549,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-env-visual"
+        ],
+        "criteriaChanged": [
+          "ENV"
+        ],
+        "lossBefore": 0.2727272727272727,
+        "lossAfter": 0.2727272727272727,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 13295,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 5,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "d8b88d9251a2835044669fc1b5411b599256de53b5bd9ce47480806f6d731d77",
+        "ts": 1789836441372,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-ui-e2e"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 0.2727272727272727,
+        "lossAfter": 0.2727272727272727,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 1161,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 6,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "b78f98e5ae6201aa340ad28e3b7c291abd52eedf8092c1d8898f5de925826062",
+        "ts": 1789836649193,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-ui-e2e"
+        ],
+        "criteriaChanged": [
+          "UI"
+        ],
+        "lossBefore": 0.18181818181818182,
+        "lossAfter": 0.18181818181818182,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 2237,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 7,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "c942d4ada02cb12a3c4527f2c9363616649727fd85ad9ad77b87a5bf43f2b8b2",
+        "ts": 1789836728067,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-build"
+        ],
+        "criteriaChanged": [
+          "ENG"
+        ],
+        "lossBefore": 0,
+        "lossAfter": 0,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1127,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 8,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "e365be42aff4b02f68cdeeecf347360dda81137d84b7fe4b927e3ba0255d3646",
+        "ts": 1789836808822,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-verify-all"
+        ],
+        "criteriaChanged": [
+          "ENG"
+        ],
+        "lossBefore": 0.09090909090909091,
+        "lossAfter": 0.09090909090909091,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 77389,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 9,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "a681be07794882632780cd219cc23b20805b61c74e85bbdfe963b02794212344",
+        "ts": 1789836931746,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-verify-all"
+        ],
+        "criteriaChanged": [
+          "ENG"
+        ],
+        "lossBefore": 0,
+        "lossAfter": 0,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 79523,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 10,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "70ad91315c8ea57a4a62c29c3abf77a1a86a44a9a3a309def2417b7c03bec5ba",
+        "ts": 1789837040391,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-verify-all"
+        ],
+        "criteriaChanged": [
+          "ENG"
+        ],
+        "lossBefore": 0.09090909090909091,
+        "lossAfter": 0.09090909090909091,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 79381,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 11,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "f9604d467ba6b6269845f0009df85506736cb37db50d80e8dfbe3c042b20e3c7",
+        "ts": 1789837151154,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-verify-all"
+        ],
+        "criteriaChanged": [
+          "ENG"
+        ],
+        "lossBefore": 0,
+        "lossAfter": 0,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 78892,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 12,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "982f5899db5e1ca192d30fefb2c30982cdf88e9699dd30e396ca397601ed4d90",
+        "ts": 1789837281933,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-verify-all"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 0.09090909090909091,
+        "lossAfter": 0.09090909090909091,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 78987,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 13,
+        "runId": "lr-4c94bb821465",
+        "fingerprint": "96c236c2d720c5bc448b68c72461d82e6050a761be1d7302910fac9d572ef82d",
+        "ts": 1789837384691,
+        "hypothesis": null,
+        "receiptIds": [
+          "c-verify-all"
+        ],
+        "criteriaChanged": [
+          "ENG"
+        ],
+        "lossBefore": 0,
+        "lossAfter": 0,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 78507,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      }
+    ],
+    "lastEvalFingerprint": "96c236c2d720c5bc448b68c72461d82e6050a761be1d7302910fac9d572ef82d",
+    "memoryNodes": [
+      "AGENTS.md"
+    ],
+    "best": {
+      "n": 1,
+      "runId": "lr-4c94bb821465",
+      "fingerprint": "dd470f7cd39b23ca3c2fa975a0be0f6ba1085074e555b97e4e87934846200c78",
+      "ts": 1789834367565,
+      "hypothesis": null,
+      "receiptIds": [
+        "c-fog-unit"
+      ],
+      "criteriaChanged": [],
+      "lossBefore": 0.6363636363636364,
+      "lossAfter": 0.6363636363636364,
+      "bestLoss": null,
+      "result": "PASS",
+      "diagnosticOnly": false,
+      "elapsedMs": 623,
+      "counted": true,
+      "reason": "evaluated_new_source_state"
+    },
+    "current": {
+      "n": 13,
+      "runId": "lr-4c94bb821465",
+      "fingerprint": "96c236c2d720c5bc448b68c72461d82e6050a761be1d7302910fac9d572ef82d",
+      "ts": 1789837384691,
+      "hypothesis": null,
+      "receiptIds": [
+        "c-verify-all"
+      ],
+      "criteriaChanged": [
+        "ENG"
+      ],
+      "lossBefore": 0,
+      "lossAfter": 0,
+      "result": "PASS",
+      "diagnosticOnly": false,
+      "elapsedMs": 78507,
+      "counted": true,
+      "reason": "evaluated_new_source_state"
+    }
+  },
+  "receipts": [
+    {
+      "checkId": "c-detect-unit",
+      "command": "npx vitest run packages/sim/test/detect.test.ts",
+      "status": "NOT_RUN",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833222140,
+      "finishedAt": 1789833222798,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-sec-unit",
+      "command": "npx vitest run packages/sim/test/security.test.ts",
+      "status": "NOT_RUN",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833222838,
+      "finishedAt": 1789833223373,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-ai-unit",
+      "command": "npx vitest run packages/sim/test/ai.test.ts",
+      "status": "NOT_RUN",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833223413,
+      "finishedAt": 1789833223958,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-mission-win",
+      "command": "npx vitest run packages/sim/test/missions23.test.ts",
+      "status": "NOT_RUN",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833223998,
+      "finishedAt": 1789833224585,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-detect-unit",
+      "command": "npx vitest run packages/sim/test/detect.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833265283,
+      "finishedAt": 1789833265927,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-sec-unit",
+      "command": "npx vitest run packages/sim/test/security.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833265977,
+      "finishedAt": 1789833266475,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-ai-unit",
+      "command": "npx vitest run packages/sim/test/ai.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833266513,
+      "finishedAt": 1789833267050,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-mission-win",
+      "command": "npx vitest run packages/sim/test/missions23.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833267092,
+      "finishedAt": 1789833267725,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-replay-determ",
+      "command": "npx vitest run packages/sim/test/replay2.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833287138,
+      "finishedAt": 1789833287692,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-save-migration",
+      "command": "npx vitest run packages/sim/test/save.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789833287739,
+      "finishedAt": 1789833288256,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "34fc0f0fda9d1ddf58697c0e837332b617a3815bff6f3beae8c07850edb417e8",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-fog-unit",
+      "command": "npx vitest run packages/sim/test/fog.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789834366916,
+      "finishedAt": 1789834367539,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "dd470f7cd39b23ca3c2fa975a0be0f6ba1085074e555b97e4e87934846200c78",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-fog-e2e",
+      "command": "npx playwright test e2e/fog.spec.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789834367591,
+      "finishedAt": 1789834381229,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "dd470f7cd39b23ca3c2fa975a0be0f6ba1085074e555b97e4e87934846200c78",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-server-tests",
+      "command": "npx vitest run packages/server/test",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789834675145,
+      "finishedAt": 1789834675805,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "247460900e8cfe476ecf705fe1b71a428651ea0fd2c26e49d9f6e713aa80405b",
+      "evidenceClass": "SYSTEM",
+      "class": "SYSTEM",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-leaderboard-e2e",
+      "command": "npx playwright test e2e/leaderboard.spec.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789834675853,
+      "finishedAt": 1789834682914,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "247460900e8cfe476ecf705fe1b71a428651ea0fd2c26e49d9f6e713aa80405b",
+      "evidenceClass": "SYSTEM",
+      "class": "SYSTEM",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "nc-tamper",
+      "command": "npx playwright test e2e/tamper.spec.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789834682957,
+      "finishedAt": 1789834687633,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "247460900e8cfe476ecf705fe1b71a428651ea0fd2c26e49d9f6e713aa80405b",
+      "evidenceClass": "SYSTEM",
+      "class": "SYSTEM",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-char-visual",
+      "command": "npx playwright test e2e/chars.spec.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836402250,
+      "finishedAt": 1789836414753,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "67a84eeaa93d1d63c1a80f893256f2531b9806c846607d83068585f881834727",
+      "evidenceClass": "VISION",
+      "class": "VISION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-env-visual",
+      "command": "npx playwright test e2e/environment.spec.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836420236,
+      "finishedAt": 1789836433531,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "bbe24e95714f2e67ea38989c2468a4bf299d759c0e24adb676c33fd1e590daeb",
+      "evidenceClass": "VISION",
+      "class": "VISION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-ui-e2e",
+      "command": "npx playwright test e2e/ui.spec.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": null,
+      "startedAt": 1789836440192,
+      "finishedAt": 1789836441353,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "d8b88d9251a2835044669fc1b5411b599256de53b5bd9ce47480806f6d731d77",
+      "evidenceClass": "SYSTEM",
+      "class": "SYSTEM",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-ui-e2e",
+      "command": "npx playwright test e2e/ui.spec.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836646928,
+      "finishedAt": 1789836649165,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "b78f98e5ae6201aa340ad28e3b7c291abd52eedf8092c1d8898f5de925826062",
+      "evidenceClass": "SYSTEM",
+      "class": "SYSTEM",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836658123,
+      "finishedAt": 1789836659219,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "b78f98e5ae6201aa340ad28e3b7c291abd52eedf8092c1d8898f5de925826062",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-replay-determ",
+      "command": "npx vitest run packages/sim/test/replay2.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836675924,
+      "finishedAt": 1789836676630,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "b78f98e5ae6201aa340ad28e3b7c291abd52eedf8092c1d8898f5de925826062",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-save-migration",
+      "command": "npx vitest run packages/sim/test/save.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836682731,
+      "finishedAt": 1789836683324,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "b78f98e5ae6201aa340ad28e3b7c291abd52eedf8092c1d8898f5de925826062",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "nc-replay",
+      "command": "npx vitest run packages/sim/test/neg-replay.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836703565,
+      "finishedAt": 1789836704336,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "b78f98e5ae6201aa340ad28e3b7c291abd52eedf8092c1d8898f5de925826062",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836722595,
+      "finishedAt": 1789836723681,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "b78f98e5ae6201aa340ad28e3b7c291abd52eedf8092c1d8898f5de925826062",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-build",
+      "command": "npm run build -w @sb/web",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836726924,
+      "finishedAt": 1789836728051,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "c942d4ada02cb12a3c4527f2c9363616649727fd85ad9ad77b87a5bf43f2b8b2",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-verify-all",
+      "command": "bash scripts/verify-all.sh",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836731406,
+      "finishedAt": 1789836808795,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "e365be42aff4b02f68cdeeecf347360dda81137d84b7fe4b927e3ba0255d3646",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836819608,
+      "finishedAt": 1789836820563,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "e365be42aff4b02f68cdeeecf347360dda81137d84b7fe4b927e3ba0255d3646",
+      "evidenceClass": "GATE",
+      "class": "GATE",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836835260,
+      "finishedAt": 1789836836099,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "e365be42aff4b02f68cdeeecf347360dda81137d84b7fe4b927e3ba0255d3646",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-verify-all",
+      "command": "bash scripts/verify-all.sh",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836852195,
+      "finishedAt": 1789836931718,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "a681be07794882632780cd219cc23b20805b61c74e85bbdfe963b02794212344",
+      "evidenceClass": "SYSTEM",
+      "class": "SYSTEM",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836946802,
+      "finishedAt": 1789836947969,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "a681be07794882632780cd219cc23b20805b61c74e85bbdfe963b02794212344",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-build",
+      "command": "npm run build -w @sb/web",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836955537,
+      "finishedAt": 1789836956782,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "a681be07794882632780cd219cc23b20805b61c74e85bbdfe963b02794212344",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-verify-all",
+      "command": "bash scripts/verify-all.sh",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789836960982,
+      "finishedAt": 1789837040363,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "70ad91315c8ea57a4a62c29c3abf77a1a86a44a9a3a309def2417b7c03bec5ba",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-verify-all",
+      "command": "bash scripts/verify-all.sh",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789837072238,
+      "finishedAt": 1789837151130,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "f9604d467ba6b6269845f0009df85506736cb37db50d80e8dfbe3c042b20e3c7",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789837171694,
+      "finishedAt": 1789837172814,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "f9604d467ba6b6269845f0009df85506736cb37db50d80e8dfbe3c042b20e3c7",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-verify-all",
+      "command": "bash scripts/verify-all.sh",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": null,
+      "startedAt": 1789837202930,
+      "finishedAt": 1789837281917,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "982f5899db5e1ca192d30fefb2c30982cdf88e9699dd30e396ca397601ed4d90",
+      "proxyOnly": false
+    },
+    {
+      "checkId": "c-verify-all",
+      "command": "bash scripts/verify-all.sh",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789837306145,
+      "finishedAt": 1789837384652,
+      "versions": {
+        "node": "v24.15.0"
+      },
+      "contractHash": "d68eaeec2f591551d95ddfc0c18f74211e92edd804e66e4e4e43c50d0e69ce17",
+      "evaluatorHash": null,
+      "sourceFingerprint": "96c236c2d720c5bc448b68c72461d82e6050a761be1d7302910fac9d572ef82d",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false
+    }
+  ],
+  "faults": [],
+  "directory": "/Users/seanj/3dgametest",
+  "checkCatalogue": {
+    "c-fog-unit": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/sim/test/fog.test.ts"
+      ],
+      "countTests": true,
+      "timeoutMs": 120000
+    },
+    "c-fog-e2e": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/fog.spec.ts"
+      ],
+      "countTests": true,
+      "integration": true,
+      "timeoutMs": 180000
+    },
+    "c-detect-unit": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/sim/test/detect.test.ts"
+      ],
+      "countTests": true,
+      "timeoutMs": 120000
+    },
+    "c-detect-e2e": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/detect.spec.ts"
+      ],
+      "countTests": true,
+      "integration": true,
+      "timeoutMs": 180000
+    },
+    "c-sec-unit": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/sim/test/security.test.ts"
+      ],
+      "countTests": true,
+      "timeoutMs": 120000
+    },
+    "c-sec-e2e": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/security.spec.ts"
+      ],
+      "countTests": true,
+      "integration": true,
+      "timeoutMs": 180000
+    },
+    "c-ai-unit": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/sim/test/ai.test.ts"
+      ],
+      "countTests": true,
+      "timeoutMs": 120000
+    },
+    "c-ai-e2e": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/ai.spec.ts"
+      ],
+      "countTests": true,
+      "integration": true,
+      "timeoutMs": 180000
+    },
+    "c-mission-win": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/sim/test/missions23.test.ts"
+      ],
+      "countTests": true,
+      "integration": true,
+      "timeoutMs": 120000
+    },
+    "c-mission-e2e": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/missions.spec.ts"
+      ],
+      "countTests": true,
+      "integration": true,
+      "timeoutMs": 180000
+    },
+    "c-replay-determ": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/sim/test/replay2.test.ts"
+      ],
+      "countTests": true,
+      "determinism": true,
+      "timeoutMs": 120000
+    },
+    "c-save-migration": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/sim/test/save.test.ts"
+      ],
+      "countTests": true,
+      "integration": true,
+      "timeoutMs": 120000
+    },
+    "c-server-tests": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test"
+      ],
+      "countTests": true,
+      "timeoutMs": 180000
+    },
+    "c-leaderboard-e2e": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/leaderboard.spec.ts"
+      ],
+      "countTests": true,
+      "timeoutMs": 240000
+    },
+    "nc-tamper": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/tamper.spec.ts"
+      ],
+      "countTests": true,
+      "security": true,
+      "negativeControl": true,
+      "timeoutMs": 180000
+    },
+    "c-char-visual": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/chars.spec.ts"
+      ],
+      "countTests": true,
+      "visual": true,
+      "timeoutMs": 240000
+    },
+    "c-env-visual": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/environment.spec.ts"
+      ],
+      "countTests": true,
+      "visual": true,
+      "timeoutMs": 240000
+    },
+    "c-ui-e2e": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "e2e/ui.spec.ts"
+      ],
+      "countTests": true,
+      "timeoutMs": 240000
+    },
+    "c-typecheck": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "timeoutMs": 180000
+    },
+    "c-build": {
+      "kind": "cmd",
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "-w",
+        "@sb/web"
+      ],
+      "timeoutMs": 300000
+    },
+    "c-verify-all": {
+      "kind": "cmd",
+      "command": [
+        "bash",
+        "scripts/verify-all.sh"
+      ],
+      "gate": true,
+      "timeoutMs": 600000
+    },
+    "nc-replay": {
+      "kind": "cmd",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/sim/test/neg-replay.test.ts"
+      ],
+      "countTests": true,
+      "determinism": true,
+      "negativeControl": true,
+      "timeoutMs": 120000
+    }
+  },
+  "createdAt": 1789833197692
+}

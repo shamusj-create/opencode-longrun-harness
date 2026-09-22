@@ -1,0 +1,13 @@
+{
+  "name": "opencode-longrun-harness",
+  "version": "1.2.22",
+  "private": true,
+  "type": "module",
+  "description": "Bounded contract/loss-driven implementation+verification+repair harness for OpenCode (desktop), dependency-free controller.",
+  "scripts": {
+    "test": "node --test harness/test/*.test.mjs",
+    "doctor": "node harness/src/cli.mjs doctor",
+    "install:global": "node harness/src/cli.mjs install",
+    "uninstall": "node harness/src/cli.mjs uninstall"
+  }
+}

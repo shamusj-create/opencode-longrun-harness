@@ -1,0 +1,74 @@
+{
+  "schema": "longrun.live_capability_report/v1",
+  "asOf": "2026-09-18",
+  "installed": {
+    "version": "1.1.0",
+    "configDir": "~/.config/opencode",
+    "pluginEntry": "plugins/longrun.js",
+    "maintenanceEntry": "longrun-harness/releases/1.1.0/bin/longrun.mjs",
+    "maintenanceLauncher": "longrun-harness/longrun",
+    "currentPointer": "1.1.0",
+    "backup": "~/.config/opencode-longrun-backups/<this-session-ts>/"
+  },
+  "backendIdentities": {
+    "cliVersionHomebrew": "1.18.31",
+    "cliVersionIsProofOfDesktop": false,
+    "desktopBackendProcess": "OpenCode Helper (Electron, bundled Node runtime, NOT homebrew node/bun)",
+    "desktopBackendPid": 5415,
+    "desktopBackendStarted": "2026-09-18 18:17:40 (predates v1.0.0 install and this v1.1.0 change)",
+    "controlServerObserved": "127.0.0.1:50056 (process-table observation; NOT connected to, NOT used for verification)",
+    "inferenceEndpoint": "MTPLX python 127.0.0.1:8000 (UP)",
+    "inferenceModel": "mtplx/mtplx-qwen38-27b-optimized-quality",
+    "clientKindEnv": "OPENCODE_CLIENT=desktop"
+  },
+  "loadingAndDiscovery": {
+    "pluginLoadedInCurrentBackend": "NOT_VERIFIED",
+    "reason": "Desktop backend PID 5415 started before the plugin was installed; plugins load at startup; no process had the plugin/controller open. A file on disk and a Node import succeeding do NOT prove current desktop load.",
+    "requiresRestartToLoad": true,
+    "commandsDiscoveredLive": "NOT_VERIFIED",
+    "agentDiscoveredLive": "NOT_VERIFIED",
+    "skillsDiscoveredLive": "NOT_VERIFIED",
+    "toolsExposedLive": "NOT_VERIFIED",
+    "liveLoadDetectableAfterRestart": true
+  },
+  "verifiedOffline": {
+    "suite": "43/43 pass (node --test; no bun)",
+    "controllerCore": "LOCALLY_VERIFIED (fixture/SIMULATED)",
+    "pluginWiringAgainstFakeSessions": "SIMULATED_ONLY",
+    "installReversibilityAndIndependence": "LOCALLY_VERIFIED (temp/standalone configs; source-tree-independent; spaces-in-path; minimal PATH)",
+    "maintenanceSourceIndependent": "LOCALLY_VERIFIED (run via launcher from /tmp against the real install; resolves copied libs)",
+    "doctorModes": "LOCALLY_VERIFIED: install mode exit 0; live mode returns AWAITING_RESTART/NOT_VERIFIED (exit 2) when no live load observed (does NOT false-pass)",
+    "repairMechanics": "LOCALLY_VERIFIED via a NON-nested self-checking runner: failing exit -> fix -> passing -> loss 1->0 -> completion; staleness on source change; protected-runner weakening detected; zero-check -> NOT_RUN",
+    "recoveryReconciliation": "SIMULATED_ONLY (contract/budgets/next-action survive a simulated compaction event)"
+  },
+  "continuation": {
+    "automaticContinuationDefault": "OFF",
+    "commissioningCaps": { "candidates": 12, "autoDispatches": 6, "state": "defined but disabled; isAutoAllowed requires an explicit authorised commissioning run" },
+    "reason": "Cannot prove real cancellation/permission handling or run a live disposable coding session with the plugin active without an app restart (would kill this session) or a forbidden second server; idle is never treated as authorization. Manual continue + native auto-compaction are the operating mode."
+  },
+  "compaction": {
+    "nativeAutoDefault": "true (assumed on per docs; effective runtime NOT verified here)",
+    "requestedApiSummarize": "NOT_VERIFIED (needs a disposable live session on the real backend)",
+    "customContextPercentageTrigger": "DISABLED (no trustworthy current-context telemetry; not invented)"
+  },
+  "integrityDecisions": {
+    "providerConfigEdited": false,
+    "providerFilesByteIdenticalAfterInstall": true,
+    "noSecondConfigFile": true,
+    "noSecondOpenCodeServer": true,
+    "controlServerCredentialsUsed": false,
+    "modelOrSamplerOrContextLimitsChanged": false
+  },
+  "outstandingLiveChecks": [
+    "After restart: confirm plugin loads (doctor --live flips to LIVE_DETECTED after a hook fires).",
+    "After restart: confirm /longrun, /longrun-resume, /longrun-status, /longrun-pause are discovered.",
+    "After restart: confirm longrun + longrun_verify tools are exposed; run a harmless status op.",
+    "In a disposable project/session: drive the REAL Qwen repair cycle; capture receipts from real command execution.",
+    "Test a real GUI Stop mid-run + a permission denial; confirm cancellation is authoritative and work is not resurrected.",
+    "Trigger a REAL summarize/compaction at an idle boundary and verify post-compaction recovery reconciliation."
+  ],
+  "labels": {
+    "overall": "installed-only + offline-verified mechanics; NO live desktop verification performed or claimed",
+    "notDerivedFromFixtureCounts": true
+  }
+}

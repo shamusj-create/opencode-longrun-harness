@@ -1,0 +1,624 @@
+{
+  "runId": "lr-2b19ebf831af",
+  "status": "RECOVERY_REQUIRED",
+  "originalRequest": "Implement a materially distinct full-stack Signal Breach \"Persistent tactical annotations on the live mission board\" feature in THIS fresh physical copy only. All application code/tests/corrections authored by the local mtplx/mtplx-flash-next-optimized-speed model only (no delegation/fallback). Codex supplies requirements/review/harness. Continuation OFF. Preserve /Users/seanj/3dgametest and protected run lr-4c94bb821465; do not touch expired presets lr-e2804cb46297 or replay lr-eee4bbf740d3.\n\nFEATURE: A planner (planning/notes) mode on the real Three.js board. Player enters planning mode, selects a currently-visible board tile (vis==2), adds a short note (category danger|objective|route, text 1..120), inspects/edits/removes saved notes, exits planning to resume the unchanged game. Notes persist via a versioned HTTP API (/api/annotations/v1) into file-backed SQLite, keyed by exact mission index (0..2) and uint32 seed (0..4294967295, including ZERO). Show only notes for the current mission/seed. Existing campaign/saves/leaderboard/replay/AI-preview stay intact. No cloud/account, no simulation-rule/PRNG change, no Godot.\n\nACCEPTANCE A (server/data): server-generated stable note ID; validate mission 0..2, seed 0..4294967295 integer, tile x/y integers 0..13, category in set, trimmed text 1..120, bounded body + bounded per-(mission,seed) collection; optimistic revision; reject wall/out-of-board using the ACTUAL mission layout (wall/pillar) and do NOT clamp invalid mission/seed/coords; 400 invalid input, 404 unknown valid ID, 409 stale revision update/delete, 500 genuine storage failure. Parameterized SQLite only; failed writes leave data unchanged; server never trusts a client-chosen ID/revision. Schema init idempotent on a pre-feature DB and preserves complete leaderboard row values. Prove exact persistence across reload + a separate owned server restart on the SAME temp file DB and SAME port (ID, mission, seed0, coords, category, text, revision).\n\nACCEPTANCE B (gameplay): planning mode has visible state + clear exit; pointer/keyboard note interactions must not move/shoot/select a tactical unit, advance turn/revision, consume AP, mutate save/PRNG or append replay actions; ordinary tactical controls work after exit; use existing read-only current state/notifications (not polling/fake); test state hash/revision/AP/PRNG/replay invariance around note ops + real gameplay after; render readable markers anchored to correct tile at gameplay scale/camera; panel supplements markers, not replaces; only currently-visible tiles (vis=2) interactive/rendered on board; restoring visibility re-reveals the same note without sim mutation; no hidden enemy info in notes UI; observe real transitions, not a test-only shim.\n\nACCEPTANCE C (UI/resilience/a11y): loading/empty/validation/conflict/network/storage/success states; preserve unsaved text after failed writes; honest retry/reload; two independently loaded pages demonstrate stale-update/no-lost-update + recovery; guard late responses when mission/seed/selection change; pending write must not clear another draft; changing mission/leaving/disposal must not attach stale markers, keep listeners/resources alive, or apply responses to a departed world; delete needs confirmation, Cancel nondestructive; labels + accessible announcements + real keyboard traversal/focus (after editor open, Cancel, delete, planning off, back to tactical); render user text as text; repeated planning toggle/mission mount/unmount must not accumulate markers/handlers; record runtime observations.\n\nACCEPTANCE D (verification): exercise UI->real HTTP->file SQLite, exact values after reload/restart, validation/no-mutation/error, concurrency, pointer+keyboard, fog visibility, simulation invariance; preserve all existing default browser membership (34 tests in 12 files) and existing sim/server assertions (do not delete/skip/weaken for a count); reproducible browser screenshots (ordinary board, note editor, marker/category readability, fog, focus/error) with real inspection not just existence; keep actual command output of failures/repairs.\n\nACCEPTANCE E (negative control): after reviewed normal checks, Codex copies final reviewed source/deps to an independent fixture; I alone introduce ONE deliberate persistence/concurrency defect there; unchanged eligible native assertions must FAIL for that exact defect (not timeout/setup/launch/zero-tests/nonzero-exit). Do not change healthy source or weaken tests for the negative control; no shell-tool workaround copy.\n\nMAPPING (fixed, do not change): annotations-server -> c-annotations-server (INTEGRATION); annotations-gameplay -> c-annotations-e2e (BROWSER); regression-unit -> c-default-unit (UNIT); regression-browser -> c-default-browser (BROWSER). Hard gates c-typecheck, c-build. New browser specs in ./e2e-annotations with playwright.annotations.config.ts (isolated file DB, owned loopback web 5499/server 9099, strictPort, reuseExistingServer false, Vite proxy to 9099).",
+  "contract": {
+    "criteria": [
+      {
+        "id": "annotations-server",
+        "required": true,
+        "weight": 3,
+        "checks": [
+          "c-annotations-server"
+        ],
+        "evidenceClass": "INTEGRATION",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "annotations-gameplay",
+        "required": true,
+        "weight": 3,
+        "checks": [
+          "c-annotations-e2e"
+        ],
+        "evidenceClass": "BROWSER",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "regression-unit",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-default-unit"
+        ],
+        "evidenceClass": "UNIT",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "regression-browser",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-default-browser"
+        ],
+        "evidenceClass": "BROWSER",
+        "visual": false,
+        "status": "FAIL"
+      }
+    ],
+    "gates": [
+      {
+        "id": "c-typecheck",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "id": "c-build",
+        "required": true,
+        "status": "FAIL"
+      }
+    ],
+    "lossTarget": 0
+  },
+  "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+  "evaluatorHash": null,
+  "sourceFingerprint": "227226c09a19c94a3d8bb7a20226bd5dd8b2847dbe463ea892ef92bed00a7b6c",
+  "loss": 1,
+  "budget": {
+    "iterations": 24,
+    "activeSeconds": 7200,
+    "deadlineSeconds": 28800,
+    "sameFailureLimit": 3,
+    "noProgressLimit": 5,
+    "autoDispatchCap": 40,
+    "toolActionCap": 140
+  },
+  "autoEnabled": false,
+  "runMode": "tracked",
+  "memoryStatus": "FRESH",
+  "state": {
+    "iterations": 0,
+    "noProgressStreak": 0,
+    "sameFailureStreak": 0,
+    "candidates": [
+      {
+        "n": 1,
+        "runId": "lr-2b19ebf831af",
+        "fingerprint": "cd10010000934e59561b9004c978d7f7dd1ecf8d6dbadc9e16eb4943823bda40",
+        "ts": 1789934897617,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-1-ca3602d2492c"
+        ],
+        "criteriaChanged": [
+          "annotations-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": null,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 1155,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 2,
+        "runId": "lr-2b19ebf831af",
+        "fingerprint": "6223097690aa0750d4aadcccebd0ee6da8eeaab9a20504092b546a5816f6f31a",
+        "ts": 1789934952509,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-2-6f43c274634d"
+        ],
+        "criteriaChanged": [
+          "annotations-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": null,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 827,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 3,
+        "runId": "lr-2b19ebf831af",
+        "fingerprint": "3ce79a0e64f47e3413bb578c61e8aba944a6b450134177ba100fb91ae6bd57f4",
+        "ts": 1789934970085,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-3-16e13ce44f83"
+        ],
+        "criteriaChanged": [
+          "annotations-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 0.625,
+        "bestLoss": null,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 650,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 4,
+        "runId": "lr-2b19ebf831af",
+        "fingerprint": "15a944aca1fb2ba7dddf7f06d2f55eccfe2ee42a131fc7c8d684d0c241d4f0d4",
+        "ts": 1789935608384,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-4-d653eda7591b"
+        ],
+        "criteriaChanged": [
+          "annotations-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 0.625,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1241,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 5,
+        "runId": "lr-2b19ebf831af",
+        "fingerprint": "227226c09a19c94a3d8bb7a20226bd5dd8b2847dbe463ea892ef92bed00a7b6c",
+        "ts": 1789935717606,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-6-0bdc3608449c"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1060,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      }
+    ],
+    "lastEvalFingerprint": "227226c09a19c94a3d8bb7a20226bd5dd8b2847dbe463ea892ef92bed00a7b6c",
+    "memoryNodes": [
+      "AGENTS.md"
+    ],
+    "current": {
+      "n": 5,
+      "runId": "lr-2b19ebf831af",
+      "fingerprint": "227226c09a19c94a3d8bb7a20226bd5dd8b2847dbe463ea892ef92bed00a7b6c",
+      "ts": 1789935717606,
+      "hypothesis": null,
+      "receiptIds": [
+        "receipt-6-0bdc3608449c"
+      ],
+      "criteriaChanged": [],
+      "lossBefore": 1,
+      "lossAfter": 1,
+      "bestLoss": 0.625,
+      "result": "PASS",
+      "diagnosticOnly": false,
+      "elapsedMs": 1060,
+      "counted": true,
+      "reason": "evaluated_new_source_state"
+    },
+    "best": {
+      "n": 4,
+      "runId": "lr-2b19ebf831af",
+      "fingerprint": "15a944aca1fb2ba7dddf7f06d2f55eccfe2ee42a131fc7c8d684d0c241d4f0d4",
+      "ts": 1789935608384,
+      "hypothesis": null,
+      "receiptIds": [
+        "receipt-4-d653eda7591b"
+      ],
+      "criteriaChanged": [
+        "annotations-server"
+      ],
+      "lossBefore": 1,
+      "lossAfter": 0.625,
+      "bestLoss": 0.625,
+      "result": "PASS",
+      "diagnosticOnly": false,
+      "elapsedMs": 1241,
+      "counted": true,
+      "reason": "evaluated_new_source_state"
+    }
+  },
+  "receipts": [
+    {
+      "checkId": "c-annotations-server",
+      "command": "npx vitest run packages/server/test/annotations.test.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 0,
+      "startedAt": 1789934896427,
+      "finishedAt": 1789934897582,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "cd10010000934e59561b9004c978d7f7dd1ecf8d6dbadc9e16eb4943823bda40",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/annotations.test.ts"
+      ],
+      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-annotations-20260920T195102Z/project\n\n ❯ packages/server/test/annotations.test.ts (0 test)\n\n Test Files  1 failed (1)\n      Tests  no tests\n   Start at  21:08:17\n   Duration  228ms (transform 22ms, setup 0ms, collect 0ms, tests 0ms, environment 0ms, prepare 42ms)\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  packages/server/test/annotations.test.ts [ packages/server/test/annotations.test.ts ]\nError: Failed to load url sqlite (resolved id: sqlite). Does the file exist?\n ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51969:17\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "f2c22247-b625-4bc6-841a-07f2eacab20f"
+    },
+    {
+      "checkId": "c-annotations-server",
+      "command": "npx vitest run packages/server/test/annotations.test.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 0,
+      "startedAt": 1789934951646,
+      "finishedAt": 1789934952473,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "6223097690aa0750d4aadcccebd0ee6da8eeaab9a20504092b546a5816f6f31a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/annotations.test.ts"
+      ],
+      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-annotations-20260920T195102Z/project\n\n ❯ packages/server/test/annotations.test.ts (11 tests | 1 failed) 54ms\n   × annotations schema init (idempotent, additive, leaderboard-preserving) > adds the annotations table to a pre-feature DB without touching leaderboard row values 7ms\n     → expected 1 to be +0 // Object.is equality\n\n Test Files  1 failed (1)\n      Tests  1 failed | 10 passed (11)\n   Start at  21:09:12\n   Duration  327ms (transform 82ms, setup 0ms, collect 107ms, tests 54ms, environment 0ms, prepare 42ms)\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  packages/server/test/annotations.test.ts > annotations schema init (idempotent, additive, leaderboard-preserving) > adds the annotations table to a pre-feature DB without touching leaderboard row values\nAssertionError: expected 1 to be +0 // Object.is equality\n\n- Expected\n+ Received\n\n- 0\n+ 1\n\n ❯ packages/server/test/annotations.test.ts:368:48\n    366|       expect(lbCount(db2)).toBe(1);\n    367|       expect(top(db2, \"all\")[0].score).toBe(1234);\n    368|       expect(listNotes(db2, PLACEABLE).length).toBe(0); // new connect…\n       |                                                ^\n    369|       db2.close();\n    370|     } finally {\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "2600fc75-2d2d-40f8-a37a-60c427380a04"
+    },
+    {
+      "checkId": "c-annotations-server",
+      "command": "npx vitest run packages/server/test/annotations.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 11,
+      "startedAt": 1789934969397,
+      "finishedAt": 1789934970047,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "3ce79a0e64f47e3413bb578c61e8aba944a6b450134177ba100fb91ae6bd57f4",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/annotations.test.ts"
+      ],
+      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-annotations-20260920T195102Z/project\n\n ✓ packages/server/test/annotations.test.ts (11 tests) 44ms\n\n Test Files  1 passed (1)\n      Tests  11 passed (11)\n   Start at  21:09:29\n   Duration  316ms (transform 79ms, setup 0ms, collect 106ms, tests 44ms, environment 0ms, prepare 33ms)\n\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "1d038255-d020-4eb2-a003-78c16c9342c4"
+    },
+    {
+      "checkId": "c-annotations-server",
+      "command": "npx vitest run packages/server/test/annotations.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 13,
+      "startedAt": 1789935607105,
+      "finishedAt": 1789935608346,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "15a944aca1fb2ba7dddf7f06d2f55eccfe2ee42a131fc7c8d684d0c241d4f0d4",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/annotations.test.ts"
+      ],
+      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-annotations-20260920T195102Z/project\n\n ✓ packages/server/test/annotations.test.ts (13 tests) 557ms\n   ✓ annotations HTTP (INTEGRATION: real HTTP -> file SQLite) > persists across a SEPARATE OWNED PROCESS restart on the SAME file DB and SAME port 425ms\n\n Test Files  1 passed (1)\n      Tests  13 passed (13)\n   Start at  21:20:07\n   Duration  796ms (transform 72ms, setup 0ms, collect 94ms, tests 557ms, environment 0ms, prepare 36ms)\n\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "ee6815f4-1641-4533-b482-ef8d697447ac"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "FAIL",
+      "exitCode": 2,
+      "testCount": null,
+      "startedAt": 1789935626150,
+      "finishedAt": 1789935627298,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "15a944aca1fb2ba7dddf7f06d2f55eccfe2ee42a131fc7c8d684d0c241d4f0d4",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "packages/server/src/annotations.ts(120,16): error TS2352: Conversion of type 'Record<string, SQLOutputValue>[]' to type 'AnnotationView[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.\n  Type 'Record<string, SQLOutputValue>' is missing the following properties from type 'AnnotationView': id, mission, seed, x, and 4 more.\npackages/server/test/annotations.test.ts(79,60): error TS2339: Property 'close' does not exist on type 'never'.\npackages/server/test/annotations.test.ts(375,28): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type '(req: unknown, res: unknown) => Promise<void>'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/annotations.test.ts(383,28): error TS2345: Argument of type '(req: IncomingMessage, res: ServerResponse<IncomingMessage>) => Promise<void>' is not assignable to parameter of type '(req: unknown, res: unknown) => Promise<void>'.\n  Types of parameters 'req' and 'req' are incompatible.\n    Type 'unknown' is not assignable to type 'IncomingMessage'.\npackages/server/test/annotations.test.ts(477,21): error TS2769: No overload matches this call.\n  Overload 1 of 3, '(chunk: any, cb?: (() => void) | undefined): ServerResponse<IncomingMessage> & { req: IncomingMessage; }', gave the following error.\n    Argument of type 'string' is not assignable to parameter of type '() => void'.\n  Overload 2 of 3, '(chunk: any, encoding: BufferEncoding, cb?: (() => void) | undefined): ServerResponse<IncomingMessage> & { req: IncomingMessage; }', gave the following error.\n    Argument of type '\"\"' is not assignable to parameter of type 'BufferEncoding'.\n",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "5c1f7852-780b-4c4b-a80f-209990a74f62"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789935716512,
+      "finishedAt": 1789935717572,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "227226c09a19c94a3d8bb7a20226bd5dd8b2847dbe463ea892ef92bed00a7b6c",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "149d0d71-b16a-40fd-a8e6-4a94cb0f9bf0"
+    }
+  ],
+  "faults": [],
+  "execution": {
+    "schemaVersion": 1,
+    "since": 1789934372883,
+    "historicalUsageUnknown": false,
+    "verificationMs": 6081,
+    "commandAttempts": 6,
+    "inFlight": null
+  },
+  "directory": "/Users/seanj/.local/state/opencode-longrun/commissioning/signal-annotations-20260920T195102Z/project",
+  "checkCatalogue": {
+    "c-annotations-server": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/annotations.test.ts"
+      ],
+      "kind": "test",
+      "integration": true,
+      "negativeControl": true,
+      "timeoutMs": 180000
+    },
+    "c-annotations-e2e": {
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.annotations.config.ts"
+      ],
+      "kind": "test",
+      "integration": true,
+      "negativeControl": true,
+      "visual": true,
+      "timeoutMs": 420000
+    },
+    "c-default-unit": {
+      "command": [
+        "npx",
+        "vitest",
+        "run"
+      ],
+      "kind": "test",
+      "timeoutMs": 180000
+    },
+    "c-default-browser": {
+      "command": [
+        "npx",
+        "playwright",
+        "test"
+      ],
+      "kind": "test",
+      "timeoutMs": 600000
+    },
+    "c-typecheck": {
+      "command": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "kind": "cmd",
+      "gate": true,
+      "timeoutMs": 180000
+    },
+    "c-build": {
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "-w",
+        "@sb/web"
+      ],
+      "kind": "cmd",
+      "gate": true,
+      "timeoutMs": 240000
+    }
+  },
+  "createdAt": 1789934372883,
+  "compactionSessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+  "agentProgressHistory": [
+    {
+      "schemaVersion": 1,
+      "revision": 1,
+      "at": 1789934384565,
+      "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+      "sourceFingerprint": "43b42152981c219f21bad5db97c6040b2d6fbbdf1806eb5c70329885060d2c65",
+      "fields": {
+        "currentSlice": "Server data layer: versioned /api/annotations/v1 + file-backed SQLite repo (server-gen ID, optimistic revision, layout wall/coord validation, 400/404/409/500), then its INTEGRATION test.",
+        "nextAction": "Write packages/server/src/annotations.ts (schema+validate+repo), wire /api/annotations/v1 into makeHandler with ensureSchema, then packages/server/test/annotations.test.ts. Verify c-annotations-server + c-typecheck before UI.",
+        "decisions": [
+          "Wall = terrain wall|pillar from buildMap (layout seed-independent); reject out-of-board + walls, no clamp.",
+          "API under /api/annotations/v1/{list,create,update,delete}; server ignores any client id/revision.",
+          "Restart-persistence proof lives in the INTEGRATION vitest (real HTTP, fixed loopback port, SAME file DB), reload proof in the BROWSER e2e.",
+          "Planning is a TacticalGame input mode gated by a flag so it cannot move/shoot/select/endTurn; markers are scene objects rebuilt each sync (no accumulation)."
+        ],
+        "failedHypotheses": [
+          "tsconfig does NOT include e2e/e2e-annotations, so Playwright specs are not typechecked by c-typecheck (they must still transpile).",
+          "Default playwright run uses testDir ./e2e only; ./e2e-annotations specs are isolated by their own config and must not alter the 34 default browser tests."
+        ],
+        "memoryNodes": [
+          "packages/server/src/index.ts",
+          "packages/server/src/leaderboard.ts",
+          "packages/server/src/validate.ts",
+          "packages/sim/src/map.ts",
+          "packages/sim/src/missions.ts",
+          "packages/web/src/game/TacticalGame.ts",
+          "packages/web/src/scene/World.ts",
+          "playwright.config.ts",
+          "vitest.config.ts",
+          "tsconfig.json"
+        ],
+        "artifacts": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "revision": 2,
+      "at": 1789935030856,
+      "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+      "sourceFingerprint": "3ce79a0e64f47e3413bb578c61e8aba944a6b450134177ba100fb91ae6bd57f4",
+      "fields": {
+        "currentSlice": "Gameplay/UI integration: planning-mode input gating in TacticalGame + World annotation markers + a planning controller/panel (a11y, late-response guards, no-lost-update) + e2e-annotations config/specs.",
+        "nextAction": "Read HUD.tsx + styles.css + sim types.ts, then add World.renderAnnotationMarkers/clear, TacticalGame planning gate, planning controller+panel, wire GameCanvas; then e2e-annotations config + specs. Verify c-annotations-e2e + gates.",
+        "decisions": [
+          "Keep one input owner: TacticalGame gates tactical actions while planning.active; left-click selects a tile (vis2 only), right/shift-drag still pans (presentation only).",
+          "PlanningController owns notes/draft/status, re-renders markers from notes∩vis==2 on game.onStateChange, and is disposed on mission unmount (no stale listeners/markers).",
+          "Restart-persistence proved in the INTEGRATION test; reload + pointer/keyboard/fog/invariance + screenshots proved in the BROWSER spec."
+        ],
+        "failedHypotheses": [
+          "Value import of node:sqlite breaks vitest (Vite resolves 'sqlite'); must use createRequire like leaderboard.ts.",
+          "One server assertion wrongly expected a persisted note to be absent; product persistence is correct."
+        ],
+        "memoryNodes": [
+          "packages/server/src/annotations.ts",
+          "packages/server/src/leaderboard.ts",
+          "packages/web/src/game/TacticalGame.ts",
+          "packages/web/src/scene/World.ts",
+          "packages/web/src/GameCanvas.tsx",
+          "packages/web/src/HUD.tsx"
+        ],
+        "artifacts": [
+          "packages/server/src/annotations.ts",
+          "packages/server/src/index.ts",
+          "packages/server/test/annotations.test.ts"
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "revision": 3,
+      "at": 1789935752230,
+      "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+      "sourceFingerprint": "dc33b0f2fa08fe45cefa09c4588065938b0f53e89db28e79e8c99af6a61000e8",
+      "fields": {
+        "currentSlice": "server layer corrected: real child-process restart proof + oversized-body complete-400 + complete leaderboard-preservation + loopback bind. Next: board planning/notes UI + markers + invariance.",
+        "nextAction": "Read World.ts + TacticalGame.ts + types.ts, then implement planning-mode input gate, World annotation markers (vis==2, anchored), PlanningController + panel, wire GameCanvas, add e2e-annotations config + specs; keep 34 default browser tests + existing sim/server assertions.",
+        "decisions": [
+          "Process-boundary restart proven with two owned child PIDs, fixed loopback port, port-released proof, exact note fields across boundary.",
+          "Readiness belongs to the owned child's own banner, not a foreign /health.",
+          "Annotation bodies capped (complete 400); submit's 5MB readBody unchanged."
+        ],
+        "failedHypotheses": [
+          "Typecheck (gate) had 5 compile issues (SQLOutput cast, dead probe, call-param contravariance, res.end overload) — fixed; c-typecheck now PASS."
+        ],
+        "memoryNodes": [
+          "packages/server/AGENTS.md"
+        ],
+        "artifacts": [
+          "packages/server/src/index.ts",
+          "packages/server/test/annotations.test.ts"
+        ]
+      }
+    }
+  ],
+  "agentProgress": {
+    "schemaVersion": 1,
+    "revision": 3,
+    "at": 1789935752230,
+    "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+    "sourceFingerprint": "dc33b0f2fa08fe45cefa09c4588065938b0f53e89db28e79e8c99af6a61000e8",
+    "fields": {
+      "currentSlice": "server layer corrected: real child-process restart proof + oversized-body complete-400 + complete leaderboard-preservation + loopback bind. Next: board planning/notes UI + markers + invariance.",
+      "nextAction": "Read World.ts + TacticalGame.ts + types.ts, then implement planning-mode input gate, World annotation markers (vis==2, anchored), PlanningController + panel, wire GameCanvas, add e2e-annotations config + specs; keep 34 default browser tests + existing sim/server assertions.",
+      "decisions": [
+        "Process-boundary restart proven with two owned child PIDs, fixed loopback port, port-released proof, exact note fields across boundary.",
+        "Readiness belongs to the owned child's own banner, not a foreign /health.",
+        "Annotation bodies capped (complete 400); submit's 5MB readBody unchanged."
+      ],
+      "failedHypotheses": [
+        "Typecheck (gate) had 5 compile issues (SQLOutput cast, dead probe, call-param contravariance, res.end overload) — fixed; c-typecheck now PASS."
+      ],
+      "memoryNodes": [
+        "packages/server/AGENTS.md"
+      ],
+      "artifacts": [
+        "packages/server/src/index.ts",
+        "packages/server/test/annotations.test.ts"
+      ]
+    }
+  },
+  "controlGeneration": 3
+}
