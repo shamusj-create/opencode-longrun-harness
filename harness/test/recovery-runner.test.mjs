@@ -199,13 +199,13 @@ test('raw dispatch streams get unique, phase-tagged names so evidence is never o
 });
 
 test('the operator fallback binary resolves under HOME, not dirname(HOME)', () => {
-  // Regression: the give-up path once used path.dirname(HOME), giving /Users/.config/<...> which does
-  // not exist, so the pause fallback failed silently with exitCode null.
-  const home = '/Users/seanj';
+  // Regression: the give-up path once used path.dirname(HOME), giving <dirname>/.config/<...> which
+  // does not exist, so the pause fallback failed silently with exitCode null.
+  const home = '/home/example';
   const bin = defaultMaintenanceBin(home);
-  assert.equal(bin, '/Users/seanj/.config/opencode/longrun-harness/longrun');
+  assert.equal(bin, '/home/example/.config/opencode/longrun-harness/longrun');
   assert.ok(bin.startsWith(home + '/'), 'must live under HOME: ' + bin);
-  assert.ok(!bin.startsWith('/Users/.config'), 'must not be dirname(HOME)-rooted: ' + bin);
+  assert.ok(!bin.startsWith('/home/.config'), 'must not be dirname(HOME)-rooted: ' + bin);
   // A different HOME must move the path with it.
   assert.ok(defaultMaintenanceBin('/tmp/fake-home').startsWith('/tmp/fake-home/.config/'));
 });
