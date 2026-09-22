@@ -141,5 +141,4 @@ desktop or CLI for the plugin.
 
 ## License
 
-No license has been chosen for this repository yet, so it is **all rights reserved** by default. Open
-an issue if you would like a specific license applied.
+[MIT](LICENSE) — use it, fork it, change it, ship it. Contributions and issues are welcome.

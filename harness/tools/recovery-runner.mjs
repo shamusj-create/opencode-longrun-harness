@@ -129,9 +129,10 @@ export function extractSessionId(stdout) {
 }
 
 // The installed operator launcher, resolved from HOME itself.
-// An earlier version resolved the give-up path with path.dirname(HOME), which yields /Users/.config/...
-// instead of $HOME/.config/... — the binary did not exist, the spawn failed, and the pause fallback
-// failed silently (ok:false, exitCode:null) while a run was left in RECOVERY_REQUIRED. Both call sites
+// An earlier version resolved the give-up path with path.dirname(HOME), which yields
+// <dirname(HOME)>/.config/... instead of <HOME>/.config/... — the binary did not exist, the spawn
+// failed, and the pause fallback failed silently (ok:false, exitCode:null) while a run was left in
+// RECOVERY_REQUIRED. Both call sites
 // now share this one definition, and the resolved binary is reported so a failure is diagnosable.
 export function defaultMaintenanceBin(home = process.env.HOME || "") {
   return path.join(home, ".config", "opencode", "longrun-harness", "longrun");

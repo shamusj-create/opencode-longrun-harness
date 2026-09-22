@@ -1,5 +1,5 @@
 {
-  "runId": "lr-4c94bb821465",
+  "runId": "lr-00000000e5f6",
   "status": "PAUSED",
   "originalRequest": "Signal Breach expansion: authoritative fog of war, enemy detection cones, stealth, deterministic noise, security network (cameras/turrets/nodes), alarm escalation, AI upgrade, mission 2/3 rebalance with deterministic win replays, leaderboard pipeline, save v2->v3 migration, character/environment/animation upgrades, browser journeys, negative controls. Preserve all existing systems/tests.",
   "contract": {
@@ -179,7 +179,7 @@
     "candidates": [
       {
         "n": 1,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "dd470f7cd39b23ca3c2fa975a0be0f6ba1085074e555b97e4e87934846200c78",
         "ts": 1789834367565,
         "hypothesis": null,
@@ -198,7 +198,7 @@
       },
       {
         "n": 2,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "247460900e8cfe476ecf705fe1b71a428651ea0fd2c26e49d9f6e713aa80405b",
         "ts": 1789834675830,
         "hypothesis": null,
@@ -218,7 +218,7 @@
       },
       {
         "n": 3,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "67a84eeaa93d1d63c1a80f893256f2531b9806c846607d83068585f881834727",
         "ts": 1789836414781,
         "hypothesis": null,
@@ -238,7 +238,7 @@
       },
       {
         "n": 4,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "bbe24e95714f2e67ea38989c2468a4bf299d759c0e24adb676c33fd1e590daeb",
         "ts": 1789836433549,
         "hypothesis": null,
@@ -258,7 +258,7 @@
       },
       {
         "n": 5,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "d8b88d9251a2835044669fc1b5411b599256de53b5bd9ce47480806f6d731d77",
         "ts": 1789836441372,
         "hypothesis": null,
@@ -276,7 +276,7 @@
       },
       {
         "n": 6,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "b78f98e5ae6201aa340ad28e3b7c291abd52eedf8092c1d8898f5de925826062",
         "ts": 1789836649193,
         "hypothesis": null,
@@ -296,7 +296,7 @@
       },
       {
         "n": 7,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "c942d4ada02cb12a3c4527f2c9363616649727fd85ad9ad77b87a5bf43f2b8b2",
         "ts": 1789836728067,
         "hypothesis": null,
@@ -316,7 +316,7 @@
       },
       {
         "n": 8,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "e365be42aff4b02f68cdeeecf347360dda81137d84b7fe4b927e3ba0255d3646",
         "ts": 1789836808822,
         "hypothesis": null,
@@ -336,7 +336,7 @@
       },
       {
         "n": 9,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "a681be07794882632780cd219cc23b20805b61c74e85bbdfe963b02794212344",
         "ts": 1789836931746,
         "hypothesis": null,
@@ -356,7 +356,7 @@
       },
       {
         "n": 10,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "70ad91315c8ea57a4a62c29c3abf77a1a86a44a9a3a309def2417b7c03bec5ba",
         "ts": 1789837040391,
         "hypothesis": null,
@@ -376,7 +376,7 @@
       },
       {
         "n": 11,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "f9604d467ba6b6269845f0009df85506736cb37db50d80e8dfbe3c042b20e3c7",
         "ts": 1789837151154,
         "hypothesis": null,
@@ -396,7 +396,7 @@
       },
       {
         "n": 12,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "982f5899db5e1ca192d30fefb2c30982cdf88e9699dd30e396ca397601ed4d90",
         "ts": 1789837281933,
         "hypothesis": null,
@@ -414,7 +414,7 @@
       },
       {
         "n": 13,
-        "runId": "lr-4c94bb821465",
+        "runId": "lr-00000000e5f6",
         "fingerprint": "96c236c2d720c5bc448b68c72461d82e6050a761be1d7302910fac9d572ef82d",
         "ts": 1789837384691,
         "hypothesis": null,
@@ -439,7 +439,7 @@
     ],
     "best": {
       "n": 1,
-      "runId": "lr-4c94bb821465",
+      "runId": "lr-00000000e5f6",
       "fingerprint": "dd470f7cd39b23ca3c2fa975a0be0f6ba1085074e555b97e4e87934846200c78",
       "ts": 1789834367565,
       "hypothesis": null,
@@ -458,7 +458,7 @@
     },
     "current": {
       "n": 13,
-      "runId": "lr-4c94bb821465",
+      "runId": "lr-00000000e5f6",
       "fingerprint": "96c236c2d720c5bc448b68c72461d82e6050a761be1d7302910fac9d572ef82d",
       "ts": 1789837384691,
       "hypothesis": null,
@@ -1114,7 +1114,7 @@
     }
   ],
   "faults": [],
-  "directory": "/Users/seanj/3dgametest",
+  "directory": "/srv/signal-breach",
   "checkCatalogue": {
     "c-fog-unit": {
       "kind": "cmd",

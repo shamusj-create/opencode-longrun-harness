@@ -22,7 +22,8 @@ import { createHash } from "node:crypto";
 const argv = process.argv.slice(2);
 const flag = (n, d) => { const i = argv.indexOf(n); return i >= 0 ? argv[i + 1] : d; };
 const STATE_DIR = flag("--state-dir", path.join(process.env.HOME, ".local/state/opencode-longrun/v1"));
-const RUN_ID = flag("--run", "lr-4c94bb821465");
+const RUN_ID = flag("--run", "");
+if (!RUN_ID) { console.error("usage: audit-receipts.mjs --run RUN_ID [--state-dir DIR] [--baseline N] [--json]"); process.exit(2); }
 const BASELINE = Number(flag("--baseline", 0));
 
 function findRun(stateDir, runId) {

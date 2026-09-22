@@ -1,5 +1,5 @@
 {
-  "runId": "lr-e2804cb46297",
+  "runId": "lr-000000001a2b",
   "status": "RECOVERY_REQUIRED",
   "originalRequest": "Mission rehearsal presets feature. From the title screen the player saves named mission/seed presets, lists, edits/renames, deletes one with explicit UI confirmation, and launches that exact mission/seed into the existing real tactical game. Persist through the HTTP API into a file-backed SQLite database (localStorage alone insufficient). New versioned API under /api/presets: create/list/update/delete with server validation, parameterized SQLite, optimistic concurrency (revision), stable server-generated IDs. Name trimmed 1..40 chars, duplicate trimmed names ->409 without overwrite. Mission indices 0..2, seed integer 0..4294967295 inclusive; seed 0 must reach the real game unchanged. Malformed JSON/types/out-of-range/malformed IDs ->400; unknown valid IDs ->404; stale revision ->409 no lost update; genuine storage failure ->500. Invalid writes leave DB unchanged. Idempotent schema init preserving existing leaderboard rows. Existing campaign, saves, leaderboard, AI preview and ?mode=replay intact; shared sim/PRNG/combat unchanged. UI has loading/empty/validation/conflict/backend-failure/success states, preserves form input on failure with retry/reload, accessible, renders names as text, selection/late-fetch must not apply to another preset, confirm-delete cancel nondestructive, two independent pages demonstrate stale conflict + recovery. Launch consumes server-returned mission/seed into the existing GameCanvas/TacticalGame, not a fake shim/new simulator; editing a preset must not overwrite existing campaign saves.",
   "contract": {
@@ -86,7 +86,7 @@
     "candidates": [
       {
         "n": 1,
-        "runId": "lr-e2804cb46297",
+        "runId": "lr-000000001a2b",
         "fingerprint": "9df02d5f20783ca7111d7f346aaa7359cec978f75e06b92da4e6158e9e4ab4f6",
         "ts": 1789920110166,
         "hypothesis": null,
@@ -105,7 +105,7 @@
       },
       {
         "n": 2,
-        "runId": "lr-e2804cb46297",
+        "runId": "lr-000000001a2b",
         "fingerprint": "c1e5143318bfa3d52619e52cdc2d669c50ee6e8d8079601165be61d713d2e80f",
         "ts": 1789920237173,
         "hypothesis": null,
@@ -124,7 +124,7 @@
       },
       {
         "n": 3,
-        "runId": "lr-e2804cb46297",
+        "runId": "lr-000000001a2b",
         "fingerprint": "4f1c9fece491541c0ad22d81c7e20641472bb6d2b7d1e9babfd57d07118a1feb",
         "ts": 1789920251996,
         "hypothesis": null,
@@ -143,7 +143,7 @@
       },
       {
         "n": 4,
-        "runId": "lr-e2804cb46297",
+        "runId": "lr-000000001a2b",
         "fingerprint": "ae59a7396b9150b3b38d52bf2af04acf20416cad4e3eb64d807b1817fcd9d710",
         "ts": 1789921054420,
         "hypothesis": null,
@@ -164,7 +164,7 @@
       },
       {
         "n": 5,
-        "runId": "lr-e2804cb46297",
+        "runId": "lr-000000001a2b",
         "fingerprint": "27c2f530d79714abfec09024294f6eb2092a52554ed5e817eca3134bf2f496d8",
         "ts": 1789921290376,
         "hypothesis": null,
@@ -185,7 +185,7 @@
       },
       {
         "n": 6,
-        "runId": "lr-e2804cb46297",
+        "runId": "lr-000000001a2b",
         "fingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
         "ts": 1789921358408,
         "hypothesis": null,
@@ -209,7 +209,7 @@
     ],
     "current": {
       "n": 6,
-      "runId": "lr-e2804cb46297",
+      "runId": "lr-000000001a2b",
       "fingerprint": "5cecaed62f5ea5ad225ffb6a73e7544170a1ed6b307128b7ea0f42754d06a39a",
       "ts": 1789921358408,
       "hypothesis": null,
@@ -228,7 +228,7 @@
     },
     "best": {
       "n": 5,
-      "runId": "lr-e2804cb46297",
+      "runId": "lr-000000001a2b",
       "fingerprint": "27c2f530d79714abfec09024294f6eb2092a52554ed5e817eca3134bf2f496d8",
       "ts": 1789921290376,
       "hypothesis": null,
@@ -367,7 +367,7 @@
         "run",
         "packages/server/test/presets.test.ts"
       ],
-      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/server/test/presets.test.ts (11 tests) 443ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 339ms\n\n Test Files  1 passed (1)\n      Tests  11 passed (11)\n   Start at  17:04:22\n   Duration  749ms (transform 95ms, setup 0ms, collect 118ms, tests 443ms, environment 0ms, prepare 55ms)\n\n",
+      "outputTail": "\n RUN  v2.1.9 /srv/longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/server/test/presets.test.ts (11 tests) 443ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 339ms\n\n Test Files  1 passed (1)\n      Tests  11 passed (11)\n   Start at  17:04:22\n   Duration  749ms (transform 95ms, setup 0ms, collect 118ms, tests 443ms, environment 0ms, prepare 55ms)\n\n",
       "terminationReason": null,
       "executionError": null,
       "executionToken": "ba21644b-8dd5-4782-a4be-7fcbc8fcea72"
@@ -398,7 +398,7 @@
         "--config",
         "playwright.presets.config.ts"
       ],
-      "outputTail": "....toEqual(expected) // deep equality\n\n    - Expected  - 0\n    + Received  + 3\n\n      Object {\n    +   \"created_ts\": 1789921040745,\n    +   \"id\": \"2af719b6-7cfd-44fa-863c-05e1466245b9\",\n        \"mission\": 0,\n        \"name\": \"Zero Seed\",\n        \"revision\": 1,\n        \"seed\": 0,\n    +   \"updated_ts\": 1789921040745,\n      }\n\n      71 |     });\n      72 |     expect(truth.presets.length).toBe(1);\n    > 73 |     expect(truth.presets[0]).toEqual({ name: \"Zero Seed\", mission: 0, seed: 0, revision: 1 });\n         |                              ^\n      74 |\n      75 |     // Launch into the game; the shared TacticalGame must receive seed 0 unchanged (not the default).\n      76 |     await page.getByTestId(\"preset-launch\").first().click();\n        at /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:73:30\n\n    Error Context: e2e-presets/test-results/presets-presets-keyboard-j-4e332-l-seed-0-into-the-real-game-chromium/error-context.md\n\n  2) [chromium] › e2e-presets/presets.spec.ts:142:3 › presets failure + conflict states › create failure keeps the typed input, and a duplicate name surfaces a conflict (not a write) \n\n    Error: expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 0\n    + Received  + 5\n\n      Object {\n    +   \"created_ts\": 1789921041999,\n    +   \"id\": \"dd5fdd5c-696b-4505-ab0a-25ffa8f03415\",\n    +   \"mission\": 0,\n        \"name\": \"Dup\",\n    +   \"revision\": 1,\n        \"seed\": 1,\n    +   \"updated_ts\": 1789921041999,\n      }\n\n      158 |     const rows = await page.evaluate(async () => (await (await fetch(\"/api/presets/v1\", { headers: { \"x-sb-api-version\": \"1\" } })).json()).presets as { name: string; seed: number }[]);\n      159 |     expect(rows.length).toBe(1);\n    > 160 |     expect(rows[0]).toEqual({ name: \"Dup\", seed: 1 }); // unchanged by the 409 attempt\n          |                     ^\n      161 |   });\n      162 |\n      163 |   test(\"network failure during a create preserves input and Retry (after the backend returns) succeeds\", async ({ page }) => {\n        at /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:160:21\n\n    Error Context: e2e-presets/test-results/presets-presets-failure-co-9618b-ces-a-conflict-not-a-write--chromium/error-context.md\n\n  3) [chromium] › e2e-presets/presets.spec.ts:183:3 › presets failure + conflict states › two independently loaded pages: stale edit conflict + recovery \n\n    Error: expect(locator).toContainText(expected) failed\n\n    Locator: getByTestId('preset-row').filter({ hasText: 'Contested' })\n    Expected substring: \"222\"\n    Received string:    \"ContestedM2 · seed 111 · rev 2LaunchEditDelete\"\n    Timeout: 10000ms\n\n    Call log:\n      - Expect \"toContainText\" getByTestId('preset-row').filter({ hasText: 'Contested' }) with timeout 10000ms\n      - waiting for getByTestId('preset-row').filter({ hasText: 'Contested' })\n        24 × locator resolved to <div class=\"preset-row\" data-name=\"Contested\" data-testid=\"preset-row\">…</div>\n           - unexpected value \"ContestedM2 · seed 111 · rev 2LaunchEditDelete\"\n\n\n      219 |       await waitReady(b);\n      220 |       const bRow = b.getByTestId(\"preset-row\").filter({ hasText: \"Contested\" });\n    > 221 |       await expect(bRow).toContainText(\"222\");\n          |                          ^\n      222 |       await bRow.getByTestId(\"preset-edit\").click();\n      223 |       await expect(b.getByTestId(\"preset-seed\")).toHaveValue(\"222\");\n      224 |     } finally {\n        at /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:221:26\n\n    Error Context: e2e-presets/test-results/presets-presets-failure-co-bdb47-tale-edit-conflict-recovery-chromium/error-context.md\n\n  3 failed\n    [chromium] › e2e-presets/presets.spec.ts:48:3 › presets keyboard journey + exact launch › create (keyboard) then launch consumes the saved mission/seed incl seed 0 into the real game \n    [chromium] › e2e-presets/presets.spec.ts:142:3 › presets failure + conflict states › create failure keeps the typed input, and a duplicate name surfaces a conflict (not a write) \n    [chromium] › e2e-presets/presets.spec.ts:183:3 › presets failure + conflict states › two independently loaded pages: stale edit conflict + recovery \n  5 passed (15.6s)\n[WebServer] (node:33840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33868) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33870) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33898) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:33901) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33938) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+      "outputTail": "....toEqual(expected) // deep equality\n\n    - Expected  - 0\n    + Received  + 3\n\n      Object {\n    +   \"created_ts\": 1789921040745,\n    +   \"id\": \"2af719b6-7cfd-44fa-863c-05e1466245b9\",\n        \"mission\": 0,\n        \"name\": \"Zero Seed\",\n        \"revision\": 1,\n        \"seed\": 0,\n    +   \"updated_ts\": 1789921040745,\n      }\n\n      71 |     });\n      72 |     expect(truth.presets.length).toBe(1);\n    > 73 |     expect(truth.presets[0]).toEqual({ name: \"Zero Seed\", mission: 0, seed: 0, revision: 1 });\n         |                              ^\n      74 |\n      75 |     // Launch into the game; the shared TacticalGame must receive seed 0 unchanged (not the default).\n      76 |     await page.getByTestId(\"preset-launch\").first().click();\n        at /srv/longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:73:30\n\n    Error Context: e2e-presets/test-results/presets-presets-keyboard-j-4e332-l-seed-0-into-the-real-game-chromium/error-context.md\n\n  2) [chromium] › e2e-presets/presets.spec.ts:142:3 › presets failure + conflict states › create failure keeps the typed input, and a duplicate name surfaces a conflict (not a write) \n\n    Error: expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 0\n    + Received  + 5\n\n      Object {\n    +   \"created_ts\": 1789921041999,\n    +   \"id\": \"dd5fdd5c-696b-4505-ab0a-25ffa8f03415\",\n    +   \"mission\": 0,\n        \"name\": \"Dup\",\n    +   \"revision\": 1,\n        \"seed\": 1,\n    +   \"updated_ts\": 1789921041999,\n      }\n\n      158 |     const rows = await page.evaluate(async () => (await (await fetch(\"/api/presets/v1\", { headers: { \"x-sb-api-version\": \"1\" } })).json()).presets as { name: string; seed: number }[]);\n      159 |     expect(rows.length).toBe(1);\n    > 160 |     expect(rows[0]).toEqual({ name: \"Dup\", seed: 1 }); // unchanged by the 409 attempt\n          |                     ^\n      161 |   });\n      162 |\n      163 |   test(\"network failure during a create preserves input and Retry (after the backend returns) succeeds\", async ({ page }) => {\n        at /srv/longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:160:21\n\n    Error Context: e2e-presets/test-results/presets-presets-failure-co-9618b-ces-a-conflict-not-a-write--chromium/error-context.md\n\n  3) [chromium] › e2e-presets/presets.spec.ts:183:3 › presets failure + conflict states › two independently loaded pages: stale edit conflict + recovery \n\n    Error: expect(locator).toContainText(expected) failed\n\n    Locator: getByTestId('preset-row').filter({ hasText: 'Contested' })\n    Expected substring: \"222\"\n    Received string:    \"ContestedM2 · seed 111 · rev 2LaunchEditDelete\"\n    Timeout: 10000ms\n\n    Call log:\n      - Expect \"toContainText\" getByTestId('preset-row').filter({ hasText: 'Contested' }) with timeout 10000ms\n      - waiting for getByTestId('preset-row').filter({ hasText: 'Contested' })\n        24 × locator resolved to <div class=\"preset-row\" data-name=\"Contested\" data-testid=\"preset-row\">…</div>\n           - unexpected value \"ContestedM2 · seed 111 · rev 2LaunchEditDelete\"\n\n\n      219 |       await waitReady(b);\n      220 |       const bRow = b.getByTestId(\"preset-row\").filter({ hasText: \"Contested\" });\n    > 221 |       await expect(bRow).toContainText(\"222\");\n          |                          ^\n      222 |       await bRow.getByTestId(\"preset-edit\").click();\n      223 |       await expect(b.getByTestId(\"preset-seed\")).toHaveValue(\"222\");\n      224 |     } finally {\n        at /srv/longrun/commissioning/signal-presets-20260920T151423Z/project/e2e-presets/presets.spec.ts:221:26\n\n    Error Context: e2e-presets/test-results/presets-presets-failure-co-bdb47-tale-edit-conflict-recovery-chromium/error-context.md\n\n  3 failed\n    [chromium] › e2e-presets/presets.spec.ts:48:3 › presets keyboard journey + exact launch › create (keyboard) then launch consumes the saved mission/seed incl seed 0 into the real game \n    [chromium] › e2e-presets/presets.spec.ts:142:3 › presets failure + conflict states › create failure keeps the typed input, and a duplicate name surfaces a conflict (not a write) \n    [chromium] › e2e-presets/presets.spec.ts:183:3 › presets failure + conflict states › two independently loaded pages: stale edit conflict + recovery \n  5 passed (15.6s)\n[WebServer] (node:33840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33868) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33870) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:33898) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:33901) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:33938) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
       "terminationReason": null,
       "executionError": null,
       "executionToken": "9a9d51ff-f7b8-4235-9849-4e709ed707f9"
@@ -552,7 +552,7 @@
         "run",
         "packages/server/test/presets.test.ts"
       ],
-      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/server/test/presets.test.ts (11 tests) 420ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 332ms\n\n Test Files  1 passed (1)\n      Tests  11 passed (11)\n   Start at  17:23:00\n   Duration  648ms (transform 66ms, setup 0ms, collect 86ms, tests 420ms, environment 0ms, prepare 33ms)\n\n",
+      "outputTail": "\n RUN  v2.1.9 /srv/longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/server/test/presets.test.ts (11 tests) 420ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 332ms\n\n Test Files  1 passed (1)\n      Tests  11 passed (11)\n   Start at  17:23:00\n   Duration  648ms (transform 66ms, setup 0ms, collect 86ms, tests 420ms, environment 0ms, prepare 33ms)\n\n",
       "terminationReason": null,
       "executionError": null,
       "executionToken": "713df509-4ebd-4a8a-a855-954e8499d277"
@@ -581,7 +581,7 @@
         "vitest",
         "run"
       ],
-      "outputTail": "\n RUN  v2.1.9 /Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/sim/test/core.test.ts (9 tests) 3ms\n ✓ packages/sim/test/save.test.ts (7 tests) 6ms\n ✓ packages/sim/test/destruct.test.ts (3 tests) 12ms\n ✓ packages/sim/test/fog.test.ts (8 tests) 18ms\n ✓ packages/sim/test/detect.test.ts (7 tests) 18ms\n ✓ packages/sim/test/security.test.ts (10 tests) 21ms\n ✓ packages/sim/test/ai.test.ts (10 tests) 30ms\n ✓ packages/sim/test/neg-replay.test.ts (4 tests) 69ms\n ✓ packages/server/test/transport.test.ts (2 tests) 75ms\n ✓ packages/server/test/server.test.ts (6 tests) 87ms\n ✓ packages/sim/test/game.test.ts (13 tests) 111ms\n ✓ packages/sim/test/replay2.test.ts (3 tests) 120ms\n ✓ packages/sim/test/missions23.test.ts (3 tests) 167ms\n ✓ packages/server/test/presets.test.ts (11 tests) 449ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 337ms\n\n Test Files  14 passed (14)\n      Tests  96 passed (96)\n   Start at  17:23:09\n   Duration  725ms (transform 459ms, setup 0ms, collect 1.50s, tests 1.19s, environment 1ms, prepare 578ms)\n\n",
+      "outputTail": "\n RUN  v2.1.9 /srv/longrun/commissioning/signal-presets-20260920T151423Z/project\n\n ✓ packages/sim/test/core.test.ts (9 tests) 3ms\n ✓ packages/sim/test/save.test.ts (7 tests) 6ms\n ✓ packages/sim/test/destruct.test.ts (3 tests) 12ms\n ✓ packages/sim/test/fog.test.ts (8 tests) 18ms\n ✓ packages/sim/test/detect.test.ts (7 tests) 18ms\n ✓ packages/sim/test/security.test.ts (10 tests) 21ms\n ✓ packages/sim/test/ai.test.ts (10 tests) 30ms\n ✓ packages/sim/test/neg-replay.test.ts (4 tests) 69ms\n ✓ packages/server/test/transport.test.ts (2 tests) 75ms\n ✓ packages/server/test/server.test.ts (6 tests) 87ms\n ✓ packages/sim/test/game.test.ts (13 tests) 111ms\n ✓ packages/sim/test/replay2.test.ts (3 tests) 120ms\n ✓ packages/sim/test/missions23.test.ts (3 tests) 167ms\n ✓ packages/server/test/presets.test.ts (11 tests) 449ms\n   ✓ presets: separate-process restart with owned cleanup > restarts the SAME file DB across a genuinely-exited server on the SAME port 337ms\n\n Test Files  14 passed (14)\n      Tests  96 passed (96)\n   Start at  17:23:09\n   Duration  725ms (transform 459ms, setup 0ms, collect 1.50s, tests 1.19s, environment 1ms, prepare 578ms)\n\n",
       "terminationReason": null,
       "executionError": null,
       "executionToken": "f0533d8e-49a9-4e06-86cd-99bd0c2932fb"
@@ -656,7 +656,7 @@
     "commandAttempts": 13,
     "inFlight": null
   },
-  "directory": "/Users/seanj/.local/state/opencode-longrun/commissioning/signal-presets-20260920T151423Z/project",
+  "directory": "/srv/longrun/commissioning/signal-presets-20260920T151423Z/project",
   "checkCatalogue": {
     "c-presets-server": {
       "command": [
