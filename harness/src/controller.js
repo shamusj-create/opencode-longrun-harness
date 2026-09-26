@@ -910,7 +910,7 @@ export function validateBudgetArgs(args = {}) {
 // needs. When the caller omits the optional per-call evidenceClass, derive it from the run's OWN
 // contract so a whole-suite round cannot silently record classless receipts and block every
 // criterion as UNKNOWN_CLASS despite green checks (observed twice: annotations lr-00000000a1b2 and
-// Godot lr-00000000c3d4). An explicit argument always wins; an ambiguous mapping (two criteria
+// another run lr-00000000c3d4). An explicit argument always wins; an ambiguous mapping (two criteria
 // demanding different classes for the same check) or an unmapped check yields null so the caller
 // must be explicit rather than guessed at.
 export function defaultEvidenceClass(run, checkId, explicit) {

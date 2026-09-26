@@ -1,6 +1,6 @@
 import { reviewProjectFixture } from "./helper.mjs";
 // v1.2.3 end-to-end reproduction through the REAL plugin tool factory + controller (LONGRUN_TEST
-// armed; isolated state dir). Reproduces the Signal-Breach class of failure at the tool surface:
+// armed; isolated state dir). Reproduces the class of failure at the tool surface:
 // a hard gate must be decided by its own CURRENT evidence, a negative control against a copied
 // fixture must not become a project failure, and a passing build must let the run complete.
 import { test } from "node:test";

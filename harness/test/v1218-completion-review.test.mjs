@@ -9,7 +9,7 @@ process.env.LONGRUN_CONTROLLER_FILE = path.resolve(import.meta.dirname, '../src/
 
 // Actual recorded, prematurely completed annotations trial. Read-only copied evidence;
 // its real receipts are not fabricated, modified or written into a live store.
-const actual = () => JSON.parse(fs.readFileSync(new URL('./fixtures/annotations-premature-complete-run.json', import.meta.url)));
+const actual = () => JSON.parse(fs.readFileSync(new URL('./fixtures/notes-premature-complete-run.json', import.meta.url)));
 
 test('actual all-green annotations record distinguishes check success from missing independent completion review', () => {
   const run = actual(), before = JSON.stringify(run);

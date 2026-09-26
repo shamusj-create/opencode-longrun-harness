@@ -1,6 +1,6 @@
 import { approveFixtureReview } from "./helper.mjs";
 // v1.2.3 reliability regression: the authoritative effective-receipt model + hard-gate recomputation.
-// Reproduces the class of the live Signal-Breach failure (a passing build/typecheck/tests still
+// Reproduces the class of the live failure (a passing build/typecheck/tests still
 // reported ENG incomplete / hard_gates_failed) using COPIED run/receipt state, then shows the
 // upgraded logic completes. Nothing here touches production source, OpenCode config, or any live run.
 import { test } from "node:test";
@@ -98,12 +98,12 @@ test("class awareness is preserved: a UNIT-only proof cannot satisfy a BROWSER c
   assert.equal(cc.reason, "required_unverified", "a weak proof is an evidence gap, not a completion");
 });
 
-// ---- THE REPRODUCTION: a faithful copy of the Signal-Breach run shape -------------------------
+// ---- THE REPRODUCTION: a faithful copy of the run shape -------------------------
 // Gates c-typecheck / c-build / c-verify-all are cached FAIL; every underlying check has a PASS on
 // current source; a build sabotage was recorded against COPIED data (a negative control). The OLD
 // logic (trust cached gate FAIL, or "any PASS") would keep ENG incomplete / hard_gates_failed; the
 // v1.2.3 logic reads the effective receipt and completes.
-function signalBreachRun() {
+function exampleRun() {
   const receipts = [
     rc("c-fog-unit", "PASS", CUR, 1, { ec: "UNIT" }),
     rc("c-detect-unit", "PASS", CUR, 2, { ec: "UNIT" }),
@@ -122,7 +122,7 @@ function signalBreachRun() {
 }
 
 test("REPRODUCE + FIX: passing build/tests no longer pin the hard gates shut", () => {
-  const run = signalBreachRun();
+  const run = exampleRun();
   // (old behaviour) a cached FAIL that nothing ever recomputed => permanent block:
   const oldBlock = run.contract.gates.some((g) => g.required && g.status !== "PASS");
   assert.equal(oldBlock, true, "the run still carries stale cached gate FAIL values (the reported symptom)");

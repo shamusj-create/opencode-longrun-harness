@@ -6,7 +6,7 @@ import path from 'node:path';
 import * as C from '../src/controller.js';
 import { F } from './helper.mjs';
 
-const observed = JSON.parse(fs.readFileSync(new URL('./fixtures/annotations-recovery-run.json', import.meta.url)));
+const observed = JSON.parse(fs.readFileSync(new URL('./fixtures/notes-recovery-run.json', import.meta.url)));
 process.env.LONGRUN_CONTROLLER_FILE = path.resolve(import.meta.dirname, '../src/controller.js');
 
 async function setup(t) {
@@ -43,7 +43,7 @@ test('wrong-ID verification remains NO_RUN and only offers project-local discove
   const s = await setup(t), before = s.bytes();
   const foreign = path.join(s.base, 'foreign'); fs.mkdirSync(foreign);
   s.add({ ...s.run, runId: 'lr-foreign-private', directory: foreign });
-  const out = JSON.parse(await s.hooks.tool.longrun_verify.execute({ runId: 'lr-foreign-private', checkId: 'c-annotations-server' }, s.ctx));
+  const out = JSON.parse(await s.hooks.tool.longrun_verify.execute({ runId: 'lr-foreign-private', checkId: 'c-notes-server' }, s.ctx));
   assert.equal(out.error, 'NO_RUN'); assert.equal(out.ok, false);
   assert.deepEqual(out.discovery.availableRuns, [{ runId: observed.runId, state: 'RECOVERY_REQUIRED' }]);
   assert.deepEqual(out.discovery.suggestedRead, { action: 'resume-context', runId: observed.runId });

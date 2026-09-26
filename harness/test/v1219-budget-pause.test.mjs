@@ -32,7 +32,7 @@ function preservedPause(before, after) {
 
 test('actual copied annotations refusal pauses without rewriting 24 candidates, 37 receipts or missing evidence', async t => {
   const s = await fixture(t);
-  const run = JSON.parse(fs.readFileSync(new URL('./fixtures/annotations-budget-exhausted-run.json', import.meta.url)));
+  const run = JSON.parse(fs.readFileSync(new URL('./fixtures/notes-budget-exhausted-run.json', import.meta.url)));
   assert.equal(run.status, 'IMPLEMENTING'); assert.equal(C.candidateCount(run), 24); assert.equal(run.receipts.length, 37);
   // Relocation only: genuine catalogue and evidence remain historical. Budget
   // refusal prevents these application commands from running in this tiny copy.

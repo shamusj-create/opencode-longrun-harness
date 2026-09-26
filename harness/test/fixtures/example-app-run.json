@@ -1,7 +1,7 @@
 {
   "runId": "lr-00000000e5f6",
   "status": "PAUSED",
-  "originalRequest": "Signal Breach expansion: authoritative fog of war, enemy detection cones, stealth, deterministic noise, security network (cameras/turrets/nodes), alarm escalation, AI upgrade, mission 2/3 rebalance with deterministic win replays, leaderboard pipeline, save v2->v3 migration, character/environment/animation upgrades, browser journeys, negative controls. Preserve all existing systems/tests.",
+  "originalRequest": "Example App expansion: implement the requested feature end to end in this copy only, keep every existing subsystem and test intact, and prove the result with the declared checks.",
   "contract": {
     "criteria": [
       {
@@ -1114,7 +1114,7 @@
     }
   ],
   "faults": [],
-  "directory": "/srv/signal-breach",
+  "directory": "/home/example/project",
   "checkCatalogue": {
     "c-fog-unit": {
       "kind": "cmd",

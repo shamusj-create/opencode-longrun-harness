@@ -98,8 +98,8 @@ test('compaction recovery matches explicit recovery after source and memory depe
  assert.ok(output.context[1].endsWith(packet));
  assert.deepEqual(store.readJSON(key,'run.json'),before,'compaction must not rewrite ledger or fingerprints');
 });
-test('real Signal Breach receipt fixture: 18 stale plus 4 absent, 36 retained, 13 candidates and contract untouched across tool projections',async(t)=>{
- const r=JSON.parse(fs.readFileSync(new URL('./fixtures/signal-breach-run.json',import.meta.url)));const original=JSON.stringify(r.contract), receipts=JSON.stringify(r.receipts),budget=JSON.stringify(r.budget);
+test('real recorded receipt fixture: 18 stale plus 4 absent, 36 retained, 13 candidates and contract untouched across tool projections',async(t)=>{
+ const r=JSON.parse(fs.readFileSync(new URL('./fixtures/example-app-run.json',import.meta.url)));const original=JSON.stringify(r.contract), receipts=JSON.stringify(r.receipts),budget=JSON.stringify(r.budget);
  assert.equal(r.receipts.length,36);assert.ok(r.receipts.every(x=>x.sourceFingerprint));
  const d=temp();write(d,'app.ts','isolated fixture');const {call,store,key}=await seed(r,d);
  const observedAt=Date.now();t.mock.method(Date,'now',()=>observedAt); // stable clock for exact projection equality

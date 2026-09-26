@@ -1,0 +1,1496 @@
+{
+  "runId": "lr-00000000a1b2",
+  "status": "COMPLETE",
+  "originalRequest": "Example App expansion: implement the requested feature end to end in this copy only, keep every existing subsystem and test intact, and prove the result with the declared checks.",
+  "contract": {
+    "criteria": [
+      {
+        "id": "notes-server",
+        "required": true,
+        "weight": 3,
+        "checks": [
+          "c-notes-server"
+        ],
+        "evidenceClass": "INTEGRATION",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "notes-gameplay",
+        "required": true,
+        "weight": 3,
+        "checks": [
+          "c-notes-e2e"
+        ],
+        "evidenceClass": "BROWSER",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "regression-unit",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-default-unit"
+        ],
+        "evidenceClass": "UNIT",
+        "visual": false,
+        "status": "FAIL"
+      },
+      {
+        "id": "regression-browser",
+        "required": true,
+        "weight": 1,
+        "checks": [
+          "c-default-browser"
+        ],
+        "evidenceClass": "BROWSER",
+        "visual": false,
+        "status": "FAIL"
+      }
+    ],
+    "gates": [
+      {
+        "id": "c-typecheck",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "id": "c-build",
+        "required": true,
+        "status": "FAIL"
+      }
+    ],
+    "lossTarget": 0
+  },
+  "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+  "evaluatorHash": null,
+  "sourceFingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+  "loss": 1,
+  "budget": {
+    "iterations": 24,
+    "activeSeconds": 7200,
+    "deadlineSeconds": 28800,
+    "sameFailureLimit": 3,
+    "noProgressLimit": 5,
+    "autoDispatchCap": 40,
+    "toolActionCap": 140
+  },
+  "autoEnabled": false,
+  "runMode": "tracked",
+  "memoryStatus": "FRESH",
+  "state": {
+    "iterations": 0,
+    "noProgressStreak": 0,
+    "sameFailureStreak": 0,
+    "candidates": [
+      {
+        "n": 1,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "cd10010000934e59561b9004c978d7f7dd1ecf8d6dbadc9e16eb4943823bda40",
+        "ts": 1789934897617,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-1-ca3602d2492c"
+        ],
+        "criteriaChanged": [
+          "notes-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": null,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 1155,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 2,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "6223097690aa0750d4aadcccebd0ee6da8eeaab9a20504092b546a5816f6f31a",
+        "ts": 1789934952509,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-2-6f43c274634d"
+        ],
+        "criteriaChanged": [
+          "notes-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": null,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 827,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 3,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "3ce79a0e64f47e3413bb578c61e8aba944a6b450134177ba100fb91ae6bd57f4",
+        "ts": 1789934970085,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-3-16e13ce44f83"
+        ],
+        "criteriaChanged": [
+          "notes-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 0.625,
+        "bestLoss": null,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 650,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 4,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "15a944aca1fb2ba7dddf7f06d2f55eccfe2ee42a131fc7c8d684d0c241d4f0d4",
+        "ts": 1789935608384,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-4-d653eda7591b"
+        ],
+        "criteriaChanged": [
+          "notes-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 0.625,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1241,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 5,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "227226c09a19c94a3d8bb7a20226bd5dd8b2847dbe463ea892ef92bed00a7b6c",
+        "ts": 1789935717606,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-6-0bdc3608449c"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1060,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 6,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "82ea0b6f585fcb6be389cb81bfad113e4a077fea08e018b724c9622c5e5906ee",
+        "ts": 1789937597564,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-7-68c13bf25294"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 1088,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 7,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "de4c38391a5de287d7a16c33a47233f5e8430bc99fa911db3d0be00ce43780f6",
+        "ts": 1789937612496,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-8-aa9f6cf5a631"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 872,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 8,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "22f09d3dfc8329d291d6a882467dd74b916474cf314444f5d6660ea405d5dd1f",
+        "ts": 1789938042983,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-9-52e08a88fa2d"
+        ],
+        "criteriaChanged": [
+          "notes-server"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 0.625,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1059,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 9,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "2447c90c4d257df55b4b5c547b3349a91bcb1ff752ebea0b73cec00f134c546b",
+        "ts": 1789938190471,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-11-722b039a6d8b"
+        ],
+        "criteriaChanged": [
+          "notes-gameplay"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 28618,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 10,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "92a0819f51ce24b5cf0de3b181cbaab5dd6c6d46b047cf022bb67d5a3f4612e6",
+        "ts": 1789938300582,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-12-8a7b98eb7262"
+        ],
+        "criteriaChanged": [
+          "notes-gameplay"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 28401,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 11,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "78a8e6d75a733302b24a687359853133bc8b8e79cd7cd73e25fc9a55da9fe53c",
+        "ts": 1789938555705,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-13-237f7573f025"
+        ],
+        "criteriaChanged": [
+          "notes-gameplay"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 211549,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 12,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "65fe8b7948e2d571a1c730c0998997f93482c23abb1005fba08a9ae7402d59cc",
+        "ts": 1789939303401,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-14-200707480c73"
+        ],
+        "criteriaChanged": [
+          "notes-gameplay"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 74829,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 13,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "e5738ddd2f71a5e7f23ee96aa9a07b1b181c95794b61a1817cac0287d1caf9c1",
+        "ts": 1789939403763,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-15-fcb1524de086"
+        ],
+        "criteriaChanged": [
+          "notes-gameplay"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "FAIL",
+        "diagnosticOnly": false,
+        "elapsedMs": 73685,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 14,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "d35892d8eb496cd291827339fb5bbcf556515a3132464a0820497b638fe7172a",
+        "ts": 1789939494887,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-16-af558b551339"
+        ],
+        "criteriaChanged": [
+          "notes-gameplay"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 0.625,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 64736,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 15,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "25dae1b3154b8234e9214dbf4f22036483ceb2b1bb01e5a3c461298c76d4a21c",
+        "ts": 1789939742067,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-20-2f9421896e76"
+        ],
+        "criteriaChanged": [
+          "regression-browser"
+        ],
+        "lossBefore": 1,
+        "lossAfter": 0.875,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 101797,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      },
+      {
+        "n": 16,
+        "runId": "lr-00000000a1b2",
+        "fingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+        "ts": 1789939778497,
+        "hypothesis": null,
+        "receiptIds": [
+          "receipt-21-9debbabb0d91"
+        ],
+        "criteriaChanged": [],
+        "lossBefore": 1,
+        "lossAfter": 1,
+        "bestLoss": 0.625,
+        "result": "PASS",
+        "diagnosticOnly": false,
+        "elapsedMs": 1054,
+        "counted": true,
+        "reason": "evaluated_new_source_state"
+      }
+    ],
+    "lastEvalFingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+    "memoryNodes": [
+      "AGENTS.md"
+    ],
+    "current": {
+      "n": 16,
+      "runId": "lr-00000000a1b2",
+      "fingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+      "ts": 1789939778497,
+      "hypothesis": null,
+      "receiptIds": [
+        "receipt-21-9debbabb0d91"
+      ],
+      "criteriaChanged": [],
+      "lossBefore": 1,
+      "lossAfter": 1,
+      "bestLoss": 0.625,
+      "result": "PASS",
+      "diagnosticOnly": false,
+      "elapsedMs": 1054,
+      "counted": true,
+      "reason": "evaluated_new_source_state"
+    },
+    "best": {
+      "n": 14,
+      "runId": "lr-00000000a1b2",
+      "fingerprint": "d35892d8eb496cd291827339fb5bbcf556515a3132464a0820497b638fe7172a",
+      "ts": 1789939494887,
+      "hypothesis": null,
+      "receiptIds": [
+        "receipt-16-af558b551339"
+      ],
+      "criteriaChanged": [
+        "notes-gameplay"
+      ],
+      "lossBefore": 1,
+      "lossAfter": 0.625,
+      "bestLoss": 0.625,
+      "result": "PASS",
+      "diagnosticOnly": false,
+      "elapsedMs": 64736,
+      "counted": true,
+      "reason": "evaluated_new_source_state"
+    }
+  },
+  "receipts": [
+    {
+      "checkId": "c-notes-server",
+      "command": "npx vitest run packages/server/test/notes.test.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 0,
+      "startedAt": 1789934896427,
+      "finishedAt": 1789934897582,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "cd10010000934e59561b9004c978d7f7dd1ecf8d6dbadc9e16eb4943823bda40",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/notes.test.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "f2c22247-b625-4bc6-841a-07f2eacab20f"
+    },
+    {
+      "checkId": "c-notes-server",
+      "command": "npx vitest run packages/server/test/notes.test.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 0,
+      "startedAt": 1789934951646,
+      "finishedAt": 1789934952473,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "6223097690aa0750d4aadcccebd0ee6da8eeaab9a20504092b546a5816f6f31a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/notes.test.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "2600fc75-2d2d-40f8-a37a-60c427380a04"
+    },
+    {
+      "checkId": "c-notes-server",
+      "command": "npx vitest run packages/server/test/notes.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 11,
+      "startedAt": 1789934969397,
+      "finishedAt": 1789934970047,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "3ce79a0e64f47e3413bb578c61e8aba944a6b450134177ba100fb91ae6bd57f4",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/notes.test.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "1d038255-d020-4eb2-a003-78c16c9342c4"
+    },
+    {
+      "checkId": "c-notes-server",
+      "command": "npx vitest run packages/server/test/notes.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 13,
+      "startedAt": 1789935607105,
+      "finishedAt": 1789935608346,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "15a944aca1fb2ba7dddf7f06d2f55eccfe2ee42a131fc7c8d684d0c241d4f0d4",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/notes.test.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "ee6815f4-1641-4533-b482-ef8d697447ac"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "FAIL",
+      "exitCode": 2,
+      "testCount": null,
+      "startedAt": 1789935626150,
+      "finishedAt": 1789935627298,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "15a944aca1fb2ba7dddf7f06d2f55eccfe2ee42a131fc7c8d684d0c241d4f0d4",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "5c1f7852-780b-4c4b-a80f-209990a74f62"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789935716512,
+      "finishedAt": 1789935717572,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "227226c09a19c94a3d8bb7a20226bd5dd8b2847dbe463ea892ef92bed00a7b6c",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "149d0d71-b16a-40fd-a8e6-4a94cb0f9bf0"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "FAIL",
+      "exitCode": 2,
+      "testCount": null,
+      "startedAt": 1789937596444,
+      "finishedAt": 1789937597532,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "82ea0b6f585fcb6be389cb81bfad113e4a077fea08e018b724c9622c5e5906ee",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "3bf9282e-710f-4c56-b264-ae47c2b6dc71"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789937611594,
+      "finishedAt": 1789937612466,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "de4c38391a5de287d7a16c33a47233f5e8430bc99fa911db3d0be00ce43780f6",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "23c171f3-6733-44ea-a27f-642c86cc9c03"
+    },
+    {
+      "checkId": "c-notes-server",
+      "command": "npx vitest run packages/server/test/notes.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 13,
+      "startedAt": 1789938041887,
+      "finishedAt": 1789938042946,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "22f09d3dfc8329d291d6a882467dd74b916474cf314444f5d6660ea405d5dd1f",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/notes.test.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "78b7ef12-7b6e-497f-bd60-15639ecb310f"
+    },
+    {
+      "checkId": "c-notes-e2e",
+      "command": "npx playwright test --config playwright.notes.config.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 1,
+      "startedAt": 1789938049819,
+      "finishedAt": 1789938092175,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "22f09d3dfc8329d291d6a882467dd74b916474cf314444f5d6660ea405d5dd1f",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "9f44dd21-2ebc-4a41-9052-90fb2d23c3b2"
+    },
+    {
+      "checkId": "c-notes-e2e",
+      "command": "npx playwright test --config playwright.notes.config.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 4,
+      "startedAt": 1789938161795,
+      "finishedAt": 1789938190413,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "2447c90c4d257df55b4b5c547b3349a91bcb1ff752ebea0b73cec00f134c546b",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "b2bd865b-bc58-4598-9eb1-4d48cb7b7f17"
+    },
+    {
+      "checkId": "c-notes-e2e",
+      "command": "npx playwright test --config playwright.notes.config.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 4,
+      "startedAt": 1789938272124,
+      "finishedAt": 1789938300525,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "92a0819f51ce24b5cf0de3b181cbaab5dd6c6d46b047cf022bb67d5a3f4612e6",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "731f8aec-d6ca-4aa6-bf12-8f1eaeee3c66"
+    },
+    {
+      "checkId": "c-notes-e2e",
+      "command": "npx playwright test --config playwright.notes.config.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 5,
+      "startedAt": 1789938344109,
+      "finishedAt": 1789938555658,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "78a8e6d75a733302b24a687359853133bc8b8e79cd7cd73e25fc9a55da9fe53c",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "49642558-96cc-487b-8645-5739019e1b2c"
+    },
+    {
+      "checkId": "c-notes-e2e",
+      "command": "npx playwright test --config playwright.notes.config.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 6,
+      "startedAt": 1789939228525,
+      "finishedAt": 1789939303354,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "65fe8b7948e2d571a1c730c0998997f93482c23abb1005fba08a9ae7402d59cc",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "b0732d60-6ca8-4730-90eb-937ca2c516a7"
+    },
+    {
+      "checkId": "c-notes-e2e",
+      "command": "npx playwright test --config playwright.notes.config.ts",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 6,
+      "startedAt": 1789939330047,
+      "finishedAt": 1789939403732,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "e5738ddd2f71a5e7f23ee96aa9a07b1b181c95794b61a1817cac0287d1caf9c1",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "58a0d403-e188-4ecf-94c4-09e2d9051782"
+    },
+    {
+      "checkId": "c-notes-e2e",
+      "command": "npx playwright test --config playwright.notes.config.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 8,
+      "startedAt": 1789939430119,
+      "finishedAt": 1789939494855,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "d35892d8eb496cd291827339fb5bbcf556515a3132464a0820497b638fe7172a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "45524806-8c8d-473c-a587-0e807f0190f8"
+    },
+    {
+      "checkId": "c-notes-server",
+      "command": "npx vitest run packages/server/test/notes.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 13,
+      "startedAt": 1789939503261,
+      "finishedAt": 1789939504198,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "d35892d8eb496cd291827339fb5bbcf556515a3132464a0820497b638fe7172a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/notes.test.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "800f04bd-6f06-459a-b01f-e8e2a6a6257b"
+    },
+    {
+      "checkId": "c-default-unit",
+      "command": "npx vitest run",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 98,
+      "startedAt": 1789939508480,
+      "finishedAt": 1789939509387,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "d35892d8eb496cd291827339fb5bbcf556515a3132464a0820497b638fe7172a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "507fa406-660a-40d5-b90d-2190b7d0f7dd"
+    },
+    {
+      "checkId": "c-default-browser",
+      "command": "npx playwright test",
+      "status": "FAIL",
+      "exitCode": 1,
+      "testCount": 33,
+      "startedAt": 1789939514788,
+      "finishedAt": 1789939616841,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "d35892d8eb496cd291827339fb5bbcf556515a3132464a0820497b638fe7172a",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "ecd150f0-5f84-4663-89b1-2f57a557c7ec"
+    },
+    {
+      "checkId": "c-default-browser",
+      "command": "npx playwright test",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 34,
+      "startedAt": 1789939640239,
+      "finishedAt": 1789939742036,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "25dae1b3154b8234e9214dbf4f22036483ceb2b1bb01e5a3c461298c76d4a21c",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "4c790612-fde0-4ce4-95c4-8476cf7a5b49"
+    },
+    {
+      "checkId": "c-typecheck",
+      "command": "npx tsc -p tsconfig.json --noEmit",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789939777409,
+      "finishedAt": 1789939778463,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "dc265457-9a2c-466a-ad41-e60ca0008033"
+    },
+    {
+      "checkId": "c-build",
+      "command": "npm run build -w @sb/web",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": null,
+      "startedAt": 1789939782920,
+      "finishedAt": 1789939784001,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "STATIC",
+      "class": "STATIC",
+      "proxyOnly": false,
+      "argv": [
+        "npm",
+        "run",
+        "build",
+        "-w",
+        "@sb/web"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "3a21242d-ae8c-4703-97bf-ef75b398618c"
+    },
+    {
+      "checkId": "c-notes-server",
+      "command": "npx vitest run packages/server/test/notes.test.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 13,
+      "startedAt": 1789939792646,
+      "finishedAt": 1789939793500,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "INTEGRATION",
+      "class": "INTEGRATION",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/notes.test.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "cc6e6025-d7d9-4e72-8930-95f48da3c061"
+    },
+    {
+      "checkId": "c-notes-e2e",
+      "command": "npx playwright test --config playwright.notes.config.ts",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 8,
+      "startedAt": 1789939797088,
+      "finishedAt": 1789939862169,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "e0b84655-3600-4e5e-8c2f-5437d21c0d3e"
+    },
+    {
+      "checkId": "c-default-unit",
+      "command": "npx vitest run",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 98,
+      "startedAt": 1789939866865,
+      "finishedAt": 1789939867941,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "UNIT",
+      "class": "UNIT",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "vitest",
+        "run"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "7f902678-d227-4d05-b30b-4c022c39f886"
+    },
+    {
+      "checkId": "c-default-browser",
+      "command": "npx playwright test",
+      "status": "PASS",
+      "exitCode": 0,
+      "testCount": 34,
+      "startedAt": 1789939872492,
+      "finishedAt": 1789939974274,
+      "versions": {
+        "node": "v24.21.0"
+      },
+      "contractHash": "5ff1bad8de4ff627df71a0c2bfef061e38b3eb262089cbca54e842d26d21c2b0",
+      "evaluatorHash": null,
+      "sourceFingerprint": "cc2be4bfd14c0210536dde650760876166c10a19331594667aeb6ace8cdca4db",
+      "fingerprintSchemaVersion": 2,
+      "fpScope": "project",
+      "evidenceClass": "BROWSER",
+      "class": "BROWSER",
+      "proxyOnly": false,
+      "argv": [
+        "npx",
+        "playwright",
+        "test"
+      ],
+      "outputTail": "command completed; the recorded status and exit code are the evidence.",
+      "terminationReason": null,
+      "executionError": null,
+      "executionToken": "7e337c05-0ca6-4217-a3a7-447114aca18c"
+    }
+  ],
+  "faults": [],
+  "execution": {
+    "schemaVersion": 1,
+    "since": 1789934372883,
+    "historicalUsageUnknown": false,
+    "verificationMs": 909896,
+    "commandAttempts": 26,
+    "inFlight": null
+  },
+  "directory": "/home/example/project",
+  "checkCatalogue": {
+    "c-notes-server": {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "packages/server/test/notes.test.ts"
+      ],
+      "kind": "test",
+      "integration": true,
+      "negativeControl": true,
+      "timeoutMs": 180000
+    },
+    "c-notes-e2e": {
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "playwright.notes.config.ts"
+      ],
+      "kind": "test",
+      "integration": true,
+      "negativeControl": true,
+      "visual": true,
+      "timeoutMs": 420000
+    },
+    "c-default-unit": {
+      "command": [
+        "npx",
+        "vitest",
+        "run"
+      ],
+      "kind": "test",
+      "timeoutMs": 180000
+    },
+    "c-default-browser": {
+      "command": [
+        "npx",
+        "playwright",
+        "test"
+      ],
+      "kind": "test",
+      "timeoutMs": 600000
+    },
+    "c-typecheck": {
+      "command": [
+        "npx",
+        "tsc",
+        "-p",
+        "tsconfig.json",
+        "--noEmit"
+      ],
+      "kind": "cmd",
+      "gate": true,
+      "timeoutMs": 180000
+    },
+    "c-build": {
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "-w",
+        "@sb/web"
+      ],
+      "kind": "cmd",
+      "gate": true,
+      "timeoutMs": 240000
+    }
+  },
+  "createdAt": 1789934372883,
+  "compactionSessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+  "agentProgressHistory": [
+    {
+      "schemaVersion": 1,
+      "revision": 1,
+      "at": 1789934384565,
+      "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+      "sourceFingerprint": "43b42152981c219f21bad5db97c6040b2d6fbbdf1806eb5c70329885060d2c65",
+      "fields": {
+        "currentSlice": "Implement and verify the requested feature.",
+        "nextAction": "Continue the declared checks one at a time and record each with longrun_verify.",
+        "decisions": [
+          "Wall = terrain wall|pillar from buildMap (layout seed-independent); reject out-of-board + walls, no clamp.",
+          "API under /api/notes/v1/{list,create,update,delete}; server ignores any client id/revision.",
+          "Restart-persistence proof lives in the INTEGRATION vitest (real HTTP, fixed loopback port, SAME file DB), reload proof in the BROWSER e2e.",
+          "Planning is a TacticalGame input mode gated by a flag so it cannot move/shoot/select/endTurn; markers are scene objects rebuilt each sync (no accumulation)."
+        ],
+        "failedHypotheses": [
+          "<example hypothesis redacted>"
+        ],
+        "memoryNodes": [
+          "packages/server/src/index.ts",
+          "packages/server/src/leaderboard.ts",
+          "packages/server/src/validate.ts",
+          "packages/sim/src/map.ts",
+          "packages/sim/src/missions.ts",
+          "packages/web/src/game/TacticalGame.ts",
+          "packages/web/src/scene/World.ts",
+          "playwright.config.ts",
+          "vitest.config.ts",
+          "tsconfig.json"
+        ],
+        "artifacts": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "revision": 2,
+      "at": 1789935030856,
+      "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+      "sourceFingerprint": "3ce79a0e64f47e3413bb578c61e8aba944a6b450134177ba100fb91ae6bd57f4",
+      "fields": {
+        "currentSlice": "Implement and verify the requested feature.",
+        "nextAction": "Continue the declared checks one at a time and record each with longrun_verify.",
+        "decisions": [
+          "Keep one input owner: TacticalGame gates tactical actions while planning.active; left-click selects a tile (vis2 only), right/shift-drag still pans (presentation only).",
+          "PlanningController owns notes/draft/status, re-renders markers from notes\u2229vis==2 on game.onStateChange, and is disposed on mission unmount (no stale listeners/markers).",
+          "Restart-persistence proved in the INTEGRATION test; reload + pointer/keyboard/fog/invariance + screenshots proved in the BROWSER spec."
+        ],
+        "failedHypotheses": [
+          "<example hypothesis redacted>"
+        ],
+        "memoryNodes": [
+          "packages/server/src/notes.ts",
+          "packages/server/src/leaderboard.ts",
+          "packages/web/src/game/TacticalGame.ts",
+          "packages/web/src/scene/World.ts",
+          "packages/web/src/GameCanvas.tsx",
+          "packages/web/src/HUD.tsx"
+        ],
+        "artifacts": [
+          "packages/server/src/notes.ts",
+          "packages/server/src/index.ts",
+          "packages/server/test/notes.test.ts"
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "revision": 3,
+      "at": 1789935752230,
+      "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+      "sourceFingerprint": "dc33b0f2fa08fe45cefa09c4588065938b0f53e89db28e79e8c99af6a61000e8",
+      "fields": {
+        "currentSlice": "Implement and verify the requested feature.",
+        "nextAction": "Continue the declared checks one at a time and record each with longrun_verify.",
+        "decisions": [
+          "Process-boundary restart proven with two owned child PIDs, fixed loopback port, port-released proof, exact note fields across boundary.",
+          "Readiness belongs to the owned child's own banner, not a foreign /health.",
+          "Annotation bodies capped (complete 400); submit's 5MB readBody unchanged."
+        ],
+        "failedHypotheses": [
+          "<example hypothesis redacted>"
+        ],
+        "memoryNodes": [
+          "packages/server/AGENTS.md"
+        ],
+        "artifacts": [
+          "packages/server/src/index.ts",
+          "packages/server/test/notes.test.ts"
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "revision": 4,
+      "at": 1789936705246,
+      "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+      "sourceFingerprint": "dc33b0f2fa08fe45cefa09c4588065938b0f53e89db28e79e8c99af6a61000e8",
+      "fields": {
+        "currentSlice": "Implement and verify the requested feature.",
+        "nextAction": "Continue the declared checks one at a time and record each with longrun_verify.",
+        "decisions": [
+          "Use existing six declared checks and exact mappings; no new IDs.",
+          "Server owns parameterized file SQLite; 400 invalid, 404 unknown, 409 stale, 500 storage.",
+          "Planning-mode input must not move/shoot/select units or mutate sim/PRNG/save/replay.",
+          "Only currently visible tiles vis==2 are interactive/rendered; notes UI cannot reveal hidden enemies.",
+          "Browser uses isolated loopback web 5499/server 9099, strict ports, no reuse, isolated fileDB, cleanup.",
+          "Preserve 27 test files and default 34 browser tests in 12 files; no weakening."
+        ],
+        "failedHypotheses": [
+          "<example hypothesis redacted>"
+        ],
+        "memoryNodes": [
+          "AGENTS.md",
+          "packages/server/AGENTS.md",
+          "packages/sim/AGENTS.md",
+          "packages/sim/src/AGENTS.md",
+          "packages/web/AGENTS.md",
+          "packages/web/src/AGENTS.md"
+        ],
+        "artifacts": [
+          "packages/server/src/index.ts",
+          "packages/server/test/notes.test.ts"
+        ]
+      }
+    }
+  ],
+  "agentProgress": {
+    "schemaVersion": 1,
+    "revision": 4,
+    "at": 1789936705246,
+    "sessionID": "ses_f3f9f0822ffeWuypAPjXEvlUzm",
+    "sourceFingerprint": "dc33b0f2fa08fe45cefa09c4588065938b0f53e89db28e79e8c99af6a61000e8",
+    "fields": {
+      "currentSlice": "Implement and verify the requested feature.",
+      "nextAction": "Continue the declared checks one at a time and record each with longrun_verify.",
+      "decisions": [
+        "Use existing six declared checks and exact mappings; no new IDs.",
+        "Server owns parameterized file SQLite; 400 invalid, 404 unknown, 409 stale, 500 storage.",
+        "Planning-mode input must not move/shoot/select units or mutate sim/PRNG/save/replay.",
+        "Only currently visible tiles vis==2 are interactive/rendered; notes UI cannot reveal hidden enemies.",
+        "Browser uses isolated loopback web 5499/server 9099, strict ports, no reuse, isolated fileDB, cleanup.",
+        "Preserve 27 test files and default 34 browser tests in 12 files; no weakening."
+      ],
+      "failedHypotheses": [
+        "<example hypothesis redacted>"
+      ],
+      "memoryNodes": [
+        "AGENTS.md",
+        "packages/server/AGENTS.md",
+        "packages/sim/AGENTS.md",
+        "packages/sim/src/AGENTS.md",
+        "packages/web/AGENTS.md",
+        "packages/web/src/AGENTS.md"
+      ],
+      "artifacts": [
+        "packages/server/src/index.ts",
+        "packages/server/test/notes.test.ts"
+      ]
+    }
+  },
+  "controlGeneration": 9
+}

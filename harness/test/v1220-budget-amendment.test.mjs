@@ -30,7 +30,7 @@ const GRANT_DEADLINE_AS_APPLIED = Date.parse('2026-09-22T23:30:00.000Z'); // his
 const TEST_GRANT_DEADLINE = Date.parse('2099-01-01T00:00:00.000Z');
 
 const GRANT = {
-  amendmentId: 'grant-annotations-20260921-01',
+  amendmentId: 'grant-example-20260921-01',
   additionalCandidates: 12,
   newDeadlineAt: TEST_GRANT_DEADLINE,
   authorization: 'User authorized 12 additional candidates (cumulative 36) and a new absolute deadline for the same paused annotations run.',
@@ -211,7 +211,7 @@ test('an exact repeat is idempotent, a conflicting repeat is refused, and a stal
   assert.equal(stale.error, 'AMENDMENT_BASIS_CHANGED', 'a grant bound to a superseded state is refused');
 
   const current = s.read();
-  const second = await s.amend({ ...GRANT, amendmentId: 'grant-annotations-20260921-02', additionalCandidates: 4, newDeadlineAt: GRANT.newDeadlineAt + 3600000, expectedRevision: current.controlGeneration || 0, expectedBasis: basisOf(current) });
+  const second = await s.amend({ ...GRANT, amendmentId: 'grant-example-20260921-02', additionalCandidates: 4, newDeadlineAt: GRANT.newDeadlineAt + 3600000, expectedRevision: current.controlGeneration || 0, expectedBasis: basisOf(current) });
   assert.equal(second.ok, true, JSON.stringify(second));
   const after = s.read();
   assert.equal(after.budgetAmendments.length, 2);
@@ -246,7 +246,7 @@ test('the real exhausted annotations run gains exactly a finite allowance withou
   t.after(() => fs.rmSync(base, { recursive: true, force: true }));
   const dir = path.join(base, 'project'); fs.mkdirSync(dir);
   const state = path.join(base, 'state');
-  const run = JSON.parse(fs.readFileSync(new URL('./fixtures/annotations-budget-exhausted-run.json', import.meta.url)));
+  const run = JSON.parse(fs.readFileSync(new URL('./fixtures/notes-budget-exhausted-run.json', import.meta.url)));
   const runId = run.runId;
   run.status = 'PAUSED'; run.autoEnabled = false; run.controlGeneration = (run.controlGeneration || 0) + 1;
   run.directory = dir;
@@ -258,7 +258,7 @@ test('the real exhausted annotations run gains exactly a finite allowance withou
   assert.equal(before.budget.iterations, 24);
 
   const result = await C.operatorBudgetAmendment(store, key, { directory: dir, runId,
-    amendmentId: 'grant-annotations-real-0001', additionalCandidates: 12,
+    amendmentId: 'grant-example-real-0001', additionalCandidates: 12,
     newDeadlineAt: TEST_GRANT_DEADLINE,
     authorization: GRANT.authorization, reason: GRANT.reason,
     expectedRevision: before.controlGeneration || 0, expectedBasis: basisOf(before) });

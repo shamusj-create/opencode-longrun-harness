@@ -1,7 +1,7 @@
 // v1.2.22 — a declared check that is mapped from a criterion with an evidenceClass should not
 // silently lose its evidence class when the model omits the optional per-call argument.
 //
-// Reproduced twice on real runs (annotations lr-00000000a1b2 and Godot lr-00000000c3d4): the final
+// Reproduced twice on real runs (annotations lr-00000000a1b2 and another run lr-00000000c3d4): the final
 // whole-suite round called longrun_verify without evidenceClass, every receipt became classless, and
 // status reported loss 1 / required_unverified / UNKNOWN_CLASS even though all six checks PASSED.
 //

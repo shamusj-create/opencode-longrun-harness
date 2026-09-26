@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { decideRecovery, evaluateOutcome, resumePrompt, freshSessionPrompt, extractSessionId, applyRebindGuard, dispatchLogStem, defaultMaintenanceBin, findRunKey, sessionForRun, boundSessions, hostLive, pauseViaMaintenance, inferenceBaseFromConfig, configFileSupplyingBase, resolveInferenceBase, parseListeners, isMtplxRuntime, discoverMtplxBases, inferenceCandidates, pickServedBase, pinnedConfigContent, DEFAULT_INFERENCE_BASE, REQUIRED_MODEL, REQUIRED_PROVIDER_MODEL } from '../tools/recovery-runner.mjs';
+import { decideRecovery, evaluateOutcome, resumePrompt, freshSessionPrompt, extractSessionId, applyRebindGuard, dispatchLogStem, defaultMaintenanceBin, findRunKey, sessionForRun, boundSessions, hostLive, pauseViaMaintenance, inferenceBaseFromConfig, configFileSupplyingBase, resolveInferenceBase, parseListeners, isMtplxRuntime, isLocalModelRuntime, requiredModel, requiredProviderModel, opencodeBin, runtimeMatcher, DEFAULT_REQUIRED_MODEL, DEFAULT_OPENCODE_BIN, DEFAULT_RUNTIME_MATCHER, discoverMtplxBases, inferenceCandidates, pickServedBase, pinnedConfigContent, DEFAULT_INFERENCE_BASE, REQUIRED_MODEL, REQUIRED_PROVIDER_MODEL } from '../tools/recovery-runner.mjs';
 
 const RUNNER = path.resolve(import.meta.dirname, '..', 'tools', 'recovery-runner.mjs');
 
@@ -401,4 +401,35 @@ test('the MTPLX endpoint is discovered from its own listening socket, then still
   } finally {
     fs.rmSync(pdir, { recursive: true, force: true });
   }
+});
+
+
+test('the toolchain is configurable, not hardcoded to one local setup', () => {
+  // The harness should drive whatever local OpenCode + model an operator runs. The shipped MTPLX values
+  // are DEFAULTS; every one of them must be overridable, or the tool cannot be reused across setups.
+  assert.equal(requiredModel({}), DEFAULT_REQUIRED_MODEL, 'default model unchanged');
+  assert.equal(requiredModel({ LONGRUN_REQUIRED_MODEL: 'other-model' }), 'other-model', 'model overridable');
+  assert.equal(requiredProviderModel({}), 'mtplx/mtplx-flash-next-optimized-speed');
+  assert.equal(requiredProviderModel({ LONGRUN_REQUIRED_PROVIDER_MODEL: 'vendor/other' }), 'vendor/other');
+  assert.equal(opencodeBin({}), DEFAULT_OPENCODE_BIN);
+  assert.equal(opencodeBin({ LONGRUN_OPENCODE_BIN: '/usr/local/bin/opencode' }), '/usr/local/bin/opencode', 'binary path overridable');
+  assert.equal(runtimeMatcher({}), DEFAULT_RUNTIME_MATCHER);
+  assert.equal(runtimeMatcher({ LONGRUN_RUNTIME_MATCHER: 'acme' }), 'acme');
+
+  // a custom matcher must change which runtime is recognised — otherwise discovery is still vendor-locked
+  assert.equal(isLocalModelRuntime('/Applications/MTPLX.app/x'), true, 'default matcher finds MTPLX');
+  assert.equal(isLocalModelRuntime('/opt/acme/runtime-venv/bin/python', 'acme[\\/].*runtime-venv'), true, 'custom matcher finds another runtime');
+  assert.equal(isLocalModelRuntime('/Applications/MTPLX.app/x', 'acme'), false, 'custom matcher excludes the default vendor');
+  assert.equal(isLocalModelRuntime('/x', '('), false, 'an invalid matcher fails closed rather than throwing');
+
+  // discovery and the strict identity check must both honour the configured toolchain
+  const fakeExec = (cmd, args) => {
+    if (cmd === 'lsof') return { stdout: 'p100\nn127.0.0.1:9100\n' };
+    return { stdout: '/opt/acme/runtime-venv/bin/python\n' };
+  };
+  assert.deepEqual(discoverMtplxBases({ exec: fakeExec }), [], 'default matcher ignores a foreign runtime');
+  assert.deepEqual(discoverMtplxBases({ exec: fakeExec, matcher: 'acme[\\/].*runtime-venv' }),
+    ['http://127.0.0.1:9100/v1'], 'configured matcher discovers the foreign runtime');
+  const cands = inferenceCandidates({ env: {}, configDir: '/nonexistent', exec: fakeExec, matcher: 'acme[\\/].*runtime-venv' });
+  assert.equal(cands[0], 'http://127.0.0.1:9100/v1', 'discovery leads the candidate list');
 });

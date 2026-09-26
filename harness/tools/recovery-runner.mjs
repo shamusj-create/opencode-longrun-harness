@@ -29,9 +29,25 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 
-export const REQUIRED_MODEL = "mtplx-flash-next-optimized-speed";
-export const REQUIRED_PROVIDER_MODEL = "mtplx/mtplx-flash-next-optimized-speed";
-export const OPENCODE_BIN = "/opt/homebrew/bin/opencode";
+// These are DEFAULTS, not laws. The harness is meant to drive whatever local OpenCode + model setup an
+// operator actually runs, so the model id, the OpenCode binary and the runtime matcher are all
+// overridable by environment. The defaults describe the local MTPLX setup this harness was built
+// against; nothing outside this block should assume them.
+export const DEFAULT_REQUIRED_MODEL = "mtplx-flash-next-optimized-speed";
+export const DEFAULT_REQUIRED_PROVIDER_MODEL = "mtplx/mtplx-flash-next-optimized-speed";
+export const DEFAULT_OPENCODE_BIN = "/opt/homebrew/bin/opencode";
+// Matches the local model server's bundled runtime, used only to attribute a listening socket to it.
+export const DEFAULT_RUNTIME_MATCHER = "mtplx[\\\\/].*runtime-venv|mtplx\\.app";
+
+// Back-compat aliases for the shipped defaults, so existing callers and tests keep working.
+export const REQUIRED_MODEL = DEFAULT_REQUIRED_MODEL;
+export const REQUIRED_PROVIDER_MODEL = DEFAULT_REQUIRED_PROVIDER_MODEL;
+export const OPENCODE_BIN = DEFAULT_OPENCODE_BIN;
+
+export function requiredModel(env = process.env) { return env.LONGRUN_REQUIRED_MODEL || DEFAULT_REQUIRED_MODEL; }
+export function requiredProviderModel(env = process.env) { return env.LONGRUN_REQUIRED_PROVIDER_MODEL || DEFAULT_REQUIRED_PROVIDER_MODEL; }
+export function opencodeBin(env = process.env) { return env.LONGRUN_OPENCODE_BIN || DEFAULT_OPENCODE_BIN; }
+export function runtimeMatcher(env = process.env) { return env.LONGRUN_RUNTIME_MATCHER || DEFAULT_RUNTIME_MATCHER; }
 
 // ---- pure decision logic (unit-tested offline) ------------------------------------------------
 // Decide what to do for a run, before any dispatch.
@@ -192,7 +208,7 @@ export function boundSessions(stateDir, runId) {
     return Object.entries(runs).filter(([, entry]) => entry && entry.runId === runId).map(([sessionId]) => sessionId);
   } catch { return []; }
 }
-export function hostLive(project, bin = OPENCODE_BIN) {
+export function hostLive(project, bin = opencodeBin()) {
   const out = spawnSync("pgrep", ["-f", `${bin} run --dir ${project}`], { encoding: "utf8" });
   return out.status === 0 && String(out.stdout || "").trim().length > 0;
 }
@@ -257,20 +273,24 @@ export function parseListeners(lsofOut) {
   return out;
 }
 
-// The MTPLX server runs from '<Application Support>/MTPLX/runtime-venv/bin/python' (or inside the app
-// bundle), which is what identifies its sockets.
-export function isMtplxRuntime(commPath) {
-  return /mtplx[\\/].*runtime-venv/i.test(commPath || "") || /mtplx\.app/i.test(commPath || "");
+// The local model server runs from its own bundled runtime (e.g. '<support>/MTPLX/runtime-venv/bin/python'
+// or inside the app bundle), which is what identifies its sockets. The pattern is configurable so the
+// harness is not tied to one vendor's runtime layout.
+export function isLocalModelRuntime(commPath, matcher = DEFAULT_RUNTIME_MATCHER) {
+  try { return new RegExp(matcher, "i").test(commPath || ""); } catch { return false; }
+}
+export function isMtplxRuntime(commPath, matcher = DEFAULT_RUNTIME_MATCHER) {
+  return isLocalModelRuntime(commPath, matcher);
 }
 
-export function discoverMtplxBases({ exec = spawnSync } = {}) {
+export function discoverMtplxBases({ exec = spawnSync, matcher = DEFAULT_RUNTIME_MATCHER } = {}) {
   const out = [];
   try {
     const lsof = exec("lsof", ["-nP", "-iTCP", "-sTCP:LISTEN", "-F", "pcn"], { encoding: "utf8" });
     for (const { pid, port } of parseListeners(lsof && lsof.stdout)) {
       const ps = exec("ps", ["-o", "comm=", "-p", String(pid)], { encoding: "utf8" });
       const comm = String((ps && ps.stdout) || "").trim();
-      if (isMtplxRuntime(comm)) out.push(`http://127.0.0.1:${port}/v1`);
+      if (isLocalModelRuntime(comm, matcher)) out.push(`http://127.0.0.1:${port}/v1`);
     }
   } catch { /* discovery is best-effort; the caller falls back to config */ }
   return [...new Set(out)];
@@ -278,9 +298,9 @@ export function discoverMtplxBases({ exec = spawnSync } = {}) {
 
 // Candidates in trust order: what the operator said, then where MTPLX actually is, then what the config
 // says, then the historic default. The FIRST that serves exactly the required model wins.
-export function inferenceCandidates({ flagValue = null, env = process.env, configDir, exec = spawnSync } = {}) {
+export function inferenceCandidates({ flagValue = null, env = process.env, configDir, exec = spawnSync, matcher = runtimeMatcher(env) } = {}) {
   const list = [];
-  for (const c of [flagValue || env.LONGRUN_MODEL_BASE, ...discoverMtplxBases({ exec }), inferenceBaseFromConfig({ configDir }), DEFAULT_INFERENCE_BASE]) {
+  for (const c of [flagValue || env.LONGRUN_MODEL_BASE, ...discoverMtplxBases({ exec, matcher }), inferenceBaseFromConfig({ configDir }), DEFAULT_INFERENCE_BASE]) {
     if (typeof c === "string" && c.trim()) {
       const norm = c.trim().replace(/\/+$/, "");
       if (!list.includes(norm)) list.push(norm);
@@ -290,13 +310,13 @@ export function inferenceCandidates({ flagValue = null, env = process.env, confi
 }
 
 // Pick the first candidate that serves EXACTLY the required model. Injected probe keeps this testable.
-export async function pickServedBase({ bases = [], probe = servedModels } = {}) {
+export async function pickServedBase({ bases = [], probe = servedModels, required = DEFAULT_REQUIRED_MODEL } = {}) {
   const tried = [];
   for (const base of bases) {
     try {
       const models = await probe(base);
       tried.push({ base, models });
-      if (models.length === 1 && models[0] === REQUIRED_MODEL) return { base, models, tried };
+      if (models.length === 1 && models[0] === required) return { base, models, tried };
     } catch (e) {
       tried.push({ base, error: String((e && e.message) || e) });
     }
@@ -349,6 +369,10 @@ async function main() {
   // Widening the accepted lifecycle states is an operator decision, so it must come with an explicit
   // written prompt instead of the tool's own default wording.
   if (allowStatus && !flag("--prompt-file")) bail("PROMPT_REQUIRED", "--allow-status overrides which lifecycle states may be dispatched; it requires an explicit --prompt-file stating the intent");
+  // Toolchain resolved from the environment, with the shipped MTPLX values as defaults. Nothing below
+  // should assume a particular model id, binary path or runtime layout.
+  const toolchain = { model: requiredModel(), providerModel: requiredProviderModel(), bin: opencodeBin(), matcher: runtimeMatcher() };
+  out.toolchain = toolchain;
   const found = findRunKey(stateDir, runId);
   if (!found) { out.error = "NO_RUN"; process.stdout.write(JSON.stringify(out, null, json ? 2 : 0) + "\n"); process.exit(3); }
   const boundSession = flag("--session") || sessionForRun(stateDir, runId);
@@ -362,13 +386,13 @@ async function main() {
   // The endpoint is DISCOVERED (MTPLX's own listening socket), not assumed, but the identity bar is
   // unchanged: exactly one served model, and it must be the required one.
   if (!has("--skip-model-check")) {
-    const bases = inferenceCandidates({ flagValue: flag("--model-base") });
+    const bases = inferenceCandidates({ flagValue: flag("--model-base"), matcher: toolchain.matcher });
     out.inferenceCandidates = bases;
-    const picked = await pickServedBase({ bases });
+    const picked = await pickServedBase({ bases, required: toolchain.model });
     out.inferenceTried = picked.tried;
     if (!picked.base) {
       out.error = "MODEL_MISMATCH";
-      out.detail = `no candidate endpoint serves exactly [${REQUIRED_MODEL}]; tried ${JSON.stringify(picked.tried)}`;
+      out.detail = `no candidate endpoint serves exactly [${toolchain.model}]; tried ${JSON.stringify(picked.tried)}`;
       process.stdout.write(JSON.stringify(out, null, 2) + "\n");
       process.exit(4);
     }
@@ -413,10 +437,10 @@ async function main() {
     if (inlineConfig) env.OPENCODE_CONFIG_CONTENT = inlineConfig;
     for (const k of ["LONGRUN_TEST", "LONGRUN_CONTROLLER_FILE", "OPENCODE_CLIENT"]) delete env[k];
     const started = Date.now();
-    const spawnArgs = ["run", "--dir", project, "--model", REQUIRED_PROVIDER_MODEL, "--agent", "build", "--format", "json"];
+    const spawnArgs = ["run", "--dir", project, "--model", toolchain.providerModel, "--agent", "build", "--format", "json"];
     if (sessionId) spawnArgs.push("--session", sessionId); // a fresh conversation deliberately has none
     spawnArgs.push(prompt);
-    const res = spawnSync(OPENCODE_BIN, spawnArgs, {
+    const res = spawnSync(toolchain.bin, spawnArgs, {
       env, encoding: "utf8", timeout: timeoutMs, maxBuffer: 64 * 1024 * 1024,
     });
     const after = findRunKey(stateDir, runId)?.run || {};
