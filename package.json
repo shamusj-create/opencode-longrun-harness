@@ -1,9 +1,45 @@
 {
   "name": "opencode-longrun-harness",
   "version": "1.2.22",
-  "private": true,
   "type": "module",
-  "description": "Bounded contract/loss-driven implementation+verification+repair harness for OpenCode (desktop), dependency-free controller.",
+  "description": "Bounded, evidence-driven long-run workflow harness for OpenCode: contract-bound runs, fingerprint-bound receipts, operator-reviewed completion. Dependency-free.",
+  "license": "MIT",
+  "main": "harness/plugin/longrun.js",
+  "bin": {
+    "longrun-harness": "harness/src/cli.mjs"
+  },
+  "files": [
+    "harness/src",
+    "harness/plugin",
+    "harness/tools",
+    "harness/commissioning",
+    "harness/test",
+    "docs/V1.2.20_EVIDENCE.md",
+    "docs/V1.2.21_EVIDENCE.md",
+    "docs/V1.2.22_EVIDENCE.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "opencode",
+    "plugin",
+    "harness",
+    "agent",
+    "verification",
+    "evidence",
+    "long-running",
+    "llm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shamusj-create/opencode-longrun-harness.git"
+  },
+  "homepage": "https://github.com/shamusj-create/opencode-longrun-harness#readme",
+  "bugs": {
+    "url": "https://github.com/shamusj-create/opencode-longrun-harness/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "test": "node --test harness/test/*.test.mjs",
     "doctor": "node harness/src/cli.mjs doctor",
