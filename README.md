@@ -61,7 +61,7 @@ to call work finished on weak evidence.
 | OpenCode plugin | `harness/plugin/longrun.js` | Exposes the native `longrun` and `longrun_verify` tools, the lifecycle guard, routing and compaction handling. |
 | Installer | `harness/src/install.mjs` | Reversible, ownership-manifest-based, JSONC-safe install. Never edits provider/model config. |
 | Operator CLI | `harness/src/maintenance.mjs` | `doctor`, `status`, `pause`, `review`, `amend`, `disable`, `enable`, `uninstall`. |
-| Recovery runner | `harness/tools/recovery-runner.mjs` | Operator-side supervised dispatch: verifies the served model, resumes a stuck run with bounded attempts, refuses to credit a no-op, and can hand a run to a fresh reduced-context conversation. |
+| Recovery runner | `harness/tools/recovery-runner.mjs` | Operator-side supervised dispatch: **discovers the live model endpoint from the running server's own listening socket** and verifies the single served model before every dispatch, resumes a stuck run with bounded attempts, refuses to credit a no-op, settles a compaction-ended turn to a controlled `PAUSED`, treats a terminal run as an ending rather than a failure, and hands a run to a fresh reduced-context conversation. |
 | Receipt auditor | `harness/tools/audit-receipts.mjs` | Independently audits receipts for substituted commands, contract mismatch, PASS-with-non-zero-exit, backdating and freshness. |
 
 ---
@@ -83,7 +83,7 @@ installed.
 npm test        # node --test harness/test/*.test.mjs
 ```
 
-**282 tests across 38 files, all passing.** These are offline tests against fixtures and mock
+**286 tests across 38 files, all passing.** These are offline tests against fixtures and mock
 sessions: they are deliberately *not* treated as proof that a real OpenCode host behaves a certain
 way, and they never touch production state.
 
@@ -116,12 +116,19 @@ writes are stopped by the lifecycle guard in any non-eligible state.
 
 ## Verified status, honestly
 
-- **Offline suite:** 282 passing tests covering identity keying, loss integrity, receipt eligibility
+- **Offline suite:** 286 passing tests covering identity keying, loss integrity, receipt eligibility
   and staleness, single-flight scheduling, resume authorization, stall/replan/pause, budget
-  amendment, completion review, negative-control isolation, memory, and the recovery runner.
+  amendment, completion review, negative-control isolation, memory, endpoint discovery, and the
+  recovery runner.
 - **Real host behaviour** has been exercised in separate, dated commissioning work: lifecycle
   transitions end-to-end, a real compaction with supervised recovery, and full-stack trial runs driven
   to `COMPLETE`. Those are recorded in the release reports below rather than reproduced here.
+- **Used in anger:** this harness drove six `COMPLETE` runs building a real browser game (Signal
+  Breach) — mouse-only interaction, smooth movement, board rotation, panning, ability targeting, audio
+  and effect work — each one gated by its own declared checks on a frozen source fingerprint and an
+  independent operator review. Several runs were extended only through the operator amendment path
+  when a budget or deadline genuinely ran out, and one was refused completion until an operator
+  accepted the evidence.
 - **Known limits, by design:** total host activity (model inference, ordinary tools) is **not**
   metered — budgets cover declared-check execution; automatic continuation is **OFF**; compaction
   recovery is **supervised**, not autonomous; a run parked with no progress is stopped rather than

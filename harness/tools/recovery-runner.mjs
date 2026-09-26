@@ -57,8 +57,15 @@ export function decideRecovery({ status, inFlight, hostLive, sessionId, attempt 
 
 // Decide the outcome after a dispatch turn finished. In-flight work always wins: a reserved or running
 // check must never be retried over, whatever the lifecycle status says.
+// States in which the run is finished and cannot legitimately be re-bound: a terminal run must never
+// be adopted by a new conversation, so the rebind guard below must not demand one. Observed live: the
+// completion dispatch drove the run to COMPLETE, then the guard scored that success as NO_REBIND and
+// retried until ATTEMPT_LIMIT, so a fully completed run was reported as a runner failure.
+export const TERMINAL_STATUSES = ["COMPLETE", "CANCELLED", "BLOCKED"];
+
 export function evaluateOutcome({ status, inFlight } = {}) {
   if (inFlight) return { recovered: false, retry: false, status, reason: "VERIFY_IN_FLIGHT" };
+  if (TERMINAL_STATUSES.includes(status)) return { recovered: true, retry: false, terminal: true, status };
   if (status === "RECOVERY_REQUIRED") return { recovered: false, retry: true, status };
   return { recovered: true, retry: false, status };
 }
@@ -99,7 +106,8 @@ export function applyRebindGuard(outcome, { newSessionId, boundSessions: bound =
   const owned = !newSessionId || !compactionSessionID || compactionSessionID === newSessionId;
   const rebound = listed && owned;
   const info = { newSessionId: newSessionId || null, boundSessions: bound.slice(), compactionSessionID: compactionSessionID || null, rebound };
-  if (outcome.recovered && !rebound) return { ...info, outcome: { recovered: false, retry: true, status: outcome.status, reason: "NO_REBIND" } };
+  // A terminal run is a SUCCESSFUL ending, not an unproven adoption: it cannot be rebound by design.
+  if (outcome.recovered && !outcome.terminal && !rebound) return { ...info, outcome: { recovered: false, retry: true, status: outcome.status, reason: "NO_REBIND" } };
   return { ...info, outcome };
 }
 
@@ -188,7 +196,129 @@ export function hostLive(project, bin = OPENCODE_BIN) {
   const out = spawnSync("pgrep", ["-f", `${bin} run --dir ${project}`], { encoding: "utf8" });
   return out.status === 0 && String(out.stdout || "").trim().length > 0;
 }
-export async function servedModels(baseUrl = "http://127.0.0.1:8000/v1") {
+// The inference endpoint is a MOVING detail of the environment, not a constant of this tool: MTPLX has
+// served the required model on :8000 and later on :8001, and another local router can hold :8000 at the
+// same time. Hardcoding one port made the identity check lie — it reported MODEL_MISMATCH against a
+// different server's model list while the required model was in fact being served on the other port.
+// So resolve the endpoint from the live OpenCode config, which is also what the dispatched session
+// itself will use, and keep the historic port only as a last-resort default.
+export const DEFAULT_INFERENCE_BASE = "http://127.0.0.1:8000/v1";
+
+export function inferenceBaseFromConfig({ configDir = process.env.OPENCODE_CONFIG_DIR || path.join(process.env.HOME || "", ".config", "opencode") } = {}) {
+  for (const name of ["opencode.json", "opencode.jsonc"]) {
+    try {
+      const cfg = JSON.parse(fs.readFileSync(path.join(configDir, name), "utf8"));
+      const url = cfg && cfg.provider && cfg.provider.mtplx && cfg.provider.mtplx.options && cfg.provider.mtplx.options.baseURL;
+      if (typeof url === "string" && url.trim()) return url.trim().replace(/\/+$/, "");
+    } catch { /* missing or unparsable: try the next candidate */ }
+  }
+  return null;
+}
+
+// The PATH of the config file that supplies the endpoint, so a dispatch can pin that exact file
+// instead of letting a merged sibling override the baseURL the identity check just read.
+export function configFileSupplyingBase({ configDir = process.env.OPENCODE_CONFIG_DIR || path.join(process.env.HOME || "", ".config", "opencode") } = {}) {
+  for (const name of ["opencode.json", "opencode.jsonc"]) {
+    const p = path.join(configDir, name);
+    try {
+      const cfg = JSON.parse(fs.readFileSync(p, "utf8"));
+      const url = cfg && cfg.provider && cfg.provider.mtplx && cfg.provider.mtplx.options && cfg.provider.mtplx.options.baseURL;
+      if (typeof url === "string" && url.trim()) return p;
+    } catch { /* try the next candidate */ }
+  }
+  return null;
+}
+
+// Precedence: explicit flag > environment override > the OpenCode config > historic default.
+export function resolveInferenceBase({ flagValue = null, env = process.env, configDir } = {}) {
+  const explicit = flagValue || env.LONGRUN_MODEL_BASE;
+  if (explicit && String(explicit).trim()) return String(explicit).trim().replace(/\/+$/, "");
+  return inferenceBaseFromConfig({ configDir }) || DEFAULT_INFERENCE_BASE;
+}
+
+// A configured port can still be stale in the OTHER direction: MTPLX's own Settings say :8000 and it
+// only fell back to :8001 because another app held :8000 ("the port in Settings is unchanged and will
+// be tried again at the next start"), so the config can point at a port MTPLX has left. The authoritative
+// answer is the OS: MTPLX serves from its bundled runtime, so the listening socket owned by that runtime
+// IS MTPLX's endpoint, whatever port it landed on. Discovery is still held to the same strict single-model
+// identity check below — it only decides WHERE to look, never WHAT is acceptable.
+
+// Parse `lsof -nP -iTCP -sTCP:LISTEN -F pcn` output into {pid, port} pairs.
+export function parseListeners(lsofOut) {
+  const out = [];
+  let pid = null;
+  for (const line of String(lsofOut || "").split("\n")) {
+    if (line.startsWith("p")) pid = line.slice(1).trim();
+    else if (line.startsWith("n") && pid) {
+      const m = /:(\d+)$/.exec(line.slice(1).trim());
+      if (m) out.push({ pid, port: Number(m[1]) });
+    }
+  }
+  return out;
+}
+
+// The MTPLX server runs from '<Application Support>/MTPLX/runtime-venv/bin/python' (or inside the app
+// bundle), which is what identifies its sockets.
+export function isMtplxRuntime(commPath) {
+  return /mtplx[\\/].*runtime-venv/i.test(commPath || "") || /mtplx\.app/i.test(commPath || "");
+}
+
+export function discoverMtplxBases({ exec = spawnSync } = {}) {
+  const out = [];
+  try {
+    const lsof = exec("lsof", ["-nP", "-iTCP", "-sTCP:LISTEN", "-F", "pcn"], { encoding: "utf8" });
+    for (const { pid, port } of parseListeners(lsof && lsof.stdout)) {
+      const ps = exec("ps", ["-o", "comm=", "-p", String(pid)], { encoding: "utf8" });
+      const comm = String((ps && ps.stdout) || "").trim();
+      if (isMtplxRuntime(comm)) out.push(`http://127.0.0.1:${port}/v1`);
+    }
+  } catch { /* discovery is best-effort; the caller falls back to config */ }
+  return [...new Set(out)];
+}
+
+// Candidates in trust order: what the operator said, then where MTPLX actually is, then what the config
+// says, then the historic default. The FIRST that serves exactly the required model wins.
+export function inferenceCandidates({ flagValue = null, env = process.env, configDir, exec = spawnSync } = {}) {
+  const list = [];
+  for (const c of [flagValue || env.LONGRUN_MODEL_BASE, ...discoverMtplxBases({ exec }), inferenceBaseFromConfig({ configDir }), DEFAULT_INFERENCE_BASE]) {
+    if (typeof c === "string" && c.trim()) {
+      const norm = c.trim().replace(/\/+$/, "");
+      if (!list.includes(norm)) list.push(norm);
+    }
+  }
+  return list;
+}
+
+// Pick the first candidate that serves EXACTLY the required model. Injected probe keeps this testable.
+export async function pickServedBase({ bases = [], probe = servedModels } = {}) {
+  const tried = [];
+  for (const base of bases) {
+    try {
+      const models = await probe(base);
+      tried.push({ base, models });
+      if (models.length === 1 && models[0] === REQUIRED_MODEL) return { base, models, tried };
+    } catch (e) {
+      tried.push({ base, error: String((e && e.message) || e) });
+    }
+  }
+  return { base: null, models: null, tried };
+}
+
+// The config content a dispatch should run with: the resolved file, with baseURL forced to the endpoint
+// that was actually verified, so the session cannot talk to a different server than the check approved.
+export function pinnedConfigContent({ file, base }) {
+  if (!file) return null;
+  try {
+    const cfg = JSON.parse(fs.readFileSync(file, "utf8"));
+    cfg.provider = cfg.provider || {};
+    cfg.provider.mtplx = cfg.provider.mtplx || {};
+    cfg.provider.mtplx.options = cfg.provider.mtplx.options || {};
+    cfg.provider.mtplx.options.baseURL = base;
+    return JSON.stringify(cfg, null, 2);
+  } catch { return null; }
+}
+
+export async function servedModels(baseUrl = DEFAULT_INFERENCE_BASE) {
   const res = await fetch(`${baseUrl}/models`);
   const body = await res.json();
   return (body.data || []).map((m) => m.id);
@@ -229,27 +359,35 @@ async function main() {
 
   // Environment identity check: never dispatch to an unverified model. --skip-model-check exists only
   // for offline unit tests of the refusal/decision paths; a real dispatch must verify the endpoint.
+  // The endpoint is DISCOVERED (MTPLX's own listening socket), not assumed, but the identity bar is
+  // unchanged: exactly one served model, and it must be the required one.
   if (!has("--skip-model-check")) {
-    try {
-      const models = await servedModels();
-      out.servedModels = models;
-      if (!(models.length === 1 && models[0] === REQUIRED_MODEL)) {
-        out.error = "MODEL_MISMATCH";
-        out.detail = `expected the single served model ${REQUIRED_MODEL}, saw ${JSON.stringify(models)}`;
-        process.stdout.write(JSON.stringify(out, null, 2) + "\n");
-        process.exit(4);
-      }
-    } catch (e) {
-      out.error = "ENDPOINT_UNREACHABLE";
-      out.detail = String(e && e.message || e);
+    const bases = inferenceCandidates({ flagValue: flag("--model-base") });
+    out.inferenceCandidates = bases;
+    const picked = await pickServedBase({ bases });
+    out.inferenceTried = picked.tried;
+    if (!picked.base) {
+      out.error = "MODEL_MISMATCH";
+      out.detail = `no candidate endpoint serves exactly [${REQUIRED_MODEL}]; tried ${JSON.stringify(picked.tried)}`;
       process.stdout.write(JSON.stringify(out, null, 2) + "\n");
       process.exit(4);
     }
+    out.inferenceBase = picked.base;
+    out.servedModels = picked.models;
   } else { out.modelCheck = "SKIPPED"; }
 
   const promptFile = flag("--prompt-file");
   const prompt = promptFile ? fs.readFileSync(promptFile, "utf8") : (freshSession ? freshSessionPrompt(runId, { phase }) : resumePrompt(runId));
-  const configFile = flag("--config-file");
+  // Pin the endpoint the check just verified. The identity check and the dispatched session must not
+  // disagree about which endpoint is in play: OpenCode merges every config file it finds, so a stale
+  // sibling can override the baseURL, and the check would then bless one server while the session talks
+  // to another and 404s. We force baseURL to the VERIFIED endpoint inside the config we hand over, so
+  // the session cannot reach anything the check did not approve. --no-pin-config opts out.
+  const pinnedFile = has("--no-pin-config") ? null : (flag("--config-file") || configFileSupplyingBase());
+  if (pinnedFile) out.configPinned = pinnedFile;
+  const inlineConfig = pinnedFile
+    ? ((out.inferenceBase ? pinnedConfigContent({ file: pinnedFile, base: out.inferenceBase }) : null) || fs.readFileSync(pinnedFile, "utf8"))
+    : null;
   let attempt = 0;
   for (;;) {
     const run = findRunKey(stateDir, runId)?.run || {};
@@ -272,7 +410,7 @@ async function main() {
     if (dryRun) { out.ok = true; out.dryRun = true; out.wouldDispatch = true; break; }
 
     const env = { ...process.env, LONGRUN_STATE_DIR: stateDir };
-    if (configFile) env.OPENCODE_CONFIG_CONTENT = fs.readFileSync(configFile, "utf8");
+    if (inlineConfig) env.OPENCODE_CONFIG_CONTENT = inlineConfig;
     for (const k of ["LONGRUN_TEST", "LONGRUN_CONTROLLER_FILE", "OPENCODE_CLIENT"]) delete env[k];
     const started = Date.now();
     const spawnArgs = ["run", "--dir", project, "--model", REQUIRED_PROVIDER_MODEL, "--agent", "build", "--format", "json"];
