@@ -9,7 +9,193 @@ every declared check passes on the *current* source **and** an independent **ope
 the evidence.
 
 The controller is deliberately dependency-free — Node builtins only. No bundler, no second server, no
-always-on daemon, no external service, no cloud model.
+always-on daemon, no external service, no cloud model. It is **project-agnostic**: it drives any
+full-stack repository through the same lifecycle, and the local toolchain (model id, CLI path, runtime)
+is configuration rather than code.
+
+---
+
+## Why use this instead of a vanilla harness
+
+"Vanilla" — plain OpenCode plus a model, no contract layer — is perfectly good for short, interactive
+work. It degrades in a specific, predictable way on long autonomous work: **you cannot tell the
+difference between "finished" and "confidently described as finished".** This harness exists to make
+that difference mechanical.
+
+| Concern | Vanilla | This harness |
+| --- | --- | --- |
+| **What "done" means** | The model says so, or its own tests happen to pass | Every *declared* check passed on the frozen source **and** an operator accepted the evidence |
+| **Evidence freshness** | Tests passed at some point; a later edit does not invalidate the claim | Receipts are bound to a source fingerprint — any tracked edit makes them `STALE` and they must be re-earned |
+| **What gets verified** | Whatever command the model chose to run, at whatever moment | Only checks the contract *declared*, run by id; arbitrary commands are refused |
+| **Self-approval** | The agent can declare its own success | The model **cannot** complete a run; completion needs an operator review bound to an evidence hash, and any later change invalidates it |
+| **Long sessions** | Compaction loses the thread; work is silently redone, or claimed without being redone | Run state is canonical on disk: compaction moves the run to `RECOVERY_REQUIRED` and a supervised resume re-binds the session and worktree |
+| **Runaway loops** | Unbounded retries, no memory of what already failed | Budgets (candidates, active check time, absolute deadline, command attempts, same-failure and no-progress limits) are enforced, not advisory |
+| **False-positive tests** | An assertion can pass while the feature is unreachable | Negative controls on a *physically isolated copy* prove an assertion can actually fail, and the receipt auditor flags substituted commands and PASS-with-non-zero-exit |
+| **Auditability** | A chat transcript | Append-only receipts and evidence, contract hash, source fingerprint, amendments, review basis |
+| **Across projects** | Hand-rolled conventions per repo | One lifecycle, one CLI, one contract shape for any repository; the local toolchain is configurable |
+
+**What it deliberately does not do.** It is workflow infrastructure, not a correctness guarantee and not
+an OS sandbox: total host activity (model inference, ordinary tool calls) is *not* metered, budgets cover
+declared-check execution, automatic continuation is **off** by default, compaction recovery is
+**supervised** rather than autonomous, and it does not stop a determined process from touching state
+files. It makes each failure mode above **explicit and checkable** — it does not make them impossible.
+
+---
+
+## Features
+
+- **Contract-bound runs.** Required criteria, each mapped to declared checks. A required criterion with
+  no satisfiable check is refused at *start*, so a run that could never reach loss 0 cannot be opened.
+- **Loss as the progress signal.** Weighted count of unverified required criteria, recomputed from
+  evidence rather than asserted by the model.
+- **Declared-checks-only verification.** Checks live in a catalogue; verification runs them by id.
+  Arbitrary shell commands are rejected, so "verification" cannot drift into a different command.
+- **Fingerprint-bound receipts.** Every result records the source state it measured, plus status, exit
+  code, output tail, evidence class and the contract hash.
+- **Automatic staleness.** A tracked-source change invalidates earlier receipts, so green evidence can
+  never be inherited by code that was never tested.
+- **Hard gates.** A check marked as a gate blocks completion regardless of loss.
+- **Enforced budgets.** Candidates, active check time, absolute deadline, command attempts, and
+  same-failure / no-progress thresholds.
+- **Operator-only, append-only amendments.** Extra candidates or a new deadline for a paused run —
+  preserving the original limits, usage, receipts and history. There is no model-side amend action.
+- **Independent completion review.** An accept/reject decision bound to a hash of the contract, source,
+  budgets and evidence. Any later change invalidates the approval.
+- **Negative controls.** A run against a physically isolated copy with one deliberate defect, proving the
+  unchanged assertion detects it. Fixtures that overlap the real project are refused.
+- **Compaction recovery.** Natural compaction parks the run; `resume-context` re-establishes state and an
+  explicit `resume` re-binds the new session and worktree to the *same* run.
+- **Hierarchical memory.** `AGENTS.md` nodes where human prose is preserved and managed blocks are
+  regenerated; memory never overrides canonical lifecycle.
+- **Reversible install.** Ownership-manifest based, JSONC-safe, and it never edits provider, model or
+  permission configuration. `uninstall` removes exactly what it installed.
+- **Supervised dispatch runner.** Operator-side: discovers the live model endpoint from the running
+  server's own listening socket, verifies the single served model *before* every dispatch, resumes a
+  stuck run with bounded attempts, refuses to credit a no-op, and treats a terminal run as an ending
+  rather than a failure.
+- **Independent receipt auditor.** A second implementation that re-reads receipts looking for substituted
+  commands, contract mismatch, PASS with a non-zero exit, backdating and freshness problems.
+- **Project-agnostic by configuration.** Model id, provider model, OpenCode binary and the runtime
+  matcher all resolve from the environment (see [Configure for your project](#configure-for-your-project)).
+
+---
+
+## Usage guide
+
+### 1. Install
+
+```sh
+npm run install:global        # node harness/src/cli.mjs install
+```
+
+Writes only Longrun-owned paths under the OpenCode config directory, alongside an ownership and rollback
+manifest. `npm run uninstall` reverses it exactly.
+
+### 2. Check the install
+
+```sh
+~/.config/opencode/longrun-harness/longrun doctor --live
+```
+
+Confirms the resolution path and reports whether a live host load has been observed.
+
+### 3. Declare a contract and start a run
+
+The contract *is* the acceptance definition, so write it before work begins. Inside an OpenCode session
+the model starts the run natively:
+
+```jsonc
+// longrun action=start
+{
+  "request": "Add password reset to the accounts service",
+  "criteria": [
+    { "id": "API",   "required": true, "weight": 1, "checks": ["c-api-tests"],  "evidenceClass": "INTEGRATION" },
+    { "id": "UI",    "required": true, "weight": 1, "checks": ["c-ui-e2e"],     "evidenceClass": "BROWSER" },
+    { "id": "ENG",   "required": true, "weight": 1, "checks": ["c-typecheck", "c-build"] }
+  ],
+  "checkCatalogue": {
+    "c-api-tests": { "command": ["npm", "run", "test:api"],        "kind": "cmd", "timeoutMs": 300000 },
+    "c-ui-e2e":    { "command": ["npx", "playwright", "test"],    "kind": "cmd", "timeoutMs": 600000 },
+    "c-typecheck": { "command": ["npx", "tsc", "--noEmit"],       "kind": "cmd", "timeoutMs": 180000 },
+    "c-build":     { "command": ["npm", "run", "build"],          "kind": "cmd", "timeoutMs": 300000 }
+  },
+  "budgets": { "candidateBudget": 40, "timeBudgetHours": 6, "deadlineHours": 24 },
+  "autoContinue": false
+}
+```
+
+Rules worth knowing up front: criteria and checks are treated as **fixed** once the run starts; `loss`
+falls only when a declared check records a PASS **on the current source**; and the model must never
+edit code after recording a receipt without re-recording it.
+
+### 4. Work, recording checks as they pass
+
+Record **one check at a time**, as soon as it passes, so partial progress survives a compaction — and run
+the broadest gate **last**, because any later edit invalidates every receipt recorded before it:
+
+```
+longrun_verify(runId=…, checkId="c-typecheck")
+longrun_verify(runId=…, checkId="c-api-tests")
+longrun_verify(runId=…, checkId="c-ui-e2e")
+longrun_verify(runId=…, checkId="c-build")        # or a single all-in-one gate last
+```
+
+### 5. Watch progress from the operator side
+
+```sh
+longrun status --json --project /path/to/repo --run lr-…
+```
+
+Shows canonical lifecycle, loss, per-criterion state, check status, budgets, stale evidence and review
+state. `receipts` pages through history; `audit-receipts.mjs` audits it independently.
+
+### 6. If a budget or deadline genuinely runs out
+
+An operator (not the model) can grant more, append-only, on a paused run:
+
+```sh
+longrun amend --additional-candidates 20 --new-deadline 2026-09-29T12:00:00+01:00 \
+  --amendment-id op-amend-01 --expected-basis HASH --expected-revision N \
+  --authorization-file auth.txt --reason-file reason.txt
+```
+
+This preserves the original limits, usage, receipts and history, and never resumes the run.
+
+### 7. Review, then complete
+
+Completion is a two-key operation. When every declared check is PASS on one fingerprint, the operator
+records the independent decision:
+
+```sh
+longrun review --verdict accept --expected-basis HASH \
+  --review-id review-20260926T2015Z --reason-file reason.txt
+```
+
+Only then can the model call `longrun action=complete`. Rejecting a premature completion leaves the run
+paused with its history intact.
+
+### 8. Optional: prove your tests can fail
+
+For a materially risky assertion, run a **negative control**: copy the reviewed source to an isolated
+fixture, introduce exactly one deliberate defect there, and confirm the *unchanged* assertion fails for
+that defect. Fixtures that overlap the real project are refused, and a timeout/launch failure/zero tests
+are classified as invalid execution rather than as the expected FAIL.
+
+### Configure for your project
+
+The harness is not tied to one local model setup. Everything below defaults to the environment it was
+developed against, and is overridable:
+
+| Variable | Meaning | Default |
+| --- | --- | --- |
+| `LONGRUN_REQUIRED_MODEL` | The single model id the served endpoint must expose | `mtplx-flash-next-optimized-speed` |
+| `LONGRUN_REQUIRED_PROVIDER_MODEL` | The provider-qualified model passed to OpenCode | `mtplx/mtplx-flash-next-optimized-speed` |
+| `LONGRUN_OPENCODE_BIN` | The OpenCode binary to dispatch | `/opt/homebrew/bin/opencode` |
+| `LONGRUN_RUNTIME_MATCHER` | Regex identifying the model server's runtime when discovering its listening port | matches the bundled local runtime |
+| `LONGRUN_MODEL_BASE` | Pin the inference base URL explicitly | discovered, then config, then default |
+
+`harness/commissioning/` holds **case scripts** from one specific commissioning exercise — they contain
+that case's numbers and are not generic tools.
 
 ---
 
@@ -61,31 +247,10 @@ to call work finished on weak evidence.
 | OpenCode plugin | `harness/plugin/longrun.js` | Exposes the native `longrun` and `longrun_verify` tools, the lifecycle guard, routing and compaction handling. |
 | Installer | `harness/src/install.mjs` | Reversible, ownership-manifest-based, JSONC-safe install. Never edits provider/model config. |
 | Operator CLI | `harness/src/maintenance.mjs` | `doctor`, `status`, `pause`, `review`, `amend`, `disable`, `enable`, `uninstall`. |
-| Recovery runner | `harness/tools/recovery-runner.mjs` | Operator-side supervised dispatch: **discovers the live model endpoint from the running server's own listening socket** and verifies the single served model before every dispatch, resumes a stuck run with bounded attempts, refuses to credit a no-op, settles a compaction-ended turn to a controlled `PAUSED`, treats a terminal run as an ending rather than a failure, and hands a run to a fresh reduced-context conversation. |
+| Recovery runner | `harness/tools/recovery-runner.mjs` | Operator-side supervised dispatch: discovers the live model endpoint, verifies the single served model before every dispatch, resumes a stuck run with bounded attempts, refuses to credit a no-op, settles a compaction-ended turn to a controlled `PAUSED`, treats a terminal run as an ending rather than a failure, and hands a run to a fresh reduced-context conversation. |
 | Receipt auditor | `harness/tools/audit-receipts.mjs` | Independently audits receipts for substituted commands, contract mismatch, PASS-with-non-zero-exit, backdating and freshness. |
 
 ---
-
-## Install
-
-```sh
-npm run install:global        # node harness/src/cli.mjs install
-```
-
-The installer is **reversible**: it writes only Longrun-owned paths under the OpenCode config
-directory, records an ownership manifest plus a rollback manifest, preserves unrelated configuration,
-and never touches provider, model or permission settings. `npm run uninstall` removes exactly what it
-installed.
-
-## Test
-
-```sh
-npm test        # node --test harness/test/*.test.mjs
-```
-
-**286 tests across 38 files, all passing.** These are offline tests against fixtures and mock
-sessions: they are deliberately *not* treated as proof that a real OpenCode host behaves a certain
-way, and they never touch production state.
 
 ## Operator CLI
 
@@ -112,23 +277,34 @@ Inside OpenCode the model sees exactly two tools:
 There is no native amend action and no native self-approval. Ordinary execution, edits and memory
 writes are stopped by the lifecycle guard in any non-eligible state.
 
+## Test
+
+```sh
+npm test        # node --test harness/test/*.test.mjs
+```
+
+**287 tests across 38 files, all passing.** These are offline tests against fixtures and mock
+sessions: they are deliberately *not* treated as proof that a real OpenCode host behaves a certain
+way, and they never touch production state.
+
 ---
 
 ## Verified status, honestly
 
-- **Offline suite:** 286 passing tests covering identity keying, loss integrity, receipt eligibility
+- **Offline suite:** 287 passing tests covering identity keying, loss integrity, receipt eligibility
   and staleness, single-flight scheduling, resume authorization, stall/replan/pause, budget
-  amendment, completion review, negative-control isolation, memory, endpoint discovery, and the
-  recovery runner.
+  amendment, completion review, negative-control isolation, memory, endpoint discovery, configurable
+  toolchain resolution, and the recovery runner.
 - **Real host behaviour** has been exercised in separate, dated commissioning work: lifecycle
   transitions end-to-end, a real compaction with supervised recovery, and full-stack trial runs driven
   to `COMPLETE`. Those are recorded in the release reports below rather than reproduced here.
-- **Used in anger:** this harness drove six `COMPLETE` runs building a real browser game (Signal
-  Breach) — mouse-only interaction, smooth movement, board rotation, panning, ability targeting, audio
-  and effect work — each one gated by its own declared checks on a frozen source fingerprint and an
-  independent operator review. Several runs were extended only through the operator amendment path
-  when a budget or deadline genuinely ran out, and one was refused completion until an operator
-  accepted the evidence.
+- **Used in anger:** this harness drove six `COMPLETE` runs building a real browser game — mouse-only
+  interaction, smooth movement, board rotation and panning, ability targeting, audio, combat legibility
+  and effect work — each gated by its own declared checks on a frozen source fingerprint plus an
+  independent operator review. Several runs were extended only through the operator amendment path when
+  a budget or deadline genuinely ran out, and one was refused completion until an operator accepted the
+  evidence. The failures it caught included a test that was green while the feature it named was
+  unreachable, and a flaky acceptance gate that a lucky green pair would otherwise have hidden.
 - **Known limits, by design:** total host activity (model inference, ordinary tools) is **not**
   metered — budgets cover declared-check execution; automatic continuation is **OFF**; compaction
   recovery is **supervised**, not autonomous; a run parked with no progress is stopped rather than
