@@ -1,5 +1,8 @@
 # OpenCode Long-run Harness
 
+[![npm version](https://img.shields.io/npm/v/opencode-longrun-harness.svg)](https://www.npmjs.com/package/opencode-longrun-harness)
+[![license](https://img.shields.io/npm/l/opencode-longrun-harness.svg)](LICENSE)
+
 **Bounded, evidence-driven long-run workflow infrastructure for [OpenCode](https://opencode.ai).**
 
 A *tracked run* is driven by a **contract**: required criteria, each mapped to **declared checks** that
@@ -86,16 +89,15 @@ files. It makes each failure mode above **explicit and checkable** — it does n
 ### 1. Install
 
 ```sh
-npm install -g github:shamusj-create/opencode-longrun-harness
+npm install -g opencode-longrun-harness
 longrun-harness install
 ```
 
-The first line pulls straight from this public repository — no npm account, no registry, no clone needed.
-The second copies the plugin, the operator CLI, the agent, the commands and the skills into your OpenCode
-config directory (`~/.config/opencode` by default), writing only Longrun-owned paths alongside an ownership
-and rollback manifest. `longrun-harness dry-run` previews it; `longrun-harness uninstall` reverses it exactly;
-`longrun-harness disable` / `enable` toggle it without removing anything; `--config-dir PATH` targets
-somewhere else.
+The first line installs the package from the npm registry. The second copies the plugin, the operator CLI,
+the agent, the commands and the skills into your OpenCode config directory (`~/.config/opencode` by default),
+writing only Longrun-owned paths alongside an ownership and rollback manifest. `longrun-harness dry-run`
+previews it; `longrun-harness uninstall` reverses it exactly; `longrun-harness disable` / `enable` toggle it
+without removing anything; `--config-dir PATH` targets somewhere else.
 
 Then **restart OpenCode.** Plugins load at process start, so one installed into an already-running backend
 is not active yet.
@@ -104,6 +106,8 @@ is not active yet.
 <summary>Other install paths</summary>
 
 - **From a clone** (development): `npm run install:global`, i.e. `node harness/src/cli.mjs install`.
+- **Registry-free**: `npm install -g github:shamusj-create/opencode-longrun-harness` — the same package
+  straight from this repository, with no registry involved.
 - **Manual or air-gapped**: copy `harness/plugin/longrun.js` to `~/.config/opencode/plugins/longrun.js`.
   OpenCode auto-loads every file in that directory, so no `opencode.json` entry is required.
 - **`opencode plugin <module>` is not a general-purpose installer** — it resolves npm *registry* packages,
