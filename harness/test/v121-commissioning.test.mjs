@@ -28,7 +28,7 @@ const ctx = (d) => ({ sessionID: "v121", agent: "longrun", directory: d, worktre
 test("v1.2.1 version alignment (package == controller == plugin == installer)", () => {
   const pkg = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, "..", "..", "package.json"), "utf8"));
   const plugSrc = fs.readFileSync(path.resolve(import.meta.dirname, "..", "plugin", "longrun.js"), "utf8");
-  assert.equal(pkg.version, "1.2.22", "package.json bumped");
+  assert.equal(pkg.version, "1.2.23", "package.json bumped");
   assert.equal(C.LIFECYCLE_SCHEMA_VERSION, pkg.version, "controller lifecycle schema version tracks package");
   assert.equal(INSTALL_VERSION, pkg.version, "installer VERSION tracks package");
   assert.ok(plugSrc.includes(`const VERSION = "${pkg.version}"`), "plugin VERSION literal matches package");

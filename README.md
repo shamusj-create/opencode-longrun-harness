@@ -102,16 +102,25 @@ without removing anything; `--config-dir PATH` targets somewhere else.
 Then **restart OpenCode.** Plugins load at process start, so one installed into an already-running backend
 is not active yet.
 
+**Prefer the GUI?** Add `opencode-longrun-harness` in the Desktop app's Plugins pane, or run
+`opencode plugin opencode-longrun-harness -g`. That registers the plugin and its two native tools
+(`longrun`, `longrun_verify`) without touching anything else. It is a **subset** of the two-step install:
+the agent, slash commands and skills only arrive via `longrun-harness install`, because OpenCode's plugin
+mechanism has no way to contribute them.
+
 <details>
-<summary>Other install paths</summary>
+<summary>Other install paths, and one that does <em>not</em> work</summary>
 
 - **From a clone** (development): `npm run install:global`, i.e. `node harness/src/cli.mjs install`.
 - **Registry-free**: `npm install -g github:shamusj-create/opencode-longrun-harness` — the same package
   straight from this repository, with no registry involved.
-- **Manual or air-gapped**: copy `harness/plugin/longrun.js` to `~/.config/opencode/plugins/longrun.js`.
-  OpenCode auto-loads every file in that directory, so no `opencode.json` entry is required.
-- **`opencode plugin <module>` is not a general-purpose installer** — it resolves npm *registry* packages,
-  and a `github:` specifier fails with `NpmInstallFailedError`. Use `longrun-harness install` instead.
+- **Manual or air-gapped**: `npm pack` on a connected machine, then `npm install -g ./opencode-longrun-harness-<version>.tgz`
+  offline, then `longrun-harness install`. Do **not** hand-copy `harness/plugin/longrun.js` out of the
+  source tree: it still holds the `__LONGRUN_CONTROLLER_URL__` placeholder and the controller is not beside
+  it, so it loads **inert** — installed, enabled, and registering zero tools. A hand-copied plugin has to be
+  the installer-baked `<config>/plugins/longrun.js`, which has the controller URL substituted.
+- **`opencode plugin <module>` takes registry packages** — a `github:` specifier fails with
+  `NpmInstallFailedError`. Either publish it, or use `longrun-harness install`.
 
 </details>
 
@@ -314,7 +323,7 @@ writes are stopped by the lifecycle guard in any non-eligible state.
 npm test        # node --test harness/test/*.test.mjs
 ```
 
-**287 tests across 38 files, all passing.** These are offline tests against fixtures and mock
+**292 tests across 39 files, all passing.** These are offline tests against fixtures and mock
 sessions: they are deliberately *not* treated as proof that a real OpenCode host behaves a certain
 way, and they never touch production state.
 
@@ -344,6 +353,7 @@ way, and they never touch production state.
 
 ## Release reports
 
+- [v1.2.23 — packaged installs no longer load an inert plugin](docs/V1.2.23_EVIDENCE.md)
 - [v1.2.22 — evidence-class derivation](docs/V1.2.22_EVIDENCE.md)
 - [v1.2.21 — negative-fixture anchoring](docs/V1.2.21_EVIDENCE.md)
 - [v1.2.20 — audited operator budget amendment](docs/V1.2.20_EVIDENCE.md)
