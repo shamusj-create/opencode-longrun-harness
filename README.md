@@ -85,19 +85,45 @@ files. It makes each failure mode above **explicit and checkable** — it does n
 ### 1. Install
 
 ```sh
-npm run install:global        # node harness/src/cli.mjs install
+npm install -g github:shamusj-create/opencode-longrun-harness
+longrun-harness install
 ```
 
-Writes only Longrun-owned paths under the OpenCode config directory, alongside an ownership and rollback
-manifest. `npm run uninstall` reverses it exactly.
+The first line pulls straight from this public repository — no npm account, no registry, no clone needed.
+The second copies the plugin, the operator CLI, the agent, the commands and the skills into your OpenCode
+config directory (`~/.config/opencode` by default), writing only Longrun-owned paths alongside an ownership
+and rollback manifest. `longrun-harness dry-run` previews it; `longrun-harness uninstall` reverses it exactly;
+`longrun-harness disable` / `enable` toggle it without removing anything; `--config-dir PATH` targets
+somewhere else.
+
+Then **restart OpenCode.** Plugins load at process start, so one installed into an already-running backend
+is not active yet.
+
+<details>
+<summary>Other install paths</summary>
+
+- **From a clone** (development): `npm run install:global`, i.e. `node harness/src/cli.mjs install`.
+- **Manual or air-gapped**: copy `harness/plugin/longrun.js` to `~/.config/opencode/plugins/longrun.js`.
+  OpenCode auto-loads every file in that directory, so no `opencode.json` entry is required.
+- **`opencode plugin <module>` is not a general-purpose installer** — it resolves npm *registry* packages,
+  and a `github:` specifier fails with `NpmInstallFailedError`. Use `longrun-harness install` instead.
+
+</details>
 
 ### 2. Check the install
 
 ```sh
-~/.config/opencode/longrun-harness/longrun doctor --live
+longrun-harness doctor                                      # managed paths, manifest, local edits
+~/.config/opencode/longrun-harness/longrun doctor --live    # has a live host actually loaded it?
 ```
 
-Confirms the resolution path and reports whether a live host load has been observed.
+The two are deliberately different checks. The first confirms every managed path is present and tells you
+which ones you have edited by hand — local edits are reported and preserved, never silently overwritten.
+It is an ownership check, not a cryptographic one.
+
+The second reads the load records the plugin writes and requires a live process, so before you restart it
+reports `AWAITING_RESTART` / `NOT_VERIFIED` with the reason. It answers "is this *actually loaded*", not
+"is this on disk" — a `NOT_VERIFIED` immediately after install is expected; a persistent one is not.
 
 ### 3. Declare a contract and start a run
 
@@ -319,8 +345,8 @@ way, and they never touch production state.
 
 ## Requirements
 
-Node.js with `node:test` and `node:sqlite`-era builtins (developed and tested on Node 24). OpenCode
-desktop or CLI for the plugin.
+Node.js **>= 22** (developed and tested on Node 24) — it relies on the `node:test` and `node:sqlite`-era
+builtins and has no third-party runtime dependencies. OpenCode desktop or CLI for the plugin itself.
 
 ## License
 
