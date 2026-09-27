@@ -106,7 +106,10 @@ is not active yet.
 `opencode plugin opencode-longrun-harness -g`. That registers the plugin and its two native tools
 (`longrun`, `longrun_verify`) without touching anything else. It is a **subset** of the two-step install:
 the agent, slash commands and skills only arrive via `longrun-harness install`, because OpenCode's plugin
-mechanism has no way to contribute them.
+mechanism has no way to contribute them. A GUI-only install also has no release directory, so the
+install-check `longrun-harness doctor` does not apply to it — `doctor --live` still reads the plugin's own
+load records, and it will report `NOT_VERIFIED` until hooks have actually fired in a real session. Loading
+the plugin is not the same as having watched it work.
 
 <details>
 <summary>Other install paths, and one that does <em>not</em> work</summary>
