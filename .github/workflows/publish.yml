@@ -1,0 +1,55 @@
+# Publish to npm from CI using OIDC trusted publishing — no long-lived token, no OTP.
+#
+# Trusted publishing is configured once on npmjs.com (or with `npm trust github`), binding this
+# repository + this exact workflow filename to the package. The npm CLI detects the OIDC environment
+# and exchanges the workflow identity for a short-lived publish token, so there is no NPM_TOKEN
+# secret to leak or rotate. Publishing from a public repo also gets provenance attestations for free.
+#
+# Release flow:  bump package.json  ->  git tag v<version> && git push origin v<version>
+name: publish
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write # REQUIRED: lets the job mint the OIDC token npm exchanges
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest # trusted publishing does not support self-hosted runners
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false # never cache in a release build
+
+      # The harness has no dependencies, so there is no `npm ci` to run.
+      - name: Trusted publishing needs npm >= 11.5.1 and Node >= 22.14
+        run: |
+          npm install -g npm@11
+          node --version
+          npm --version
+
+      # Fail before publishing if the tag and the package disagree, rather than shipping a surprise.
+      - name: Tag must match package.json
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          echo "tag=$tag package.json=$pkg"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::tag v$tag does not match package.json $pkg"
+            exit 1
+          fi
+
+      - name: Test (the same suite the release reports cite)
+        run: npm test
+
+      - name: Publish
+        run: npm publish --access public # OIDC auth: no NODE_AUTH_TOKEN is set, by design
