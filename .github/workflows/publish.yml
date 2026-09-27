@@ -1,17 +1,26 @@
 # Publish to npm from CI using OIDC trusted publishing — no long-lived token, no OTP.
 #
-# Trusted publishing is configured once on npmjs.com (or with `npm trust github`), binding this
+# Trusted publishing is configured once on npmjs.com (here: with `npm trust github`), binding this
 # repository + this exact workflow filename to the package. The npm CLI detects the OIDC environment
 # and exchanges the workflow identity for a short-lived publish token, so there is no NPM_TOKEN
-# secret to leak or rotate. Publishing from a public repo also gets provenance attestations for free.
+# secret to leak, rotate, or wait on. Publishing from a public repo also gets provenance attestations.
 #
-# Release flow:  bump package.json  ->  git tag v<version> && git push origin v<version>
+# Release flow:    bump package.json  ->  git tag v<version> && git push origin v<version>
+# Manual rehearsal: Actions -> publish -> Run workflow (dry_run defaults to true, so it cannot publish)
+#
+# The workflow FILENAME is part of the trust binding. Renaming this file breaks publishing until the
+# trusted publisher is re-created with the new name.
 name: publish
 
 on:
   push:
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Rehearse only: build, test and verify the tarball without publishing"
+        type: boolean
+        default: true
 
 permissions:
   id-token: write # REQUIRED: lets the job mint the OIDC token npm exchanges
@@ -21,9 +30,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest # trusted publishing does not support self-hosted runners
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
@@ -51,5 +60,36 @@ jobs:
       - name: Test (the same suite the release reports cite)
         run: npm test
 
+      # The plugin must resolve its controller from the package alone, or a registry/GUI install
+      # silently registers zero tools. This checks the SHIPPED artifact, not the source tree — the
+      # exact failure that shipped in 1.2.22 and would otherwise only be caught by hand.
+      - name: Packaged plugin must not be inert
+        run: |
+          npm pack --pack-destination /tmp
+          mkdir -p /tmp/pkg && tar xzf /tmp/opencode-longrun-harness-*.tgz -C /tmp/pkg
+          test -f /tmp/pkg/package/harness/plugin/_controller.js || {
+            echo "::error::_controller.js missing: registry installs would load inert"; exit 1; }
+          cat > /tmp/check-inert.mjs <<'JS'
+          process.env.LONGRUN_STATE_DIR = "/tmp/lr-ci-state";
+          process.env.OPENCODE_CLIENT = "1";
+          delete process.env.LONGRUN_CONTROLLER_FILE;
+          const m = await import("/tmp/pkg/package/harness/plugin/longrun.js");
+          const logs = [];
+          const h = await m.default.server({ client: { app: { log: (a) => logs.push(a?.body?.message) } } });
+          const tools = Object.keys(h?.tool || {});
+          console.log("tools:", tools, "| log:", logs);
+          if (tools.length !== 2) {
+            console.error("::error::packaged plugin is inert (" + tools.length + " tools)");
+            process.exit(1);
+          }
+          JS
+          node /tmp/check-inert.mjs
+
       - name: Publish
-        run: npm publish --access public # OIDC auth: no NODE_AUTH_TOKEN is set, by design
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "dry_run=true -> rehearsing only, not publishing"
+            npm publish --dry-run --access public
+          else
+            npm publish --access public # OIDC auth: no NODE_AUTH_TOKEN is set, by design
+          fi
