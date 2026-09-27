@@ -11,7 +11,7 @@ import * as EXEC from "./execution.mjs";
 
 // ---- Run-lifecycle schema (authoritative, shared by plugin + tools + CLI + tests) ----------
 // The native longrun tool exposes EXACTLY these actions; no ellipsis, no hidden guessing.
-export const LIFECYCLE_SCHEMA_VERSION = "1.2.23";
+export const LIFECYCLE_SCHEMA_VERSION = "1.2.24";
 export const RUN_ACTIONS = [
   "help", "start", "status", "receipts", "next", "checkpoint", "verify", "pause",
   "resume", "complete", "cancel", "reconcile", "memory_init", "memory_refresh", "memory_status",
