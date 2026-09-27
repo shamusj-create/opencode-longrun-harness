@@ -334,7 +334,7 @@ way, and they never touch production state.
 
 ## Verified status, honestly
 
-- **Offline suite:** 287 passing tests covering identity keying, loss integrity, receipt eligibility
+- **Offline suite:** 292 passing tests covering identity keying, loss integrity, receipt eligibility
   and staleness, single-flight scheduling, resume authorization, stall/replan/pause, budget
   amendment, completion review, negative-control isolation, memory, endpoint discovery, configurable
   toolchain resolution, and the recovery runner.
@@ -356,6 +356,7 @@ way, and they never touch production state.
 
 ## Release reports
 
+- [v1.2.24 — publish from CI, and prove a packaged install is actually live](docs/V1.2.24_EVIDENCE.md)
 - [v1.2.23 — packaged installs no longer load an inert plugin](docs/V1.2.23_EVIDENCE.md)
 - [v1.2.22 — evidence-class derivation](docs/V1.2.22_EVIDENCE.md)
 - [v1.2.21 — negative-fixture anchoring](docs/V1.2.21_EVIDENCE.md)
