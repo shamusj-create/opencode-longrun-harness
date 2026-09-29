@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 
-export const VERSION = "1.2.26";
+export const VERSION = "1.2.27";
 
 function sha256(s) { return crypto.createHash("sha256").update(s).digest("hex"); }
 function readSafe(p) { try { return fs.readFileSync(p); } catch { return null; } }

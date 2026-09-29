@@ -327,7 +327,7 @@ writes are stopped by the lifecycle guard in any non-eligible state.
 npm test        # node --test harness/test/*.test.mjs
 ```
 
-**297 tests across 40 files, all passing.** These are offline tests against fixtures and mock
+**303 tests across 41 files, all passing.** These are offline tests against fixtures and mock
 sessions: they are deliberately *not* treated as proof that a real OpenCode host behaves a certain
 way, and they never touch production state.
 
@@ -335,7 +335,7 @@ way, and they never touch production state.
 
 ## Verified status, honestly
 
-- **Offline suite:** 297 passing tests covering identity keying, loss integrity, receipt eligibility
+- **Offline suite:** 303 passing tests covering identity keying, loss integrity, receipt eligibility
   and staleness, single-flight scheduling, resume authorization, stall/replan/pause, budget
   amendment, completion review, negative-control isolation, memory, endpoint discovery, configurable
   toolchain resolution, and the recovery runner.
@@ -357,6 +357,7 @@ way, and they never touch production state.
 
 ## Release reports
 
+- [v1.2.27 — OpenCode V2 support via a dual export](docs/V1.2.27_EVIDENCE.md)
 - [v1.2.26 — an operator `version` command, and load-record hygiene](docs/V1.2.26_EVIDENCE.md)
 - [v1.2.24 — publish from CI, and prove a packaged install is actually live](docs/V1.2.24_EVIDENCE.md)
 - [v1.2.23 — packaged installs no longer load an inert plugin](docs/V1.2.23_EVIDENCE.md)
@@ -373,9 +374,14 @@ point. This is the configuration it has actually been exercised on:
 | --- | --- | --- |
 | macOS | 27.0, Apple Silicon | Desktop and CLI OpenCode |
 | Node.js | 24.21.0 | Floor is `>= 22`; no third-party runtime dependencies |
-| OpenCode | 1.18.32 | Both the CLI dispatch path and the desktop plugin host |
+| OpenCode | **1.18.32 (V1) and 2.0.6 (V2)** | Both lines supported from one package — see below |
 | MTPLX | 2.12.0 | Local OpenAI-compatible inference server (`com.youssofal.mtplx`) |
 | Qwen model | `mtplx-flash-next-optimized-speed` | The one model id MTPLX serves — 262k context |
+
+Both OpenCode lines are supported from **one package**. V2 does not run V1 plugins at all — a V1-only
+plugin is imported and then never activated, so it looks installed and does nothing. The plugin
+therefore exports **both** entrypoints: `server()` for V1 and `setup(ctx)` for V2. The same installed
+file serves either runtime; both were exercised end-to-end.
 
 Put concretely: **MTPLX serves a single local Qwen model, and OpenCode is pointed at it as
 `mtplx/mtplx-flash-next-optimized-speed`.** Every implementation, test and patch behind the release reports

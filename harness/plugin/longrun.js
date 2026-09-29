@@ -35,7 +35,7 @@ if (process.env.LONGRUN_CONTROLLER_FILE) CANDIDATES.push("file://" + process.env
 const BAKED = "__LONGRUN_CONTROLLER_URL__";
 if (!/^\w+$/.test(BAKED)) CANDIDATES.push(BAKED); // replaced at install time
 CANDIDATES.push(new URL("./_controller.js", import.meta.url).href);
-const VERSION = "1.2.26";
+const VERSION = "1.2.27";
 
 // ---- tool-discovery contract: the authoritative action list (shared with controller) --------
 const ACTIONS = ["help", "start", "status", "receipts", "next", "checkpoint", "verify", "pause", "resume", "cancel", "complete", "reconcile", "memory_init", "memory_refresh", "memory_status", "resume-context"];
@@ -154,9 +154,14 @@ function bumpActivity(ctx, sid) {
   } catch {}
 }
 
-const server = async (input) => {
+// Shared tooling builder. V1 calls it via server(input); V2 calls it via setup(ctx) with v2:true.
+const buildTooling = async (input, { v2 = false } = {}) => {
   const C = await loadController();
-  const helper = await getToolHelper();
+  // V2 registers tools through ctx.tool.transform, which takes plain JSON Schema. The
+  // @opencode-ai/plugin helpers are V1-only, so force the plain-schema branch there — the tool
+  // argument definitions already carry plain fallbacks for exactly this reason.
+  let helper = await getToolHelper();
+  if (v2) helper = null;
   try { input?.client?.app?.log?.({ body: { service: "longrun", level: C && !isDisabledGlobally() ? "info" : "warn", message: !C ? "controller NOT found; plugin inert" : isDisabledGlobally() ? "DISABLED" : "loaded" } }); } catch {}
   if (!C || isDisabledGlobally()) return {};
   const SD = stateDir();
@@ -304,7 +309,7 @@ const server = async (input) => {
           harnessVersion: VERSION, lifecycleSchema: C.LIFECYCLE_SCHEMA_VERSION,
           actions: ACTIONS, params: DEFAULT_PARAMS,
           run: cur && cur.run ? { runId: cur.run.runId, state: cur.run.status } : null,
-          continuation: { enabled: false, note: "automatic continuation is OFF by default in v1.2.26" },
+          continuation: { enabled: false, note: "automatic continuation is OFF by default in v1.2.27" },
           criteriaSchema: "criteria: [{id, required?(default true), weight?(default 1), evidenceClass?, checks:[checkId,...]}]. Every REQUIRED criterion MUST map to >=1 declared check, else start returns INVALID_CONTRACT and creates NO run.",
           checkCatalogueSchema: "checkCatalogue: {checkId:{command:[...argv], kind:'cmd'|'test', timeoutMs?, countTests?, proxyOnly?, integration?, visual?, security?, determinism?, negativeControl?, gate?}}; evidenceClass STATIC is accepted; kind:'test' needs discovered test counts (zero tests cannot satisfy a test criterion).",
           mappingFields: "the mapping from a criterion to its evidence is criterion.checks -> checkCatalogue keys; longrun_verify(checkId=...) executes ONLY those declared checks.",
@@ -690,4 +695,97 @@ const server = async (input) => {
   return result;
 };
 
-export default { id: "longrun", server };
+// ---- V1 entrypoint -------------------------------------------------------------------------
+// V1 calls server(input) and uses the returned hooks/tools directly.
+const server = async (input) => buildTooling(input, { v2: false });
+
+// ---- V2 entrypoint -------------------------------------------------------------------------
+// V2 calls setup(ctx); V1 calls server(). Both are exported so one package serves either runtime,
+// because V1 plugin implementations do NOT run on V2 — V2 ignores `server()` entirely.
+//
+// Shapes below were verified against the real OpenCode 2.0.6 binary, not just the migration guide:
+//   - a plain { id, setup } object works, so this stays dependency-free (no @opencode/plugin import)
+//   - tools are addressed from the code-mode sandbox as tools.<namespace>.<name>(args)
+//   - execute receives (input, { sessionID, agent, messageID, id, progress }) with NO directory
+//   - ctx.tool.hook("execute.before", ev) gives { tool, sessionID, agent, messageID, id, input }
+//   - the event stream is { id, created, type, location, data }, with the session at data.sessionID
+//   - ctx.location.directory is the instance directory
+function asJsonSchema(args) {
+  return { type: "object", properties: args || {}, required: [], additionalProperties: false };
+}
+// event.tool may arrive as "longrun", "longrun.run" or "longrun_longrun" depending on how the
+// runtime names a namespaced tool; the admission guard only understands the V1 tool names.
+function canonicalToolName(name) {
+  const s = String(name || "");
+  if (/(^|[._])longrun_verify$/.test(s)) return "longrun_verify";
+  if (/(^|[._])longrun$/.test(s) || /(^|[._])longrun_run$/.test(s)) return "longrun";
+  return s;
+}
+
+async function setup(ctx) {
+  const dir = ctx?.location?.directory || ctx?.location?.project?.directory || process.cwd();
+  const r = await buildTooling({ directory: dir, worktree: dir }, { v2: true });
+  if (!r || !r.tool) return; // no controller, or globally disabled: stay inert exactly as V1 does
+
+  // V2 tool calls carry no directory, so supply the plugin instance's location.
+  const callContext = (call) => ({ ...(call || {}), directory: dir, worktree: dir });
+  const asResult = (out) => ({ content: typeof out === "string" ? out : JSON.stringify(out) });
+  const wrap = (def) => async (args, call) => asResult(await def.execute(args || {}, callContext(call)));
+
+  await ctx.tool.transform((editor) => {
+    for (const name of ["longrun", "longrun_verify"]) {
+      const def = r.tool[name];
+      if (!def) continue;
+      editor.add({
+        name,
+        description: def.description,
+        input: asJsonSchema(def.args),
+        options: { namespace: "longrun", codemode: true },
+        execute: wrap(def),
+      });
+    }
+  });
+
+  const before = r["tool.execute.before"];
+  if (typeof before === "function") {
+    await ctx.tool.hook("execute.before", (event) => before(
+      { tool: canonicalToolName(event?.tool), sessionID: event?.sessionID },
+      { args: event?.input }));
+  }
+
+  // experimental.session.compacting maps to the session "compaction" hook. V2's event shape for
+  // this hook is not documented and could not be exercised without a real compaction, so accept
+  // both plausible carriers (a string list, or the system-prompt parts used by "context").
+  const compacting = r["experimental.session.compacting"];
+  if (typeof compacting === "function") {
+    await ctx.session.hook("compaction", async (event) => {
+      const sid = event?.sessionID || event?.data?.sessionID;
+      const sink = { context: [] };
+      await compacting({ sessionID: sid }, sink);
+      const text = (sink.context || []).join("\n");
+      if (!text) return;
+      if (Array.isArray(event?.context)) event.context.push(text);
+      else if (Array.isArray(event?.system)) event.system.push({ type: "text", text });
+    });
+  }
+
+  // The V1 "experimental.compaction.autocontinue" veto has no known V2 equivalent; see the release
+  // notes. Continuation policy is therefore not enforced by this plugin on V2.
+
+  const onEvent = r.event;
+  if (typeof onEvent !== "function") return;
+  const ac = new AbortController();
+  void (async () => {
+    try {
+      for await (const ev of ctx.event.subscribe({ signal: ac.signal })) {
+        const sid = ev?.data?.sessionID;
+        if (!sid) continue;
+        // Present the V1 event shape to the shared handler so both runtimes share one code path.
+        await onEvent({ event: { type: ev?.type, properties: { sessionID: sid } } });
+      }
+    } catch {}
+  })();
+  return () => ac.abort();
+}
+
+export default { id: "longrun", server, setup };
