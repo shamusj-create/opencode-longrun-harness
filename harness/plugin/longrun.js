@@ -35,7 +35,7 @@ if (process.env.LONGRUN_CONTROLLER_FILE) CANDIDATES.push("file://" + process.env
 const BAKED = "__LONGRUN_CONTROLLER_URL__";
 if (!/^\w+$/.test(BAKED)) CANDIDATES.push(BAKED); // replaced at install time
 CANDIDATES.push(new URL("./_controller.js", import.meta.url).href);
-const VERSION = "1.2.25";
+const VERSION = "1.2.26";
 
 // ---- tool-discovery contract: the authoritative action list (shared with controller) --------
 const ACTIONS = ["help", "start", "status", "receipts", "next", "checkpoint", "verify", "pause", "resume", "cancel", "complete", "reconcile", "memory_init", "memory_refresh", "memory_status", "resume-context"];
@@ -119,6 +119,22 @@ function writeLoadRecord(ctx) {
       pid: process.pid, runtime: process.version, exec,
       client: process.env.OPENCODE_CLIENT || null,
     }));
+    // Retention: drop records whose host process is gone. A dead-pid record can never satisfy the
+    // live check, and host instances churn, so without this the directory grows without bound and
+    // `doctor --live` ends up reporting dozens of long-dead pids instead of a verdict.
+    // Best-effort and conservative: unparseable files and anything without a numeric pid are kept.
+    try {
+      const mine = path.basename(f);
+      for (const name of fs.readdirSync(ld)) {
+        if (name === mine) continue;
+        let rec = null;
+        try { rec = JSON.parse(fs.readFileSync(path.join(ld, name), "utf8")); } catch { continue; }
+        const pid = rec && rec.pid;
+        if (typeof pid !== "number" || pid === process.pid) continue;
+        let alive = false; try { process.kill(pid, 0); alive = true; } catch {}
+        if (!alive) { try { fs.unlinkSync(path.join(ld, name)); } catch {} }
+      }
+    } catch {}
   } catch {}
 }
 function bumpActivity(ctx, sid) {
@@ -288,7 +304,7 @@ const server = async (input) => {
           harnessVersion: VERSION, lifecycleSchema: C.LIFECYCLE_SCHEMA_VERSION,
           actions: ACTIONS, params: DEFAULT_PARAMS,
           run: cur && cur.run ? { runId: cur.run.runId, state: cur.run.status } : null,
-          continuation: { enabled: false, note: "automatic continuation is OFF by default in v1.2.25" },
+          continuation: { enabled: false, note: "automatic continuation is OFF by default in v1.2.26" },
           criteriaSchema: "criteria: [{id, required?(default true), weight?(default 1), evidenceClass?, checks:[checkId,...]}]. Every REQUIRED criterion MUST map to >=1 declared check, else start returns INVALID_CONTRACT and creates NO run.",
           checkCatalogueSchema: "checkCatalogue: {checkId:{command:[...argv], kind:'cmd'|'test', timeoutMs?, countTests?, proxyOnly?, integration?, visual?, security?, determinism?, negativeControl?, gate?}}; evidenceClass STATIC is accepted; kind:'test' needs discovered test counts (zero tests cannot satisfy a test criterion).",
           mappingFields: "the mapping from a criterion to its evidence is criterion.checks -> checkCatalogue keys; longrun_verify(checkId=...) executes ONLY those declared checks.",

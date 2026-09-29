@@ -3,7 +3,7 @@
 // WITHOUT the source repository. Resolves its own controller + installer copy by relative
 // URL (reuses existing logic; no competing controller). Node-builtin only (works under the
 // Electron/Node desktop runtime too). Run via the `longrun` launcher or:
-//   node longrun.mjs <doctor [--live]|status|pause|review|amend|disable|enable|uninstall> [--json] [--project PATH]
+//   node longrun.mjs <version|doctor [--live]|status|pause|review|amend|disable|enable|uninstall> [--json] [--project PATH]
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
@@ -25,6 +25,67 @@ function cfgDir() {
 }
 function stateDir() { return process.env.LONGRUN_STATE_DIR || path.join(os.homedir() || os.tmpdir(), ".local", "state", "opencode-longrun", "v1"); }
 function currentVersion() { try { return fs.readFileSync(path.join(cfgDir(), "longrun-harness", "current"), "utf8").trim(); } catch { return null; } }
+
+// ---- version: which plugins are installed, and at which version -------------------------------
+// OpenCode records a plugin as a bare path or npm spec and stores no version for it, so nothing in
+// OpenCode can print one. Resolve each from where it actually lives: the harness release pointer for
+// the harness plugin, OpenCode's package cache for an npm spec, else a VERSION literal in the file.
+// Read-only: this never writes, and never dispatches anything.
+function readJsonc(file) {
+  try {
+    const txt = fs.readFileSync(file, "utf8")
+      .replace(/^\s*\/\/.*$/gm, "")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/,(\s*[}\]])/g, "$1");
+    return JSON.parse(txt);
+  } catch { return null; }
+}
+function configuredPlugins(cfg) {
+  const out = [];
+  for (const name of ["opencode.json", "opencode.jsonc"]) {
+    const d = readJsonc(path.join(cfg, name));
+    if (!d || !Array.isArray(d.plugin)) continue;
+    for (const e of d.plugin) if (typeof e === "string" && !out.includes(e)) out.push(e);
+  }
+  // OpenCode ALSO auto-loads every file in plugins/, which is the convention this installer uses
+  // (and the GUI/registry install path does not). Those plugins appear in no config array, so
+  // reading the config alone silently omits the harness itself.
+  try {
+    const pdir = path.join(cfg, "plugins");
+    for (const f of fs.readdirSync(pdir)) {
+      if (!/\.(js|mjs|cjs|ts)$/.test(f)) continue;
+      const abs = path.join(pdir, f);
+      if (!out.includes(abs) && !out.includes("file://" + abs)) out.push(abs);
+    }
+  } catch {}
+  return out;
+}
+function sourceVersion(file) {
+  try {
+    const src = fs.readFileSync(file, "utf8");
+    const m = src.match(/(?:const|let|var)\s+VERSION\s*=\s*["']([^"']+)["']/) || src.match(/["']version["']\s*:\s*["']([^"']+)["']/);
+    return m ? m[1] : null;
+  } catch { return null; }
+}
+function cachedPackageVersion(spec) {
+  const p = path.join(os.homedir(), ".cache", "opencode", "packages", `${spec}@latest`, "node_modules", spec, "package.json");
+  try { return JSON.parse(fs.readFileSync(p, "utf8")).version; } catch { return null; }
+}
+function versionReport() {
+  const cfg = cfgDir();
+  const harness = currentVersion();
+  const plugins = configuredPlugins(cfg).map((e) => {
+    if (e.startsWith("file://") || path.isAbsolute(e)) {
+      const file = e.startsWith("file://") ? e.slice("file://".length) : e;
+      const base = path.basename(file);
+      if (/longrun/.test(base) && harness) return { name: base, version: harness, note: "long-run harness" };
+      return { name: base, version: sourceVersion(file) || "not declared", note: "" };
+    }
+    const spec = e.replace(/@[^@/]*$/, "");
+    return { name: e, version: cachedPackageVersion(spec) || "not declared", note: "" };
+  });
+  return { mode: "version", ok: true, configDir: cfg, harnessVersion: harness, plugins };
+}
 
 async function loadMods() {
   if (!ctrlUrl) throw new Error("controller copy not found next to maintenance entry point");
@@ -160,7 +221,16 @@ async function doctor({ live = false }) {
       res.failures.push("No runtime load record observed: the plugin was not loaded by the running backend (it predates install). Restart required.");
     } else if (freshGenuine.length === 0) {
       res.ok = false; res.status = "STALE_LOAD_RECORD"; res.live = "NOT_VERIFIED";
-      for (const x of rejected) res.failures.push(`load record ${x.file} rejected (${x.why}): untrusted as live evidence`);
+      // Summarise by reason. Every rejectable record is inert by definition, and host instances
+      // churn, so listing one line per record buries the verdict under long-dead pids. The
+      // per-record detail stays in liveEvidence.rejectedUntrusted for machine reads.
+      const byReason = {};
+      for (const x of rejected) byReason[x.why] = (byReason[x.why] || 0) + 1;
+      res.liveEvidence.rejectionSummary = byReason;
+      if (rejected.length) {
+        const parts = Object.entries(byReason).map(([why, n]) => `${n} ${why}`).join(", ");
+        res.failures.push(`${rejected.length} load record(s) rejected as untrusted: ${parts}`);
+      }
       if (rejected.length === files.length && rejected.length > 0 && !rejected.some((x) => x.why === "dead-or-missing-pid" || x.why === "stale")) {
         res.failures.push("Load record(s) exist but none are fresh with hook activity; treat as not currently loaded.");
       }
@@ -179,6 +249,21 @@ async function main() {
   const json = rest.includes("--json");
   const live = rest.includes("--live");
   const flag = (n) => { const i = rest.indexOf(n); return i >= 0 ? rest[i + 1] : undefined; };
+
+  // `version` is pure file inspection and needs no controller, so it is handled BEFORE loadMods:
+  // it must work even where the release tree is absent, e.g. a GUI-only npm plugin install.
+  if (cmd === "version") {
+    const v = versionReport();
+    if (json) { process.stdout.write(JSON.stringify({ cmd, ...v }, null, 2) + "\n"); process.exitCode = 0; return; }
+    process.stdout.write(`long-run harness ${v.harnessVersion || "not installed"}\n`);
+    process.stdout.write(`config dir: ${v.configDir}\n`);
+    process.stdout.write(`installed plugins (${v.plugins.length}):\n`);
+    const w = Math.max(0, ...v.plugins.map((p) => p.name.length));
+    for (const p of v.plugins) process.stdout.write(`  ${p.name.padEnd(w)}  ${p.version}${p.note ? "  (" + p.note + ")" : ""}\n`);
+    process.exitCode = 0;
+    return;
+  }
+
   const { C, I } = await loadMods();
   const out = { cmd };
 
@@ -238,7 +323,7 @@ async function main() {
   } else if (cmd === "disable") { Object.assign(out, I ? I.disable({ configDir: cfgDir() }) : { error: "install lib missing" }); }
   else if (cmd === "enable") { Object.assign(out, I ? I.enable({ configDir: cfgDir() }) : { error: "install lib missing" }); }
   else if (cmd === "uninstall") { Object.assign(out, I ? I.uninstall({ configDir: cfgDir() }) : { error: "install lib missing" }); }
-  else { Object.assign(out, { error: "unknown command", usage: "doctor [--live]|status|pause|review|amend|disable|enable|uninstall [--json] [--project PATH]" }); }
+  else { Object.assign(out, { error: "unknown command", usage: "version|doctor [--live]|status|pause|review|amend|disable|enable|uninstall [--json] [--project PATH]" }); }
 
   if (json) process.stdout.write(JSON.stringify(out, null, 2) + "\n");
   else {

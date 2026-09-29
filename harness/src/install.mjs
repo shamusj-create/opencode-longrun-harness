@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 
-export const VERSION = "1.2.25";
+export const VERSION = "1.2.26";
 
 function sha256(s) { return crypto.createHash("sha256").update(s).digest("hex"); }
 function readSafe(p) { try { return fs.readFileSync(p); } catch { return null; } }
@@ -56,6 +56,7 @@ export function buildFileSet({ configDir, version = VERSION }) {
     { rel: path.posix.join("commands", "longrun-resume.md"), content: CMD_RESUME, kind: "command" },
     { rel: path.posix.join("commands", "longrun-status.md"), content: CMD_STATUS, kind: "command" },
     { rel: path.posix.join("commands", "longrun-pause.md"), content: CMD_PAUSE, kind: "command" },
+    { rel: path.posix.join("commands", "longrun-version.md"), content: cmdVersion(path.join(configDir, "longrun-harness", "longrun").split(path.sep).join("/")), kind: "command" },
     { rel: path.posix.join("skills", "longrun-workflow", "SKILL.md"), content: SKILL_WORKFLOW, kind: "skill" },
     { rel: path.posix.join("skills", "longrun-repair", "SKILL.md"), content: SKILL_REPAIR, kind: "skill" },
     { rel: path.posix.join("skills", "longrun-ui", "SKILL.md"), content: SKILL_UI, kind: "skill" },
@@ -291,6 +292,24 @@ description: Pause the current long-run run (requires explicit resume)
 ---
 Call the longrun tool with action=pause to stop the current run and cancel any pending continuation.
 Further work requires an explicit /longrun-resume.
+`;
+// The version command runs the installed launcher, whose absolute path is baked in at install time
+// (the same way the plugin gets its controller URL). Pinning `agent: build` matters: left on the
+// current agent, a read-only version question asked from inside the longrun agent is exactly the
+// shape of request that can get answered by starting a tracked run instead.
+const cmdVersion = (launcher) => `---
+description: Show installed OpenCode plugins and the long-run harness version
+agent: build
+---
+Installed plugins and harness version:
+
+!\`${launcher} version\`
+
+Reply with that output inside a single fenced code block, preserving every line break and space exactly
+as printed, and add no commentary of your own.
+
+This is a read-only version display: do not call any tools, do not start or resume a run, and do not
+create a tracked run for this request.
 `;
 const SKILL_WORKFLOW = `---
 name: longrun-workflow

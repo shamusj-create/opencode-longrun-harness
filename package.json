@@ -1,6 +1,6 @@
 {
   "name": "opencode-longrun-harness",
-  "version": "1.2.25",
+  "version": "1.2.26",
   "type": "module",
   "description": "Bounded, evidence-driven long-run workflow harness for OpenCode: contract-bound runs, fingerprint-bound receipts, operator-reviewed completion. Dependency-free.",
   "license": "MIT",

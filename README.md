@@ -301,6 +301,7 @@ Installed as `longrun-harness/longrun` (a thin launcher over `harness/src/mainte
 
 | Command | Purpose |
 | --- | --- |
+| `version [--json]` | Which plugins are installed, and their versions. Needs no controller, so it also works for a plugin-only install. |
 | `doctor [--live]` | Self-test the installation and the resolution path. |
 | `status --json --project DIR --run ID` | Canonical lifecycle, loss, criteria, checks, budgets, review state. |
 | `pause --json --project DIR --run ID` | Canonical pause through the same writer lock as native pause. |
@@ -326,7 +327,7 @@ writes are stopped by the lifecycle guard in any non-eligible state.
 npm test        # node --test harness/test/*.test.mjs
 ```
 
-**292 tests across 39 files, all passing.** These are offline tests against fixtures and mock
+**297 tests across 40 files, all passing.** These are offline tests against fixtures and mock
 sessions: they are deliberately *not* treated as proof that a real OpenCode host behaves a certain
 way, and they never touch production state.
 
@@ -334,7 +335,7 @@ way, and they never touch production state.
 
 ## Verified status, honestly
 
-- **Offline suite:** 292 passing tests covering identity keying, loss integrity, receipt eligibility
+- **Offline suite:** 297 passing tests covering identity keying, loss integrity, receipt eligibility
   and staleness, single-flight scheduling, resume authorization, stall/replan/pause, budget
   amendment, completion review, negative-control isolation, memory, endpoint discovery, configurable
   toolchain resolution, and the recovery runner.
@@ -356,6 +357,7 @@ way, and they never touch production state.
 
 ## Release reports
 
+- [v1.2.26 — an operator `version` command, and load-record hygiene](docs/V1.2.26_EVIDENCE.md)
 - [v1.2.24 — publish from CI, and prove a packaged install is actually live](docs/V1.2.24_EVIDENCE.md)
 - [v1.2.23 — packaged installs no longer load an inert plugin](docs/V1.2.23_EVIDENCE.md)
 - [v1.2.22 — evidence-class derivation](docs/V1.2.22_EVIDENCE.md)
